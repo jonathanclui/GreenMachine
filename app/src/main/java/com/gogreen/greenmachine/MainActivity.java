@@ -1,10 +1,12 @@
 package com.gogreen.greenmachine;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -13,6 +15,33 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Set up the handler for the driving button click
+        Button drivingButton = (Button) findViewById(R.id.driving_button);
+        drivingButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DrivingActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Set up the handler for the riding button click
+        Button ridingButton = (Button) findViewById(R.id.riding_button);
+        ridingButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RidingActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Set up the handler for the riding button click
+        Button badgesButton = (Button) findViewById(R.id.badges_button);
+        badgesButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, BadgeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

@@ -30,7 +30,7 @@ public class LoginActivity extends ActionBarActivity {
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
-        usernameEditText = (EditText) findViewById(R.id.username);
+        usernameEditText = (EditText) findViewById(R.id.email);
         passwordEditText = (EditText) findViewById(R.id.password);
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

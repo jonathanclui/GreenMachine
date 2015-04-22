@@ -8,6 +8,10 @@
     <string name="title_activity_main">Main Activity</string>
     <string name="title_activity_welcome">Welcome Activity</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_riding">Riding Activity</string>
+    <string name="title_activity_badge">Badge Activity</string>
+    <string name="title_activity_match_item">Match</string>
+    <string name="title_activity_driving">DrivingActivity</string>
 
     <string name="signup">Sign up</string>
     <string name="progress_signup">Signing you up&#8230;</string>

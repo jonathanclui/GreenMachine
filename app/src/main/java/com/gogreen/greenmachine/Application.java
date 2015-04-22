@@ -9,6 +9,15 @@ import com.parse.Parse;
  * Created by jonathanlui on 4/19/15.
  */
 public class Application extends android.app.Application {
+    // Debugging switch
+    public static final boolean APPDEBUG = false;
+
+    // Debugging tag for the application
+    public static final String APPTAG = "greenmachine";
+
+    // Used to pass location from MainActivity to DrivingActivity/RidingActivity
+    public static final String INTENT_EXTRA_LOCATION = "location";
+
     public static String APP_ID = null;
     public static String CLIENT_KEY = null;
 

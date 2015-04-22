@@ -31,7 +31,7 @@ public class SignUpActivity extends ActionBarActivity {
         setContentView(R.layout.activity_signup);
 
         // Set up the signup form.
-        usernameEditText = (EditText) findViewById(R.id.username_edit_text);
+        usernameEditText = (EditText) findViewById(R.id.email_edit_text);
 
         passwordEditText = (EditText) findViewById(R.id.password_edit_text);
         passwordAgainEditText = (EditText) findViewById(R.id.password_again_edit_text);

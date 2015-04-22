@@ -9,14 +9,19 @@
     <!-- Prevents apps from displaying on devices without OpenGL ES Version 2 -->
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"/>
+        android:required="true" />
 
-    <!-- Permissions-->
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:name=".Application"
@@ -58,10 +63,27 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_api_key"/>
+            android:value="@string/google_api_key" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".MatchItem"
+            android:label="@string/title_activity_match_item" >
+        </activity>
+        <activity
+            android:name=".DrivingActivity"
+            android:label="@string/title_activity_driving" >
+        </activity>
+        <activity
+            android:name=".RidingActivity"
+            android:label="@string/title_activity_riding" >
+        </activity>
+        <activity
+            android:name=".BadgeActivity"
+            android:label="@string/title_activity_badge" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="match_info_car">I am driving a</string>
+    <string name="match_info_seats">Seats available</string>
+    <string name="match_info_start">I want to leave</string>
+    <string name="match_info_by">by</string>
+    <string name="match_info_end">I want to arrive at</string>
+    <string name="match_button_text">Match Me!</string>
+    <string name="matching_textview">Ok, we\'re working on it, we\'ll let you know
+        if there is a match by</string>
+</resources>

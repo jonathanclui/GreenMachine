@@ -17,9 +17,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
@@ -69,10 +68,6 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MatchItem"
-            android:label="@string/title_activity_match_item" >
-        </activity>
-        <activity
             android:name=".DrivingActivity"
             android:label="@string/title_activity_driving" >
         </activity>
@@ -83,6 +78,10 @@
         <activity
             android:name=".BadgeActivity"
             android:label="@string/title_activity_badge" >
+        </activity>
+        <activity
+            android:name=".MatchingActivity"
+            android:label="@string/title_activity_matching" >
         </activity>
     </application>
 

@@ -68,6 +68,10 @@ public class SignUpActivity extends ActionBarActivity {
             validationError = true;
             validationErrorMessage.append(getString(R.string.error_blank_username));
         }
+        if (!username.contains("@")) {
+            validationError = true;
+            validationErrorMessage.append(getString(R.string.error_invalid_email));
+        }
         if (password.length() == 0) {
             if (validationError) {
                 validationErrorMessage.append(getString(R.string.error_join));
@@ -99,6 +103,7 @@ public class SignUpActivity extends ActionBarActivity {
         // Set up a new Parse user
         ParseUser user = new ParseUser();
         user.setUsername(username);
+        user.setEmail(username);
         user.setPassword(password);
 
         // Call the Parse signup method

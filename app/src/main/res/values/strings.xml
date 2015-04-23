@@ -14,6 +14,8 @@
     <string name="title_activity_driving">DrivingActivity</string>
     <string name="title_activity_driving_info">Arrange a Carpool</string>
     <string name="title_activity_matching">MatchingActivity</string>
+    <string name="title_activity_driver_matched">DriverMatchedActivity</string>
+    <string name="title_activity_rider_matched">RiderMatchedActivity</string>
 
     <string name="signup">Sign up</string>
     <string name="progress_signup">Signing you up&#8230;</string>

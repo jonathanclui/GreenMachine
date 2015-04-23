@@ -83,6 +83,14 @@
             android:name=".MatchingActivity"
             android:label="@string/title_activity_matching" >
         </activity>
+        <activity
+            android:name=".DriverMatchedActivity"
+            android:label="@string/title_activity_driver_matched" >
+        </activity>
+        <activity
+            android:name=".RiderMatchedActivity"
+            android:label="@string/title_activity_rider_matched" >
+        </activity>
     </application>
 
 </manifest>

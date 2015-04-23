@@ -1,9 +1,12 @@
 package com.gogreen.greenmachine;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 public class MatchingActivity extends ActionBarActivity {
@@ -12,6 +15,24 @@ public class MatchingActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matching);
+
+        // Set up the handler for the match button click
+        Button driverMatchedButton = (Button) findViewById(R.id.driver_matched);
+        driverMatchedButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MatchingActivity.this, DriverMatchedActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Set up the handler for the match button click
+        Button riderMatchedButton = (Button) findViewById(R.id.rider_matched);
+        riderMatchedButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MatchingActivity.this, RiderMatchedActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

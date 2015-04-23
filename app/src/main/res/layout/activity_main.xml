@@ -15,20 +15,26 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="I'm Driving"
+        android:text="@string/driving"
         android:id="@+id/driving_button" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="I'm Riding"
+        android:text="@string/riding"
         android:id="@+id/riding_button"
         android:layout_gravity="center_vertical" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tell me about badges!"
+        android:text="@string/about_badges"
         android:id="@+id/badges_button" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test Profile Completion"
+        android:id="@+id/test_profile" />
 
 </LinearLayout>

@@ -15,14 +15,16 @@ import com.parse.ParseUser;
 public class ProfileArriveByInfoActivity extends ActionBarActivity {
 
     // UI references.
-    private EditText arriveByEditText;
+    private EditText arriveHQByEditText;
+    private EditText arriveHomeByEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_arrive_by_info);
 
-        arriveByEditText = (EditText) findViewById(R.id.arrive_by_edit_text);
+        arriveHQByEditText = (EditText) findViewById(R.id.arrive_hq_by_edit_text);
+        arriveHomeByEditText = (EditText) findViewById(R.id.arrive_home_by_edit_text);
 
         // Set up the handler for the next button click
         Button nextButton = (Button) findViewById(R.id.next_button);
@@ -59,17 +61,19 @@ public class ProfileArriveByInfoActivity extends ActionBarActivity {
     private void submit() {
         // Set up public profile with data
         ParseUser currentUser = ParseUser.getCurrentUser();
-        String arriveBy = arriveByEditText.getText().toString().trim();
+        String arriveHQBy = arriveHQByEditText.getText().toString().trim();
+        String arriveHomeBy = arriveHomeByEditText.getText().toString().trim();
 
-        savePrivateProfile(arriveBy);
+        savePrivateProfile(arriveHQBy, arriveHomeBy);
 
         Intent intent = new Intent(ProfileArriveByInfoActivity.this, ProfileHotspotInfoActivity.class);
         startActivity(intent);
     }
 
-    private void savePrivateProfile(String arriveBy) {
+    private void savePrivateProfile(String arriveHQBy, String arriveHomeBy) {
         PrivateProfile privProfile = (PrivateProfile) ParseUser.getCurrentUser().get("privateProfile");
-        privProfile.setArriveBy(arriveBy);
+        privProfile.setArriveHQBy(arriveHQBy);
+        privProfile.setArriveHomeBy(arriveHomeBy);
         privProfile.saveInBackground();
     }
 }

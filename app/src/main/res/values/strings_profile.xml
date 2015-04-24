@@ -6,7 +6,8 @@
     <string name="prompt_phone">Phone Number</string>
     <string name="prompt_driving">Driving?</string>
     <string name="prompt_car">Car Make, Model, Year</string>
-    <string name="prompt_arrive_by">Arrive by</string>
+    <string name="prompt_arrive_hq_by">Arrive to HQ by</string>
+    <string name="prompt_arrive_home_by">Arrive Home by</string>
     <string name="prompt_latitude">Latitude</string>
     <string name="prompt_longitude">Longitude</string>
 </resources>

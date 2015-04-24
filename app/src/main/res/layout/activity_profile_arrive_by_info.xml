@@ -10,10 +10,18 @@
     tools:context="com.gogreen.greenmachine.ProfileBasicInfoActivity">
 
     <EditText
-        android:id="@+id/arrive_by_edit_text"
+        android:id="@+id/arrive_hq_by_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/prompt_arrive_by"
+        android:hint="@string/prompt_arrive_hq_by"
+        android:maxLines="1"
+        android:singleLine="true" />
+
+    <EditText
+        android:id="@+id/arrive_home_by_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/prompt_arrive_home_by"
         android:maxLines="1"
         android:singleLine="true" />
 

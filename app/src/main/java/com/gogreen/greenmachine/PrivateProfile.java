@@ -69,12 +69,20 @@ public class PrivateProfile extends ParseObject {
         put("driverCar", value);
     }
 
-    public String getArriveBy() {
-        return getString("arriveBy");
+    public String getArriveHQBy() {
+        return getString("arriveHQBy");
     }
 
-    public void setArriveBy(String value) {
-        put("arriveBy", value);
+    public void setArriveHQBy(String value) {
+        put("arriveHQBy", value);
+    }
+
+    public String getArriveHomeBy() {
+        return getString("arriveHomeBy");
+    }
+
+    public void setArriveHomeBy(String value) {
+        put("arriveHomeBy", value);
     }
 
     public ArrayList<ParseGeoPoint> getPreferredHotspots() {

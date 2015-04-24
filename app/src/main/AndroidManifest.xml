@@ -21,6 +21,7 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <application
         android:name=".Application"
@@ -90,6 +91,26 @@
         <activity
             android:name=".RiderMatchedActivity"
             android:label="@string/title_activity_rider_matched" >
+        </activity>
+        <activity
+            android:name=".ProfileBasicInfoActivity"
+            android:label="@string/title_activity_profile_basic_info" >
+        </activity>
+        <activity
+            android:name=".ProfileDriverInfoActivity"
+            android:label="@string/title_activity_profile_driver_info" >
+        </activity>
+        <activity
+            android:name=".ProfileArriveByInfoActivity"
+            android:label="@string/title_activity_profile_arrive_by_info" >
+        </activity>
+        <activity
+            android:name=".ProfileHotspotInfoActivity"
+            android:label="@string/title_activity_profile_hotspot_info" >
+        </activity>
+        <activity
+            android:name=".ProfileInitDispatchActivity"
+            android:label="ProfileInitDispatchActivity" >
         </activity>
     </application>
 

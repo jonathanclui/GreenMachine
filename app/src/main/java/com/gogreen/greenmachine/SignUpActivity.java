@@ -61,6 +61,39 @@ public class SignUpActivity extends ActionBarActivity {
         String password = passwordEditText.getText().toString().trim();
         String passwordAgain = passwordAgainEditText.getText().toString().trim();
 
+        validateUserInput(username, password, passwordAgain);
+
+        // Set up a progress dialog
+        final ProgressDialog dialog = new ProgressDialog(SignUpActivity.this);
+        dialog.setMessage(getString(R.string.progress_signup));
+        dialog.show();
+
+        // Set up user fields
+        ParseUser user = new ParseUser();
+        user.setUsername(username);
+        user.setEmail(username);
+        user.setPassword(password);
+        user.put("profileComplete", false);
+
+        // Call the Parse signup method
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                dialog.dismiss();
+                if (e != null) {
+                    // Show the error message
+                    Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                } else {
+                    // Start an intent for the dispatch activity
+                    Intent intent = new Intent(SignUpActivity.this, DispatchActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private void validateUserInput(String username, String password, String passwordAgain) {
         // Validate the sign up data
         boolean validationError = false;
         StringBuilder validationErrorMessage = new StringBuilder(getString(R.string.error_intro));
@@ -94,33 +127,5 @@ public class SignUpActivity extends ActionBarActivity {
                     .show();
             return;
         }
-
-        // Set up a progress dialog
-        final ProgressDialog dialog = new ProgressDialog(SignUpActivity.this);
-        dialog.setMessage(getString(R.string.progress_signup));
-        dialog.show();
-
-        // Set up a new Parse user
-        ParseUser user = new ParseUser();
-        user.setUsername(username);
-        user.setEmail(username);
-        user.setPassword(password);
-
-        // Call the Parse signup method
-        user.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-                dialog.dismiss();
-                if (e != null) {
-                    // Show the error message
-                    Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                } else {
-                    // Start an intent for the dispatch activity
-                    Intent intent = new Intent(SignUpActivity.this, DispatchActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
-            }
-        });
     }
 }

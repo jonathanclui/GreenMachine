@@ -42,15 +42,6 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-
-        // Set up the handler for the riding button click
-        Button testProfileButton = (Button) findViewById(R.id.test_profile);
-        testProfileButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BadgeActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
 

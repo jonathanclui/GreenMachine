@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 /**
  * Created by jonathanlui on 4/19/15.
@@ -37,6 +38,8 @@ public class Application extends android.app.Application {
         CLIENT_KEY = getString(R.string.parse_client_key);
 
         Parse.enableLocalDatastore(this);
+        ParseObject.registerSubclass(PublicProfile.class);
+        ParseObject.registerSubclass(PrivateProfile.class);
         Parse.initialize(this, APP_ID, CLIENT_KEY);
 
         preferences = getSharedPreferences("com.gogreen.greenmachine", Context.MODE_PRIVATE);

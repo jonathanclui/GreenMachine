@@ -105,7 +105,6 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
         } catch (Exception e) {
             Toast.makeText(ProfileBasicInfoActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent(ProfileBasicInfoActivity.this, ProfileBasicInfoActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
     }
@@ -128,7 +127,6 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
 
     private void startNextActivity() {
         Intent intent = new Intent(ProfileBasicInfoActivity.this, ProfileDriverInfoActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

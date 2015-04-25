@@ -3,11 +3,15 @@
     <string name="prompt_first_name">First Name</string>
     <string name="prompt_last_name">Last Name</string>
     <string name="prompt_home_city">Home City</string>
-    <string name="prompt_phone">Phone Number</string>
+    <string name="prompt_phone">Phone</string>
     <string name="prompt_driving">Driving?</string>
     <string name="prompt_car">Car Make, Model, Year</string>
     <string name="prompt_arrive_hq_by">Arrive to HQ by</string>
     <string name="prompt_arrive_home_by">Arrive Home by</string>
     <string name="prompt_latitude">Latitude</string>
     <string name="prompt_longitude">Longitude</string>
+
+    <string name="switch_label_driving">Driving?</string>
+    <string name="progress_update_profile">Updating Profile</string>
+    <string name="profile_saved">Profile saved!</string>
 </resources>

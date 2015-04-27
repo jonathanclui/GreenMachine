@@ -1,10 +1,11 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.profile;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;

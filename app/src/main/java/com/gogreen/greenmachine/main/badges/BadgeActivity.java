@@ -1,9 +1,11 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.main.badges;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.gogreen.greenmachine.R;
 
 
 public class BadgeActivity extends ActionBarActivity {

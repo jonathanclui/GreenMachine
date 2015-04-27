@@ -1,8 +1,12 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.gogreen.greenmachine.helpers.ConfigHelper;
+import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.parseobjects.PrivateProfile;
+import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.parse.Parse;
 import com.parse.ParseObject;
 

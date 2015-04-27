@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.main.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gogreen.greenmachine.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -84,7 +85,7 @@ public class LoginActivity extends ActionBarActivity {
         final ProgressDialog dialog = new ProgressDialog(LoginActivity.this);
         dialog.setMessage(getString(R.string.progress_login));
         dialog.show();
-        // Call the Parse login method
+        // Call the parseobjects login method
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {

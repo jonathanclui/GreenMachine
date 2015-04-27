@@ -24,13 +24,13 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <application
-        android:name=".Application"
+        android:name=".main.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".DispatchActivity"
+            android:name=".main.login.DispatchActivity"
             android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,25 +39,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name=".main.login.SignUpActivity"
             android:label="@string/title_activity_signup"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".main.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".main.WelcomeActivity"
             android:label="@string/title_activity_welcome" >
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".menus.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
 
@@ -69,47 +69,47 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".DrivingActivity"
+            android:name=".main.match.DrivingActivity"
             android:label="@string/title_activity_driving" >
         </activity>
         <activity
-            android:name=".RidingActivity"
+            android:name=".main.match.RidingActivity"
             android:label="@string/title_activity_riding" >
         </activity>
         <activity
-            android:name=".BadgeActivity"
+            android:name=".main.badges.BadgeActivity"
             android:label="@string/title_activity_badge" >
         </activity>
         <activity
-            android:name=".MatchingActivity"
+            android:name=".main.match.MatchingActivity"
             android:label="@string/title_activity_matching" >
         </activity>
         <activity
-            android:name=".DriverMatchedActivity"
+            android:name=".main.match.DriverMatchedActivity"
             android:label="@string/title_activity_driver_matched" >
         </activity>
         <activity
-            android:name=".RiderMatchedActivity"
+            android:name=".main.match.RiderMatchedActivity"
             android:label="@string/title_activity_rider_matched" >
         </activity>
         <activity
-            android:name=".ProfileBasicInfoActivity"
+            android:name=".profile.ProfileBasicInfoActivity"
             android:label="@string/title_activity_profile_basic_info" >
         </activity>
         <activity
-            android:name=".ProfileDriverInfoActivity"
+            android:name=".profile.ProfileDriverInfoActivity"
             android:label="@string/title_activity_profile_driver_info" >
         </activity>
         <activity
-            android:name=".ProfileArriveByInfoActivity"
+            android:name=".profile.ProfileArriveByInfoActivity"
             android:label="@string/title_activity_profile_arrive_by_info" >
         </activity>
         <activity
-            android:name=".ProfileHotspotInfoActivity"
+            android:name=".profile.ProfileHotspotInfoActivity"
             android:label="@string/title_activity_profile_hotspot_info" >
         </activity>
         <activity
-            android:name=".ProfileInitDispatchActivity"
+            android:name=".profile.ProfileInitDispatchActivity"
             android:label="ProfileInitDispatchActivity" >
         </activity>
     </application>

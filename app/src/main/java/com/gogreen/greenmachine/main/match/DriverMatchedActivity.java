@@ -1,39 +1,26 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.main.match;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-import com.parse.ParseGeoPoint;
+import com.gogreen.greenmachine.R;
 
 
-public class RidingActivity extends ActionBarActivity {
-    private ParseGeoPoint geoPoint;
+public class DriverMatchedActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_riding);
-
-        // Set up the handler for the match button click
-        Button matchButton = (Button) findViewById(R.id.rider_match_button);
-        matchButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(RidingActivity.this, MatchingActivity.class);
-                startActivity(intent);
-            }
-        });
+        setContentView(R.layout.activity_driver_matched);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_riding, menu);
+        getMenuInflater().inflate(R.menu.menu_driver_matched, menu);
         return true;
     }
 

@@ -1,9 +1,12 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.main.login;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.gogreen.greenmachine.main.MainActivity;
+import com.gogreen.greenmachine.main.WelcomeActivity;
+import com.gogreen.greenmachine.profile.ProfileInitDispatchActivity;
 import com.parse.ParseUser;
 
 /**

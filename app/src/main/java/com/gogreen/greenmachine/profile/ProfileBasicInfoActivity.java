@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.parseobjects.PrivateProfile;
+import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;

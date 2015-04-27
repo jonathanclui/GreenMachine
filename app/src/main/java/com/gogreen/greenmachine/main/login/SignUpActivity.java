@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.main.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gogreen.greenmachine.R;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -75,7 +76,7 @@ public class SignUpActivity extends ActionBarActivity {
         user.setPassword(password);
         user.put("profileComplete", false);
 
-        // Call the Parse signup method
+        // Call the parseobjects signup method
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {

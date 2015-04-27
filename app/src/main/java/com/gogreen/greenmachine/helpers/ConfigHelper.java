@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.helpers;
 
 import com.parse.ConfigCallback;
 import com.parse.ParseConfig;

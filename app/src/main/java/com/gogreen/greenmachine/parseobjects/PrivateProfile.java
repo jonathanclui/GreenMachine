@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.parseobjects;
 
 import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;

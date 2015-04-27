@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.parse.ParseUser;
 
 

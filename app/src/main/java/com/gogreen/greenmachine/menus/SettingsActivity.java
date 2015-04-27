@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine;
+package com.gogreen.greenmachine.menus;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.main.login.DispatchActivity;
+import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -98,7 +101,7 @@ public class SettingsActivity extends ActionBarActivity {
         Button logoutButton = (Button) findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Call the Parse log out method
+                // Call the parseobjects log out method
                 ParseUser.logOut();
                 // Start and intent for the dispatch activity
                 Intent intent = new Intent(SettingsActivity.this, DispatchActivity.class);

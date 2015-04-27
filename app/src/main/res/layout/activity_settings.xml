@@ -182,7 +182,7 @@
                     android:layout_height="200dp"
                     android:layout_weight="1"
                     android:layout_below="@+id/submit_button_row"
-                    tools:context="com.gogreen.greenmachine.ProfileHotspotInfoActivity"
+                    tools:context="com.gogreen.greenmachine.profile.ProfileHotspotInfoActivity"
                     android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
             </TableRow>

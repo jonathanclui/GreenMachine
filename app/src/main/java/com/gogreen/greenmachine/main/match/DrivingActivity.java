@@ -102,7 +102,7 @@ public class DrivingActivity extends ActionBarActivity {
 
         // 3) Show page with information
         if (this.matchRoute == null) {
-            Toast.makeText(DrivingActivity.this, getString(R.string.progress_no_route_found), Toast.LENGTH_SHORT).show();
+            Toast.makeText(DrivingActivity.this, getString(R.string.progress_no_rider_found), Toast.LENGTH_SHORT).show();
         } else {
             startNextActivity();
         }
@@ -162,6 +162,11 @@ public class DrivingActivity extends ActionBarActivity {
             ParseGeoPoint hq = new ParseGeoPoint(37.5311942, -122.2646403);
             if (!intersection.isEmpty()) {
                 ParseUser rider = request.getRequester();
+                try {
+                    rider.fetchIfNeeded();
+                } catch (ParseException e) {
+                    return;
+                }
                 // The rider can't also be the driver!
                 if (!rider.equals(ParseUser.getCurrentUser())) {
                     // Create a new match route

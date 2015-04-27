@@ -14,7 +14,9 @@
     <string name="default_match_by">8:30 AM</string>
     <string name="default_arrive_by">9:00 AM</string>
 
-    <string name="progress_no_route_found">Looks like there aren\'t any riders. Try again in a
+    <string name="progress_no_rider_found">Looks like there aren\'t any riders. Try again in a
+         a couple minutes!</string>
+    <string name="progress_no_driver_found">Looks like there aren\'t any drivers. Try again in a
          a couple minutes!</string>
     <string name="progress_matching">One moment while we find you riders</string>
 

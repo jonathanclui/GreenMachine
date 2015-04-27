@@ -7,6 +7,8 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by jonathanlui on 4/26/15.
@@ -15,11 +17,11 @@ import java.util.Date;
 public class MatchRequest extends ParseObject {
 
     public RequestType getRequestType() {
-        return (RequestType) get("type");
+        return RequestType.parse(getString("type"));
     }
 
     public void setRequestType(RequestType value) {
-        put("type", value);
+        put("type", value.toString());
     }
 
     public ParseUser getRequester() {
@@ -30,12 +32,12 @@ public class MatchRequest extends ParseObject {
         put("user", value);
     }
 
-    public ArrayList<Hotspot> getHotspots() {
-        return (ArrayList<Hotspot>) get("hotspots");
+    public Set<Hotspot> getHotspots() {
+        return new HashSet<Hotspot>((ArrayList<Hotspot>) get("hotspots"));
     }
 
-    public void setHotspots(ArrayList<Hotspot> value) {
-        put("hotspots", value);
+    public void setHotspots(Set<Hotspot> value) {
+        put("hotspots", new ArrayList<Hotspot>(value));
     }
 
     public Date getMatchByTime() {
@@ -55,11 +57,11 @@ public class MatchRequest extends ParseObject {
     }
 
     public MatchStatus getStatus() {
-        return (MatchStatus) get("status");
+        return MatchStatus.parse(getString("status"));
     }
 
     public void setStatus(MatchStatus value) {
-        put("status", value);
+        put("status", value.toString());
     }
 
     public int getSeats() {
@@ -74,13 +76,40 @@ public class MatchRequest extends ParseObject {
         return ParseQuery.getQuery(MatchRequest.class);
     }
 
-    private enum MatchStatus {
-        ACTIVE,
-        INACTIVE
+    public void populateMatchRequest(RequestType type, ParseUser user, Set<Hotspot> hotspots,
+                                      Date matchBy, Date arriveBy, MatchStatus status, int seats) {
+        setRequestType(type);
+        setRequester(user);
+        setHotspots(hotspots);
+        setMatchByTime(matchBy);
+        setArriveByTime(arriveBy);
+        setStatus(status);
+        setSeats(seats);
     }
 
-    private enum RequestType {
+    public enum MatchStatus {
+        ACTIVE,
+        INACTIVE;
+
+        private static MatchStatus parse(String s) {
+            if (s.equals("ACTIVE")) {
+                return ACTIVE;
+            } else {
+                return INACTIVE;
+            }
+        }
+    }
+
+    public enum RequestType {
         DRIVER,
-        RIDER
+        RIDER;
+
+        private static RequestType parse(String s) {
+            if (s.equals("DRIVER")) {
+                return DRIVER;
+            } else {
+                return RIDER;
+            }
+        }
     }
 }

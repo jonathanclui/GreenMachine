@@ -4,6 +4,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -13,28 +14,34 @@ import java.util.ArrayList;
 @ParseClassName("MatchRoute")
 public class MatchRoute extends ParseObject {
 
-    public String getDriverName() {
-        return getString("driverName");
+    public ParseUser getDriver() {
+        return getParseUser("driver");
     }
 
-    public void setDriverName(String value) {
-        put("driverName", value);
+    public void setDriver(ParseUser value) {
+        put("driver", value);
     }
 
-    public String getDriverCar() {
-        return getString("driverCar");
+    public ArrayList<PublicProfile> getRiders() {
+        return (ArrayList<PublicProfile>) get("riders");
     }
 
-    public void setDriverCar(String value) {
-        put("driverCar", value);
-    }
-
-    public ArrayList<PrivateProfile> getRiders() {
-        return (ArrayList<PrivateProfile>) get("riders");
-    }
-
-    public void setRiders(ArrayList<PrivateProfile> value) {
+    public void setRiders(ArrayList<PublicProfile> value) {
         put("riders", value);
+    }
+
+    public void addRider(PublicProfile rider) {
+        ArrayList<PublicProfile> riders;
+        try {
+            riders = getRiders();
+            if (riders == null) {
+                riders = new ArrayList<PublicProfile>();
+            }
+        } catch (Exception e) {
+            riders = new ArrayList<PublicProfile>();
+        }
+        riders.add(rider);
+        put("riders", riders);
     }
 
     public Hotspot getHotspot() {
@@ -46,7 +53,7 @@ public class MatchRoute extends ParseObject {
     }
 
     public ParseGeoPoint getDestination() {
-        return (ParseGeoPoint) get("destination");
+        return getParseGeoPoint("destination");
     }
 
     public void setDestination(ParseGeoPoint value) {
@@ -54,21 +61,51 @@ public class MatchRoute extends ParseObject {
     }
 
     public TripStatus getStatus() {
-        return (TripStatus) get("tripStatus");
+        return TripStatus.parse(getString("tripStatus"));
     }
 
     public void setStatus(TripStatus value) {
-        put("tripStatus", value);
+        put("tripStatus", value.toString());
+    }
+
+    public int getCapacity() {
+        return getInt("capacity");
+    }
+
+    public void setCapacity(int value) {
+        put("capacity", value);
     }
 
     public static ParseQuery<MatchRoute> getQuery() {
         return ParseQuery.getQuery(MatchRoute.class);
     }
 
-    private enum TripStatus {
+    public void populateMatchRoute(ParseUser driver, PublicProfile rider, Hotspot hotspot,
+                                     ParseGeoPoint destination, TripStatus status, int capacity) {
+        setDriver(driver);
+        addRider(rider);
+        setHotspot(hotspot);
+        setDestination(destination);
+        setStatus(status);
+        setCapacity(capacity);
+    }
+
+    public enum TripStatus {
         NOT_STARTED,
         EN_ROUTE_HOTSPOT,
         EN_ROUTE_DESTINATION,
-        COMPLETED
+        COMPLETED;
+
+        private static TripStatus parse(String s) {
+            if (s.equals("NOT_STARTED")) {
+                return NOT_STARTED;
+            } else if (s.equals("EN_ROUTE_HOTSPOT")) {
+                return EN_ROUTE_HOTSPOT;
+            } else if (s.equals("EN_ROUTE_DESTINATION")) {
+                return EN_ROUTE_DESTINATION;
+            } else {
+                return COMPLETED;
+            }
+        }
     }
 }

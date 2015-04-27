@@ -3,8 +3,11 @@ package com.gogreen.greenmachine.main;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.gogreen.greenmachine.helpers.ConfigHelper;
 import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.helpers.ConfigHelper;
+import com.gogreen.greenmachine.parseobjects.Hotspot;
+import com.gogreen.greenmachine.parseobjects.MatchRequest;
+import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.parse.Parse;
@@ -44,6 +47,9 @@ public class Application extends android.app.Application {
         Parse.enableLocalDatastore(this);
         ParseObject.registerSubclass(PublicProfile.class);
         ParseObject.registerSubclass(PrivateProfile.class);
+        ParseObject.registerSubclass(MatchRequest.class);
+        ParseObject.registerSubclass(MatchRoute.class);
+        ParseObject.registerSubclass(Hotspot.class);
         Parse.initialize(this, APP_ID, CLIENT_KEY);
 
         preferences = getSharedPreferences("com.gogreen.greenmachine", Context.MODE_PRIVATE);

@@ -170,7 +170,7 @@ public class RidingActivity extends ActionBarActivity {
                     } catch (ParseException e) {
                         return;
                     }
-                    this.matchRoute = new MatchRoute();
+                    this.matchRoute = request;
                     this.matchRoute.addRider(pubProfile);
                     try {
                         this.matchRoute.save();

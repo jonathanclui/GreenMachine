@@ -3,6 +3,7 @@ package com.gogreen.greenmachine.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +21,18 @@ public class ProfileArriveByInfoActivity extends ActionBarActivity {
     private EditText arriveHQByEditText;
     private EditText arriveHomeByEditText;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_arrive_by_info);
+
+        // Set up the toolbar
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         arriveHQByEditText = (EditText) findViewById(R.id.arrive_hq_by_edit_text);
         arriveHomeByEditText = (EditText) findViewById(R.id.arrive_home_by_edit_text);

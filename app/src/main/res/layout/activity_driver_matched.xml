@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.gogreen.greenmachine.main.match.DriverMatchedActivity">
 
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar">
+    </include>
+
     <TextView
         android:text="@string/matched"
         android:id="@+id/matched_text"

@@ -1,9 +1,10 @@
-package com.gogreen.greenmachine.menus;
+package com.gogreen.greenmachine.navigation;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -44,10 +45,18 @@ public class SettingsActivity extends ActionBarActivity {
     private static PrivateProfile userProfile;
     private boolean isDriver;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        // Set up the toolbar
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         userProfile = (PrivateProfile) ParseUser.getCurrentUser().get("privateProfile");
         try {

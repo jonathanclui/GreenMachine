@@ -3,6 +3,7 @@ package com.gogreen.greenmachine.main;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,10 +16,15 @@ import com.gogreen.greenmachine.main.login.SignUpActivity;
 
 public class WelcomeActivity extends ActionBarActivity {
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
         // Log in button click handler
         Button loginButton = (Button) findViewById(R.id.login_button);

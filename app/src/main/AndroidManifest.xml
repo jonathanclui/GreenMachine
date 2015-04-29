@@ -3,7 +3,7 @@
     package="com.gogreen.greenmachine" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="19"
         android:targetSdkVersion="21" />
 
     <!-- Prevents apps from displaying on devices without OpenGL ES Version 2 -->
@@ -57,7 +57,7 @@
             android:label="@string/title_activity_welcome" >
         </activity>
         <activity
-            android:name=".menus.SettingsActivity"
+            android:name=".navigation.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
 

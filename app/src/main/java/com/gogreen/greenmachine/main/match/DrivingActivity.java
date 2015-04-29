@@ -3,6 +3,7 @@ package com.gogreen.greenmachine.main.match;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,10 +39,18 @@ public class DrivingActivity extends ActionBarActivity {
     private MatchRequest driverRequest;
     private MatchRoute matchRoute;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driving);
+
+        // Set up the toolbar
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         mCarSpinner = (Spinner) findViewById(R.id.car_spinner);
         ArrayAdapter<CharSequence> carAdapter = ArrayAdapter.createFromResource(this,

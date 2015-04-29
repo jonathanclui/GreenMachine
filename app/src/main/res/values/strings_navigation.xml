@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="open_drawer">Open navigation drawer</string>
+    <string name="close_drawer">Close navigation drawer</string>
+
+    <string-array name="navigation_drawer_titles">
+        <item>Home</item>
+        <item>Badges</item>
+        <item>Hotspots</item>
+        <item>About Us</item>
+        <item>Log out</item>
+    </string-array>
+
+    <array name="navigation_drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_home</item>
+    </array>
+</resources>

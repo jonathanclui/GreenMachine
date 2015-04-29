@@ -13,6 +13,11 @@
             style="@style/LoginFormContainer"
             android:orientation="vertical" >
 
+            <include
+                android:id="@+id/tool_bar"
+                layout="@layout/tool_bar">
+            </include>
+
             <EditText
                 android:id="@+id/email_edit_text"
                 android:layout_width="match_parent"

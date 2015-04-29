@@ -3,7 +3,6 @@
     tools:context=".LoginActivity" >
 
     <!-- Login form -->
-
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
@@ -13,10 +12,16 @@
             style="@style/LoginFormContainer"
             android:orientation="vertical" >
 
+            <include
+                android:id="@+id/tool_bar"
+                layout="@layout/tool_bar">
+            </include>
+
             <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="16dp"
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"

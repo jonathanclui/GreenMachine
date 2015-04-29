@@ -11,7 +11,7 @@ android {
     buildToolsVersion '21.1.2'
     defaultConfig {
         applicationId "com.gogreen.greenmachine"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -28,6 +28,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile fileTree(dir: 'libs', include: 'parseobjects-*.jar')
+    compile 'de.hdodenhof:circleimageview:1.2.1'
+    compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.google.android.gms:play-services:7.0.0'
     compile 'com.parse.bolts:bolts-android:1.+'

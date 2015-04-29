@@ -10,6 +10,11 @@
         <TableLayout
             style="@style/ProfileFormContainer">
 
+            <include
+                android:id="@+id/tool_bar"
+                layout="@layout/tool_bar">
+            </include>
+
             <TableRow
                 android:id="@+id/first_name_row"
                 android:layout_width="fill_parent"

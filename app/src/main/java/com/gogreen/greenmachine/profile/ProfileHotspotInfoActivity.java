@@ -3,6 +3,7 @@ package com.gogreen.greenmachine.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,10 +33,18 @@ public class ProfileHotspotInfoActivity extends ActionBarActivity {
     private EditText hotspotLatEditText;
     private EditText hotspotLongEditText;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_hotspot_info);
+
+        // Set up the toolbar
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         hotspotLatEditText = (EditText) findViewById(R.id.hotspot_lat_edit_text);
         hotspotLongEditText = (EditText) findViewById(R.id.hotspot_long_edit_text);

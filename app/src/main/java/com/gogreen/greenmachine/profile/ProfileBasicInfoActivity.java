@@ -3,6 +3,7 @@ package com.gogreen.greenmachine.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,10 +27,18 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
     private EditText homeCityEditText;
     private EditText phoneEditText;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_basic_info);
+
+        // Set up the toolbar
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         // Set up Edit Texts
         firstNameEditText = (EditText) findViewById(R.id.first_name_edit_text);

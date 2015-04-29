@@ -1,5 +1,12 @@
 package com.gogreen.greenmachine.profile;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.text.format.DateFormat;
+import android.widget.TimePicker;
+import android.widget.TextView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -11,9 +18,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.fragments.TimePickerFragment;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.parse.ParseUser;
 
+import java.util.Calendar;
 
 public class ProfileArriveByInfoActivity extends ActionBarActivity {
 
@@ -36,6 +45,76 @@ public class ProfileArriveByInfoActivity extends ActionBarActivity {
 
         arriveHQByEditText = (EditText) findViewById(R.id.arrive_hq_by_edit_text);
         arriveHomeByEditText = (EditText) findViewById(R.id.arrive_home_by_edit_text);
+
+        arriveHQByEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(ProfileArriveByInfoActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String suffix = "AM";
+                        if (selectedHour == 00){
+                            selectedHour = 12;
+                        }
+                        else if (selectedHour > 12){
+                            selectedHour = selectedHour - 12;
+                            suffix = "PM";
+                        }
+                        String time = selectedHour + ":";
+                        if (selectedMinute < 10){
+                            time = time + "0" + selectedMinute;
+                        }
+                        else {
+                            time = time + selectedMinute;
+                        }
+                        time = time + suffix;
+                        arriveHQByEditText.setText(time);
+                    }
+                }, hour, minute, false);//use AM/PM time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+
+        });
+
+        arriveHomeByEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(ProfileArriveByInfoActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String suffix = "AM";
+                        if (selectedHour == 00){
+                            selectedHour = 12;
+                        }
+                        else if (selectedHour > 12){
+                            selectedHour = selectedHour - 12;
+                            suffix = "PM";
+                        }
+                        String time = selectedHour + ":";
+                        if (selectedMinute < 10){
+                            time = time + "0" + selectedMinute;
+                        }
+                        else {
+                            time = time + selectedMinute;
+                        }
+                        time = time + suffix;
+                        arriveHomeByEditText.setText(time);
+                    }
+                }, hour, minute, false);//use AM/PM time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+
+        });
 
         // Set up the handler for the next button click
         Button nextButton = (Button) findViewById(R.id.next_button);

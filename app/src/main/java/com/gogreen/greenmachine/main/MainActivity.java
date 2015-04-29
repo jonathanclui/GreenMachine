@@ -39,10 +39,10 @@ public class MainActivity extends ActionBarActivity {
     private final int LOGOUT = 5;
 
     private int ICONS[] = {R.drawable.ic_home,
-            R.drawable.ic_home,
-            R.drawable.ic_home,
-            R.drawable.ic_home,
-            R.drawable.ic_home};
+            R.drawable.ic_badges,
+            R.drawable.ic_hotspots,
+            R.drawable.ic_about,
+            R.drawable.ic_logout};
 
     String NAME = "Connor Horton";
     String EMAIL = "connor.horton@oracle.com";
@@ -98,7 +98,6 @@ public class MainActivity extends ActionBarActivity {
                     mDrawer.closeDrawers();
                     switch(childPosition) {
                         case HOME:
-                            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                             return true;
                         case BADGES:
                             startActivity(new Intent(MainActivity.this, BadgeActivity.class));
@@ -111,7 +110,7 @@ public class MainActivity extends ActionBarActivity {
                             logout();
                             return true;
                         default:
-                            return true;
+                            return false;
                     }
                 }
                 return false;
@@ -119,7 +118,6 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-
             }
         });
 
@@ -169,15 +167,6 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-
-        // Set up the handler for the riding button click
-        Button badgesButton = (Button) findViewById(R.id.badges_button);
-        badgesButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BadgeActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -203,7 +192,15 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        return super.onOptionsItemSelected(item);
+        switch (id) {
+            case R.id.action_user:
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                return true;
+            case R.id.action_search:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void logout() {

@@ -38,14 +38,6 @@
             android:id="@+id/riding_button"
             android:layout_gravity="center_vertical" />
 
-        <Button
-            style="@style/PrimaryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/text_dim_top"
-            android:text="@string/about_badges"
-            android:id="@+id/badges_button" />
-
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

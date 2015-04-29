@@ -212,23 +212,6 @@
                     android:text="@string/submit" />
             </TableRow>
 
-            <TableRow
-                android:id="@+id/logout_row"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="center">
-
-                <Button
-                    style="@style/PrimaryButton"
-                    android:id="@+id/logout_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/text_dim_top"
-                    android:text="@string/logout"
-                    android:layout_above="@+id/submit_button"
-                    android:layout_centerHorizontal="true" />
-            </TableRow>
-
         </TableLayout>
     </ScrollView>
 </merge>

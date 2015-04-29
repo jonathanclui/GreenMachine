@@ -1,5 +1,6 @@
 package com.gogreen.greenmachine.main;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -16,18 +17,28 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.main.badges.BadgeActivity;
+import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
-
+import com.parse.LogOutCallback;
+import com.parse.ParseUser;
+import com.parse.ParseException;
 
 public class MainActivity extends ActionBarActivity {
-    int ICONS[] = {R.drawable.ic_home,
+
+    // Menu positions
+    private final int HOME = 1;
+    private final int BADGES = 2;
+    private final int HOTSPOTS = 3;
+    private final int ABOUT_US = 4;
+    private final int LOGOUT = 5;
+
+    private int ICONS[] = {R.drawable.ic_home,
             R.drawable.ic_home,
             R.drawable.ic_home,
             R.drawable.ic_home,
@@ -83,10 +94,25 @@ public class MainActivity extends ActionBarActivity {
                 View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
                 if(child != null && mGestureDetector.onTouchEvent(motionEvent)){
+                    int childPosition = recyclerView.getChildPosition(child);
                     mDrawer.closeDrawers();
-                    Toast.makeText(MainActivity.this, "The Item Clicked is: " + recyclerView.getChildPosition(child), Toast.LENGTH_SHORT).show();
-
-                    return true;
+                    switch(childPosition) {
+                        case HOME:
+                            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                            return true;
+                        case BADGES:
+                            startActivity(new Intent(MainActivity.this, BadgeActivity.class));
+                            return true;
+                        case HOTSPOTS:
+                            return true;
+                        case ABOUT_US:
+                            return true;
+                        case LOGOUT:
+                            logout();
+                            return true;
+                        default:
+                            return true;
+                    }
                 }
                 return false;
             }
@@ -159,13 +185,7 @@ public class MainActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        menu.findItem(R.id.action_settings).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                return true;
-            }
-        });
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -182,16 +202,29 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        final ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+        dialog.setMessage(getString(R.string.progress_logout));
+        dialog.show();
+
+        ParseUser.logOutInBackground(new LogOutCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    dialog.dismiss();
+                    startNextActivity();
+                }
+            }
+        });
+    }
+
+    private void startNextActivity() {
+        // Start and intent for the dispatch activity
+        Intent intent = new Intent(MainActivity.this, DispatchActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

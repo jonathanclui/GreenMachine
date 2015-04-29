@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.gogreen.greenmachine.R;
-import com.gogreen.greenmachine.helpers.DividerItemDecoration;
 import com.gogreen.greenmachine.main.badges.BadgeActivity;
 import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
@@ -68,8 +67,6 @@ public class MainActivity extends ActionBarActivity {
         // Set up recycler and provide it with the proper adapter
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this, null));
         mAdapter = new NavDrawerAdapter(navRowTitles, ICONS, NAME, EMAIL, PROFILE, this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -105,7 +102,7 @@ public class MainActivity extends ActionBarActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Set the drawer
-        mDrawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this,
                 mDrawer,
                 toolbar,

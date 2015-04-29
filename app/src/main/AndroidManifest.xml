@@ -29,7 +29,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -41,10 +40,10 @@
             android:name=".main.login.DispatchActivity"
             android:noHistory="true" >
         </activity>
-        <activity
-            android:name=".main.SplashActivity" >
+        <activity android:name=".main.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -75,12 +74,12 @@
         <activity
             android:name=".main.match.DrivingActivity"
             android:label="@string/title_activity_driving"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".main.match.RidingActivity"
             android:label="@string/title_activity_riding"
-            android:parentActivityName=".main.MainActivity">
+            android:parentActivityName=".main.MainActivity" >
         </activity>
         <activity
             android:name=".main.badges.BadgeActivity"
@@ -89,12 +88,12 @@
         <activity
             android:name=".main.match.DriverMatchedActivity"
             android:label="@string/title_activity_driver_matched"
-            android:parentActivityName=".main.match.DrivingActivity">
+            android:parentActivityName=".main.match.DrivingActivity" >
         </activity>
         <activity
             android:name=".main.match.RiderMatchedActivity"
             android:label="@string/title_activity_rider_matched"
-            android:parentActivityName=".main.match.RidingActivity">
+            android:parentActivityName=".main.match.RidingActivity" >
         </activity>
         <activity
             android:name=".profile.ProfileBasicInfoActivity"
@@ -103,17 +102,17 @@
         <activity
             android:name=".profile.ProfileDriverInfoActivity"
             android:label="@string/title_activity_profile_driver_info"
-            android:parentActivityName=".profile.ProfileBasicInfoActivity">
+            android:parentActivityName=".profile.ProfileBasicInfoActivity" >
         </activity>
         <activity
             android:name=".profile.ProfileArriveByInfoActivity"
             android:label="@string/title_activity_profile_arrive_by_info"
-            android:parentActivityName=".profile.ProfileDriverInfoActivity">
+            android:parentActivityName=".profile.ProfileDriverInfoActivity" >
         </activity>
         <activity
             android:name=".profile.ProfileHotspotInfoActivity"
             android:label="@string/title_activity_profile_hotspot_info"
-            android:parentActivityName=".profile.ProfileArriveByInfoActivity">
+            android:parentActivityName=".profile.ProfileArriveByInfoActivity" >
         </activity>
         <activity
             android:name=".profile.ProfileInitDispatchActivity"

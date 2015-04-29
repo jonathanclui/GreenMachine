@@ -87,16 +87,14 @@
             android:label="@string/title_activity_badge" >
         </activity>
         <activity
-            android:name=".main.match.MatchingActivity"
-            android:label="@string/title_activity_matching" >
-        </activity>
-        <activity
             android:name=".main.match.DriverMatchedActivity"
-            android:label="@string/title_activity_driver_matched" >
+            android:label="@string/title_activity_driver_matched"
+            android:parentActivityName=".main.match.DrivingActivity">
         </activity>
         <activity
             android:name=".main.match.RiderMatchedActivity"
-            android:label="@string/title_activity_rider_matched" >
+            android:label="@string/title_activity_rider_matched"
+            android:parentActivityName=".main.match.RidingActivity">
         </activity>
         <activity
             android:name=".profile.ProfileBasicInfoActivity"

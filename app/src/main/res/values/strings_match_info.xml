@@ -18,7 +18,8 @@
          a couple minutes!</string>
     <string name="progress_no_driver_found">Looks like there aren\'t any drivers. Try again in a
          a couple minutes!</string>
-    <string name="progress_matching">One moment while we find you riders</string>
+    <string name="progress_matching_driver">One moment while we find you riders</string>
+    <string name="progress_matching_rider">One moment while we find you a driver</string>
 
     <string-array name="car_seats_array">
         <item>1</item>

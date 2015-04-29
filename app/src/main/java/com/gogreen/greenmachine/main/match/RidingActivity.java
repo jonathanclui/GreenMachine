@@ -1,6 +1,8 @@
 package com.gogreen.greenmachine.main.match;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -66,7 +68,7 @@ public class RidingActivity extends ActionBarActivity {
         Button matchButton = (Button) findViewById(R.id.rider_match_button);
         matchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                findMatch();
+                new FindMatchTask().execute();
             }
         });
     }
@@ -193,7 +195,29 @@ public class RidingActivity extends ActionBarActivity {
     }
 
     private void startNextActivity() {
-        Intent intent = new Intent(RidingActivity.this, MatchingActivity.class);
+        Intent intent = new Intent(RidingActivity.this, RiderMatchedActivity.class);
         startActivity(intent);
+    }
+
+    private class FindMatchTask extends AsyncTask<Void, Void, Void> {
+        ProgressDialog pdLoading = new ProgressDialog(RidingActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdLoading.setMessage(getString(R.string.progress_matching_rider));
+            pdLoading.show();
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            findMatch();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            pdLoading.dismiss();
+        }
     }
 }

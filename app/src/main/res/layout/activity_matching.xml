@@ -17,14 +17,18 @@
         android:id="@+id/matching_text"/>
 
     <Button
+        style="@style/PrimaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_dim_top"
         android:text="Driver Matched"
         android:id="@+id/driver_matched" />
 
     <Button
+        style="@style/PrimaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_dim_top"
         android:text="Rider Matched"
         android:id="@+id/rider_matched" />
 

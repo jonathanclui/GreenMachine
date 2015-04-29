@@ -21,10 +21,8 @@
     <string name="title_activity_profile_arrive_by_info">Time Preferences</string>
     <string name="title_activity_profile_hotspot_info">Hotspots</string>
     <string name="title_activity_splash"></string>
+    <string name="title_activity_login">Log in</string>
 
-    <string name="signup">Sign up</string>
-    <string name="progress_signup">Signing you up&#8230;</string>
-    <string name="logout_full">Log out of Green Machine</string>
     <string name="submit">Submit</string>
     <string name="powered_by">Powered by</string>
     <string name="oracle">Oracle</string>

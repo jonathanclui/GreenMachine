@@ -21,6 +21,7 @@
          </include>
 
         <Button
+            style="@style/PrimaryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tool_bar"
@@ -29,15 +30,19 @@
             android:id="@+id/driving_button" />
 
         <Button
+            style="@style/PrimaryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_dim_top"
             android:text="@string/riding"
             android:id="@+id/riding_button"
             android:layout_gravity="center_vertical" />
 
         <Button
+            style="@style/PrimaryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_dim_top"
             android:text="@string/about_badges"
             android:id="@+id/badges_button" />
 

@@ -199,9 +199,11 @@
                 android:gravity="center">
 
                 <Button
+                    style="@style/PrimaryButton"
                     android:id="@+id/submit_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_dim_top"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentRight="true"
@@ -217,10 +219,12 @@
                 android:gravity="center">
 
                 <Button
+                    style="@style/PrimaryButton"
                     android:id="@+id/logout_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/logout_full"
+                    android:layout_marginTop="@dimen/text_dim_top"
+                    android:text="@string/logout"
                     android:layout_above="@+id/submit_button"
                     android:layout_centerHorizontal="true" />
             </TableRow>

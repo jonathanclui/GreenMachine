@@ -27,8 +27,10 @@
         android:singleLine="true" />
 
     <Button
+        style="@style/PrimaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_dim_top"
         android:text="@string/next"
         android:id="@+id/next_button"
         android:layout_gravity="end"

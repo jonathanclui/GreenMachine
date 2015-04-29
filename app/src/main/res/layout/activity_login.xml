@@ -6,7 +6,7 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <LinearLayout
             style="@style/LoginFormContainer"
@@ -37,7 +37,8 @@
                 android:singleLine="true"
                 android:imeActionId="@+id/edittext_action_login"
                 android:imeActionLabel="@string/login"
-                android:imeOptions="actionUnspecified" />
+                android:imeOptions="actionUnspecified"
+                android:fontFamily="sans-serif" />
 
             <Button
                 style="@style/PrimaryButton"
@@ -48,7 +49,8 @@
                 android:layout_marginTop="16dp"
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
-                android:text="@string/login" />
+                android:text="@string/login"
+                android:paddingEnd="5px" />
         </LinearLayout>
     </ScrollView>
 

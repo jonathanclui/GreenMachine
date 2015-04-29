@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Green Machine</string>
-    <string name="slogan">Go Green Machine!</string>
+    <string name="slogan">Green Machine</string>
 
     <string name="action_settings">Settings</string>
     <string name="next">Next</string>
 
     <string name="title_activity_signup">Sign up</string>
     <string name="title_activity_main">Home</string>
-    <string name="title_activity_welcome">Green Machine</string>
+    <string name="title_activity_welcome"></string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_riding">Riding</string>
     <string name="title_activity_badge">Badge Activity</string>

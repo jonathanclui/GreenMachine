@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.gc.materialdesign.views.ButtonFloat;
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.parse.ParseUser;
@@ -39,7 +40,7 @@ public class ProfileDriverInfoActivity extends ActionBarActivity {
         carEditText = (EditText) findViewById(R.id.car_edit_text);
 
         // Set up the handler for the next button click
-        Button nextButton = (Button) findViewById(R.id.next_button);
+        ButtonFloat nextButton = (ButtonFloat) findViewById(R.id.next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 submit();

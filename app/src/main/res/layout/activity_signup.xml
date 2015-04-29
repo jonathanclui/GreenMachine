@@ -34,7 +34,8 @@
                 android:hint="@string/prompt_password"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:fontFamily="sans-serif" />
 
             <EditText
                 android:id="@+id/password_again_edit_text"
@@ -46,7 +47,8 @@
                 android:singleLine="true"
                 android:imeActionId="@+id/edittext_action_signup"
                 android:imeActionLabel="@string/signup"
-                android:imeOptions="actionUnspecified" />
+                android:imeOptions="actionUnspecified"
+                android:fontFamily="sans-serif" />
 
             <Button
                 style="@style/PrimaryButton"

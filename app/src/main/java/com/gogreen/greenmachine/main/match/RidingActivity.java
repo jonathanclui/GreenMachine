@@ -1,6 +1,7 @@
 package com.gogreen.greenmachine.main.match;
 
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.gogreen.greenmachine.R;
@@ -24,6 +27,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -40,6 +44,10 @@ public class RidingActivity extends ActionBarActivity {
     private MatchRoute matchRoute;
 
     private Toolbar toolbar;
+
+    // UI references.
+    private EditText matchByEditText;
+    private EditText leaveByEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +71,79 @@ public class RidingActivity extends ActionBarActivity {
                 R.array.destinations_array, android.R.layout.simple_spinner_item);
         destAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mDestSpinner.setAdapter(destAdapter);
+
+        matchByEditText = (EditText) findViewById(R.id.match_by_edit_text);
+        leaveByEditText = (EditText) findViewById(R.id.leave_by_edit_text);
+
+        matchByEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(RidingActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String suffix = "AM";
+                        if (selectedHour == 00){
+                            selectedHour = 12;
+                        }
+                        else if (selectedHour > 12){
+                            selectedHour = selectedHour - 12;
+                            suffix = "PM";
+                        }
+                        String time = selectedHour + ":";
+                        if (selectedMinute < 10){
+                            time = time + "0" + selectedMinute;
+                        }
+                        else {
+                            time = time + selectedMinute;
+                        }
+                        time = time + suffix;
+                        matchByEditText.setText(time);
+                    }
+                }, hour, minute, false);//use AM/PM time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+
+        });
+
+        leaveByEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(RidingActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String suffix = "AM";
+                        if (selectedHour == 00){
+                            selectedHour = 12;
+                        }
+                        else if (selectedHour > 12){
+                            selectedHour = selectedHour - 12;
+                            suffix = "PM";
+                        }
+                        String time = selectedHour + ":";
+                        if (selectedMinute < 10){
+                            time = time + "0" + selectedMinute;
+                        }
+                        else {
+                            time = time + selectedMinute;
+                        }
+                        time = time + suffix;
+                        leaveByEditText.setText(time);
+                    }
+                }, hour, minute, false);//use AM/PM time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+
+        });
 
         // Set up the handler for the match button click
         Button matchButton = (Button) findViewById(R.id.rider_match_button);

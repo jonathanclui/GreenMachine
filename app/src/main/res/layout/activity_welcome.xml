@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     tools:context=".WelcomeActivity"
     android:background="#efeff2">
-
     <include
         android:id="@+id/tool_bar"
-        layout="@layout/tool_bar">
+        layout="@layout/tool_bar"
+        >
     </include>
 
     <TextView
@@ -19,7 +19,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/text_slogan"
         android:layout_below="@+id/tool_bar"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="85px"
+        android:textStyle="bold" />
 
     <Button
         style="@style/PrimaryButton"

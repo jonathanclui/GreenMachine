@@ -46,6 +46,17 @@
         android:layout_alignRight="@+id/login_button"
         android:layout_alignEnd="@+id/login_button"/>
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/signgoogle_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/signup_button"
+        android:text="@string/signgoogle" />
+
     <TextView
         android:id="@+id/powered_by"
         android:layout_width="wrap_content"

@@ -37,8 +37,6 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
         // Set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
 
         // Set up Edit Texts
         firstNameEditText = (EditText) findViewById(R.id.first_name_edit_text);

@@ -29,6 +29,14 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".main.login.DispatchActivity"
             android:noHistory="true" >
@@ -64,21 +72,15 @@
             android:name=".navigation.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
         <activity
             android:name=".main.match.DrivingActivity"
-            android:label="@string/title_activity_driving" >
+            android:label="@string/title_activity_driving"
+            android:parentActivityName=".main.MainActivity">
         </activity>
         <activity
             android:name=".main.match.RidingActivity"
-            android:label="@string/title_activity_riding" >
+            android:label="@string/title_activity_riding"
+            android:parentActivityName=".main.MainActivity">
         </activity>
         <activity
             android:name=".main.badges.BadgeActivity"
@@ -102,15 +104,18 @@
         </activity>
         <activity
             android:name=".profile.ProfileDriverInfoActivity"
-            android:label="@string/title_activity_profile_driver_info" >
+            android:label="@string/title_activity_profile_driver_info"
+            android:parentActivityName=".profile.ProfileBasicInfoActivity">
         </activity>
         <activity
             android:name=".profile.ProfileArriveByInfoActivity"
-            android:label="@string/title_activity_profile_arrive_by_info" >
+            android:label="@string/title_activity_profile_arrive_by_info"
+            android:parentActivityName=".profile.ProfileDriverInfoActivity">
         </activity>
         <activity
             android:name=".profile.ProfileHotspotInfoActivity"
-            android:label="@string/title_activity_profile_hotspot_info" >
+            android:label="@string/title_activity_profile_hotspot_info"
+            android:parentActivityName=".profile.ProfileArriveByInfoActivity">
         </activity>
         <activity
             android:name=".profile.ProfileInitDispatchActivity"

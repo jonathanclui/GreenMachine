@@ -12,3 +12,4 @@ In order for this app to work you must do the following:
   - parse_client_id
 3. Set up an application on Parse and plug in the keys into the file
 4. Set up an application on the Google Developer API and allow permissions for your app
+

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.Handler;
 
 import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.main.login.DispatchActivity;
 
 /**
  * Created by pallavi on 4/28/15.
@@ -28,7 +29,7 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(SplashActivity.this,MainActivity.class);
+                Intent mainIntent = new Intent(SplashActivity.this, DispatchActivity.class);
                 SplashActivity.this.startActivity(mainIntent);
                 SplashActivity.this.finish();
             }

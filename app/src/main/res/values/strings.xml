@@ -6,22 +6,21 @@
     <string name="next">Next</string>
 
     <string name="title_activity_signup">Sign up</string>
-    <string name="title_activity_main">Main Activity</string>
-    <string name="title_activity_welcome">Welcome Activity</string>
+    <string name="title_activity_main">Home</string>
+    <string name="title_activity_welcome">Green Machine</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="title_activity_riding">Riding Activity</string>
+    <string name="title_activity_riding">Riding</string>
     <string name="title_activity_badge">Badge Activity</string>
-    <string name="title_activity_match_item">Match</string>
-    <string name="title_activity_driving">DrivingActivity</string>
+    <string name="title_activity_driving">Driving</string>
     <string name="title_activity_driving_info">Arrange a Carpool</string>
-    <string name="title_activity_matching">MatchingActivity</string>
-    <string name="title_activity_driver_matched">DriverMatchedActivity</string>
-    <string name="title_activity_rider_matched">RiderMatchedActivity</string>
-    <string name="title_activity_profile_basic_info">ProfileBasicInfoActivity</string>
-    <string name="title_activity_profile_driver_info">ProfileDriverInfoActivity</string>
-    <string name="title_activity_profile_arrive_by_info">ProfileArriveByInfoActivity</string>
-    <string name="title_activity_profile_hotspot_info">ProfileHotspotInfoActivity</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_matching">Matching</string>
+    <string name="title_activity_driver_matched">Driver Matched</string>
+    <string name="title_activity_rider_matched">Rider Matched</string>
+    <string name="title_activity_profile_basic_info">Basic Profile Information</string>
+    <string name="title_activity_profile_driver_info">Driving Information</string>
+    <string name="title_activity_profile_arrive_by_info">Time Preferences</string>
+    <string name="title_activity_profile_hotspot_info">Hotspots</string>
+    <string name="title_activity_splash"></string>
 
     <string name="signup">Sign up</string>
     <string name="progress_signup">Signing you up&#8230;</string>

@@ -40,24 +40,24 @@
         <activity
             android:name=".main.login.DispatchActivity"
             android:noHistory="true" >
+        </activity>
+        <activity
+            android:name=".main.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.SplashActivity"
-            android:label="SplashActivity" >
-        </activity>
-        <activity
             android:name=".main.login.SignUpActivity"
             android:label="@string/title_activity_signup"
+            android:parentActivityName=".main.WelcomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".main.login.LoginActivity"
             android:label="@string/title_activity_login"
+            android:parentActivityName=".main.WelcomeActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity

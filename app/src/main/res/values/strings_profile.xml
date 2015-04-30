@@ -15,6 +15,7 @@
     <string name="prompt_latitude">Latitude</string>
     <string name="prompt_longitude">Longitude</string>
     <string name="title_profile_arrive_by_info">What\'s your daily schedule?</string>
+    <string name="title_hotspot_info">Here\'s our pickup and dropoff locations. Select a few near your home.</string>
     <string name="switch_label_driving">Driving?</string>
     <string name="progress_update_profile">Updating Profile</string>
     <string name="profile_saved">Profile saved!</string>

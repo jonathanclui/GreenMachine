@@ -1,15 +1,53 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.gogreen.greenmachine.profile.ProfileBasicInfoActivity">
+    tools:context="com.gogreen.greenmachine.profile.ProfileHotspotInfoActivity" >
 
-    <include
+    <ScrollView
+        android:id="@+id/signup_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+
+        >
+
+    <LinearLayout
+        style="@style/LoginFormContainer"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+    <!--include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar">
-    </include>
+    </include-->
 
+        <LinearLayout
+            style="@style/LoginFormContainer"
+            android:orientation="vertical"
+            android:background="#F44336"
+            android:layout_weight="0.17">
+            <ImageView android:id="@+id/icon"
+                android:src="@drawable/ic_hotspot"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="50px" />
+
+            <TextView
+                android:layout_width="301dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/title_hotspot_info"
+                android:id="@+id/textView"
+                android:layout_gravity="center_horizontal"
+                android:textAlignment="center"
+                android:padding="10px"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
+    <LinearLayout
+        style="@style/LoginFormContainer"
+        android:orientation="vertical"
+        android:padding="0px"
+        >
     <EditText
         android:id="@+id/hotspot_lat_edit_text"
         android:layout_width="match_parent"
@@ -33,17 +71,61 @@
         android:layout_below="@+id/next_button"
         tools:context="com.gogreen.greenmachine.profile.ProfileHotspotInfoActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
+    </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="30px"
+        android:id="@+id/rl"
+        android:transitionGroup="false"
 
-    <Button
-        style="@style/PrimaryButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/text_dim_top"
-        android:text="@string/next"
-        android:id="@+id/next_button"
-        android:layout_gravity="end"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-</LinearLayout>
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/linearLayout"
+            android:layout_marginTop="100px"
+            >
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/imageButton2"
+                android:src="@drawable/ic_left_arrow"
+                android:padding="80px"
+                android:layout_marginTop="40px"
+                android:background="#80FFFFFF"
+                />
+            <ImageView android:id="@+id/train"
+                android:src="@drawable/train4of4"
+                android:layout_gravity="center"
+                android:layout_width="150dp"
+                android:layout_height="75dp"
+                android:padding="50px"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/next_button"
+                />
+            <!--<com.gc.materialdesign.views.ButtonRectangle
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/primary_button"
+                android:text="@string/setprofile"
+                android:padding="50px"
+                android:layout_alignParentRight="true" />-->
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/next_button"
+                android:src="@drawable/ic_right_arrow"
+                android:padding="80px"
+                android:layout_marginTop="40px"
+                android:background="#80FFFFFF"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+</merge>

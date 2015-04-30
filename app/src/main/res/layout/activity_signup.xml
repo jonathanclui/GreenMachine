@@ -37,7 +37,7 @@
                 android:layout_width="301dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Transforming the way Oracle employees commute to work"
+                android:text="@string/title_signup"
                 android:id="@+id/textView"
                 android:layout_gravity="center_horizontal"
                 android:textAlignment="center"
@@ -90,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="30px"
-        android:id="@+id/">
+        android:id="@+id/rl">
         <com.gc.materialdesign.views.ButtonRectangle
             android:id="@+id/action_button"
             android:layout_width="wrap_content"

@@ -3,11 +3,12 @@
     <!-- Theme Colors -->
     <color name="primary">#8bc34a</color>
     <color name="primary_dark">#558b2f</color>
+    <color name="primary_background">#efeff2</color>
 
     <!-- Button Related Colors -->
-    <color name="primary_button">#259b24</color>
+    <color name="primary_button">#00bcd4</color>
     <color name="primary_button_text">#efeff2</color>
 
     <!-- Text Colors -->
-    <color name="text_slogan">#317256</color>
+    <color name="text_slogan">#558b2f</color>
 </resources>

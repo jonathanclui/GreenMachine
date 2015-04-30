@@ -7,9 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
+import com.gc.materialdesign.views.ButtonRectangle;
 
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
@@ -35,8 +36,8 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
         setContentView(R.layout.activity_profile_basic_info);
 
         // Set up the toolbar
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
+        /*toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);*/
 
         // Set up Edit Texts
         firstNameEditText = (EditText) findViewById(R.id.first_name_edit_text);
@@ -45,7 +46,7 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
         phoneEditText = (EditText) findViewById(R.id.phone_edit_text);
 
         // Set up the handler for the next button click
-        Button nextButton = (Button) findViewById(R.id.next_button);
+        ImageButton nextButton = (ImageButton) findViewById(R.id.next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 submit();

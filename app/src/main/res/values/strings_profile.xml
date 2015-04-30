@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_signup">Transforming the way Oracle employees commute to work</string>
+    <string name="setprofile">Set up profile</string>
+    <string name="title_basic_info">Carpool with fellow Oracle employees</string>
+    <string name="title_driver_info">Interested in driving others?</string>
     <string name="prompt_first_name">First Name</string>
     <string name="prompt_last_name">Last Name</string>
     <string name="prompt_home_city">Home City</string>
     <string name="prompt_phone">Phone</string>
-    <string name="prompt_driving">Driving?</string>
+    <string name="prompt_driving">I will be a driver</string>
     <string name="prompt_car">Car Make, Model, Year</string>
-    <string name="prompt_arrive_hq_by">Arrive to HQ by</string>
-    <string name="prompt_arrive_home_by">Arrive Home by</string>
+    <string name="prompt_arrive_hq_by">I usually get to HQ by</string>
+    <string name="prompt_arrive_home_by">I usually get home by</string>
     <string name="prompt_latitude">Latitude</string>
     <string name="prompt_longitude">Longitude</string>
-
+    <string name="title_profile_arrive_by_info">What\'s your daily schedule?</string>
     <string name="switch_label_driving">Driving?</string>
     <string name="progress_update_profile">Updating Profile</string>
     <string name="profile_saved">Profile saved!</string>

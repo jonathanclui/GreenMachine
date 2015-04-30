@@ -15,7 +15,7 @@
             <LinearLayout
                 style="@style/LoginFormContainer"
                 android:orientation="vertical"
-                android:background="#00796B"
+                android:background="#1976D2"
                 android:layout_weight="0.17">
     <!--include
         android:id="@+id/tool_bar"
@@ -83,14 +83,13 @@
                 android:id="@+id/imageButton2"
                 android:src="@drawable/ic_left_arrow"
                 android:background="@color/primary_background"
-                android:visibility="invisible"
                 />
 
             <ImageView android:id="@+id/train"
                 android:src="@drawable/train3of4"
                 android:layout_gravity="center"
-                android:layout_width="200dp"
-                android:layout_height="100dp"
+                android:layout_width="150dp"
+                android:layout_height="75dp"
                 android:padding="50px"
                 android:layout_centerHorizontal="true"
                 android:layout_alignTop="@+id/next_button"

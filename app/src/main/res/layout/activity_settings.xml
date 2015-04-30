@@ -150,6 +150,7 @@
                     android:inputType="time"
                     android:ems="10"
                     android:id="@+id/arrive_hq_by_edit_text"
+                    android:windowSoftInputMode="stateHidden"
                     android:layout_weight="2"/>
 
             </TableRow>
@@ -172,6 +173,7 @@
                     android:inputType="time"
                     android:ems="10"
                     android:id="@+id/arrive_home_by_edit_text"
+                    android:windowSoftInputMode="stateHidden"
                     android:layout_weight="2"/>
 
             </TableRow>

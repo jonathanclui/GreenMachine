@@ -8,11 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.gogreen.greenmachine.R;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -34,10 +33,10 @@ public class SignUpActivity extends ActionBarActivity {
         setContentView(R.layout.activity_signup);
 
         // Set up the toolbar
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        /*toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);*/
 
         // Set up the signup form.
         usernameEditText = (EditText) findViewById(R.id.email_edit_text);
@@ -57,7 +56,7 @@ public class SignUpActivity extends ActionBarActivity {
         });
 
         // Set up the submit button click handler
-        Button mActionButton = (Button) findViewById(R.id.action_button);
+        ButtonRectangle mActionButton = (ButtonRectangle) findViewById(R.id.action_button);
         mActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 signup();

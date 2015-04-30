@@ -1,16 +1,66 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.gogreen.greenmachine.profile.ProfileBasicInfoActivity">
+    <merge xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.gogreen.greenmachine.profile.ProfileBasicInfoActivity" >
 
-    <include
+
+        <ScrollView
+            android:id="@+id/signup_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+
+            >
+
+            <LinearLayout
+                style="@style/LoginFormContainer"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+    <!--<include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar">
-    </include>
+    </include>-->
 
+                <LinearLayout
+                    style="@style/LoginFormContainer"
+                    android:orientation="vertical"
+                    android:background="#E048FB"
+                    android:layout_weight="0.17">
+                    <ImageView android:id="@+id/icon"
+                        android:src="@drawable/ic_drive"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="50px" />
 
+                    <TextView
+                        android:layout_width="301dp"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/title_driver_info"
+                        android:id="@+id/textView"
+                        android:layout_gravity="center_horizontal"
+                        android:textAlignment="center"
+                        android:padding="10px"
+                        android:gravity="center_horizontal" />
+                </LinearLayout>
+
+            <LinearLayout
+                style="@style/LoginFormContainer"
+                android:orientation="vertical"
+                android:padding="30px"
+
+                >
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prompt_driving"
+                    android:id="@+id/switch1"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:padding="5px"
+                    android:textOn="YES"
+                    android:textOff="NO" />
 
     <EditText
         android:id="@+id/driving_edit_text"
@@ -27,23 +77,57 @@
         android:hint="@string/prompt_car"
         android:maxLines="1"
         android:singleLine="true" />
+                </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="30px"
+        android:id="@+id/rl"
         >
-        <!-- ... XML CODE -->
-        <com.gc.materialdesign.views.ButtonFloat
-            android:id="@+id/next_button"
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="24dp"
-            android:background="@color/primary_button"
-            materialdesign:animate="true"
-            materialdesign:iconDrawable="@drawable/ic_launcher" />
+            android:id="@+id/linearLayout"
+            >
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:id="@+id/imageButton2"
+                android:src="@drawable/ic_left_arrow"
+                android:background="@color/primary_background"
+                android:visibility="invisible"
+                />
+
+            <ImageView android:id="@+id/train"
+                android:src="@drawable/train4of4"
+                android:layout_gravity="center"
+                android:layout_width="150dp"
+                android:layout_height="75dp"
+                android:padding="50px"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/next_button"
+
+                />
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:id="@+id/next_button"
+                android:src="@drawable/ic_right_arrow"
+                android:background="@color/primary_background"
+                />
+        </LinearLayout>
+
+
     </RelativeLayout>
 
-</LinearLayout>
+
+</merge>

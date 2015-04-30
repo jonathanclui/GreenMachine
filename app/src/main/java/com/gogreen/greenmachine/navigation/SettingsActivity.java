@@ -1,6 +1,7 @@
 package com.gogreen.greenmachine.navigation;
 
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.gogreen.greenmachine.R;
@@ -24,6 +26,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 
@@ -96,6 +99,76 @@ public class SettingsActivity extends ActionBarActivity {
                     isDriver = false;
                 }
             }
+        });
+
+        mArriveHQBy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(SettingsActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String suffix = "AM";
+                        if (selectedHour == 00){
+                            selectedHour = 12;
+                        }
+                        else if (selectedHour > 12){
+                            selectedHour = selectedHour - 12;
+                            suffix = "PM";
+                        }
+                        String time = selectedHour + ":";
+                        if (selectedMinute < 10){
+                            time = time + "0" + selectedMinute;
+                        }
+                        else {
+                            time = time + selectedMinute;
+                        }
+                        time = time + suffix;
+                        mArriveHQBy.setText(time);
+                    }
+                }, hour, minute, false);//use AM/PM time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+
+        });
+
+        mArriveHomeBy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(SettingsActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String suffix = "AM";
+                        if (selectedHour == 00){
+                            selectedHour = 12;
+                        }
+                        else if (selectedHour > 12){
+                            selectedHour = selectedHour - 12;
+                            suffix = "PM";
+                        }
+                        String time = selectedHour + ":";
+                        if (selectedMinute < 10){
+                            time = time + "0" + selectedMinute;
+                        }
+                        else {
+                            time = time + selectedMinute;
+                        }
+                        time = time + suffix;
+                        mArriveHomeBy.setText(time);
+                    }
+                }, hour, minute, false);//use AM/PM time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+
         });
 
         Button submitButton = (Button) findViewById(R.id.submit_button);

@@ -9,8 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.CompoundButton;
 
-import com.gc.materialdesign.views.ButtonFloat;
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.parse.ParseUser;
@@ -19,8 +21,9 @@ import com.parse.ParseUser;
 public class ProfileDriverInfoActivity extends ActionBarActivity {
 
     // UI references.
-    private EditText drivingEditText;
+    private  Switch drivingSwitch;
     private EditText carEditText;
+    private LinearLayout carReveal;
 
     private Toolbar toolbar;
 
@@ -35,9 +38,25 @@ public class ProfileDriverInfoActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);*/
 
-        // Set up Edit Texts
-        drivingEditText = (EditText) findViewById(R.id.driving_edit_text);
+        // Set up Edit Texts and Switch
+        carReveal = (LinearLayout) findViewById(R.id.isdriving);
+        drivingSwitch = (Switch) findViewById(R.id.driving_switch);
+        drivingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (drivingSwitch.isChecked()){
+                    carReveal.setVisibility(View.VISIBLE);}
+                else{
+                    carReveal.setVisibility(View.INVISIBLE);
+                }
+            }
+
+
+        });
         carEditText = (EditText) findViewById(R.id.car_edit_text);
+
 
         // Set up the handler for the next button click
         ImageButton nextButton = (ImageButton) findViewById(R.id.next_button);
@@ -46,6 +65,7 @@ public class ProfileDriverInfoActivity extends ActionBarActivity {
                 submit();
             }
         });
+
     }
 
     @Override
@@ -64,7 +84,7 @@ public class ProfileDriverInfoActivity extends ActionBarActivity {
     private void submit() {
         // Set up public profile with data
         ParseUser currentUser = ParseUser.getCurrentUser();
-        String driving = drivingEditText.getText().toString().trim();
+        String driving = drivingSwitch.getText().toString().trim();
         String car = carEditText.getText().toString().trim();
 
         savePrivateProfile(driving, car);

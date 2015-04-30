@@ -14,6 +14,9 @@
     <string name="prompt_arrive_home_by">Arrive Home by</string>
     <string name="prompt_latitude">Latitude</string>
     <string name="prompt_longitude">Longitude</string>
+    <string name="describe_car">Describe your car:</string>
+    <string name="num_passengers">How many passengers can you take?</string>
+    <string name="prompt_passengers">#</string>prompt_passengers
 
     <string name="switch_label_driving">Driving?</string>
     <string name="progress_update_profile">Updating Profile</string>

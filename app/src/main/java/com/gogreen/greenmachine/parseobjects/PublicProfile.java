@@ -1,6 +1,7 @@
 package com.gogreen.greenmachine.parseobjects;
 
 import com.parse.ParseClassName;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -33,6 +34,14 @@ public class PublicProfile extends ParseObject {
 
     public void setPhoneNumber(String value) {
         put("phoneNumber", value);
+    }
+
+    public ParseGeoPoint getLastKnownLocation() {
+        return getParseGeoPoint("lastKnownLocation");
+    }
+
+    public void  setLastKnownLocation(ParseGeoPoint value) {
+        put("lastKnownLocation", value);
     }
 
     public static ParseQuery<PublicProfile> getQuery() {

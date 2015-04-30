@@ -28,6 +28,7 @@ import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
+import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -45,6 +46,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
 import java.util.Arrays;
@@ -336,15 +338,23 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     private void updateLocation() {
-        mLatitude=(mCurrentLocation.getLatitude());
-        mLongitude=(mCurrentLocation.getLongitude());
-        //mLastUpdateTimeTextView.setText(mLastUpdateTime);
-        Log.i(MainActivity.class.getSimpleName(), "Lart:"+mLatitude+" Lon:" + mLongitude);
-        //PrivateProfile privProfile = (PrivateProfile) ParseUser.getCurrentUser().get("privateProfile");
-        //ArrayList<ParseGeoPoint> pg=privProfile.getPreferredHotspots();
+        Log.i(MainActivity.class.getSimpleName(), "Lat:"+mLatitude+" Lon:" + mLongitude);
 
+        mLatitude = mCurrentLocation.getLatitude();
+        mLongitude = mCurrentLocation.getLongitude();
 
+        // Fetch user's public profile
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
+        try {
+            pubProfile.fetchIfNeeded();
+        } catch (ParseException e) {
+            return;
+        }
 
+        // Insert coordinates into the user's public profile lastKnownLocation
+        ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
+        pubProfile.setLastKnownLocation(userLoc);
     }
 
     protected void createLocationRequest() {

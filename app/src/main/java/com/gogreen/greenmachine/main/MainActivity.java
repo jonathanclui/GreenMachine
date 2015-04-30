@@ -28,12 +28,11 @@ import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
-import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,10 +45,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -442,7 +439,7 @@ public class MainActivity extends ActionBarActivity implements
                 .target(new LatLng(mLatitude, mLongitude))      // Sets the center of the map
                 .zoom(10)
                 .build();                   // Creates a CameraPosition from the builder
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         for (int j = 0; j < hspotsList.size(); j++) {
             //Log.i(MainActivity.class.getSimpleName(), "hotspot:" + j + hspotsList.get(j));
             mMap.addMarker(new MarkerOptions().position(hspotsList.get(j))

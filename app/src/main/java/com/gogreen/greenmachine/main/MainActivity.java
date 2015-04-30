@@ -365,23 +365,25 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     private void updateLocation() {
-        Log.i(MainActivity.class.getSimpleName(), "Lat:"+mLatitude+" Lon:" + mLongitude);
+        Log.i(MainActivity.class.getSimpleName(), "Lat:" + mLatitude + " Lon:" + mLongitude);
 
-        mLatitude = mCurrentLocation.getLatitude();
-        mLongitude = mCurrentLocation.getLongitude();
+        if (mCurrentLocation!=null){
+            mLatitude = mCurrentLocation.getLatitude();
+            mLongitude = mCurrentLocation.getLongitude();
 
-        // Fetch user's public profile
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
-        try {
-            pubProfile.fetchIfNeeded();
-        } catch (ParseException e) {
-            return;
+            // Fetch user's public profile
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
+            try {
+                pubProfile.fetchIfNeeded();
+            } catch (ParseException e) {
+                return;
+            }
+
+            // Insert coordinates into the user's public profile lastKnownLocation
+            ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
+            pubProfile.setLastKnownLocation(userLoc);
         }
-
-        // Insert coordinates into the user's public profile lastKnownLocation
-        ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
-        pubProfile.setLastKnownLocation(userLoc);
     }
 
     protected void createLocationRequest() {

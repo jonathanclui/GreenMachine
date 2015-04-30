@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/primary"
+    android:background="@color/primary_dark"
     android:gravity="center">
 
 <ImageView android:id="@+id/splashscreen" android:layout_width="469px"

@@ -25,7 +25,7 @@
     </style>
 
     <style name="PrimaryButton">
-        <item name="android:background">@color/primary</item>
+        <item name="android:background">@color/primary_button</item>
         <item name="android:textColor">@color/primary_button_text</item>
     </style>
 

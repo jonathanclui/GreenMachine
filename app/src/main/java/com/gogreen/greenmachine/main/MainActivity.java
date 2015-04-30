@@ -28,12 +28,12 @@ import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
-import com.gogreen.greenmachine.parseobjects.PrivateProfile;
+import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,7 +49,6 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -339,15 +338,23 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     private void updateLocation() {
-        mLatitude=(mCurrentLocation.getLatitude());
-        mLongitude=(mCurrentLocation.getLongitude());
-        //mLastUpdateTimeTextView.setText(mLastUpdateTime);
-        Log.i(MainActivity.class.getSimpleName(), "Lart:"+mLatitude+" Lon:" + mLongitude);
-        //PrivateProfile privProfile = (PrivateProfile) ParseUser.getCurrentUser().get("privateProfile");
-        //ArrayList<ParseGeoPoint> pg=privProfile.getPreferredHotspots();
+        Log.i(MainActivity.class.getSimpleName(), "Lat:"+mLatitude+" Lon:" + mLongitude);
 
+        mLatitude = mCurrentLocation.getLatitude();
+        mLongitude = mCurrentLocation.getLongitude();
 
+        // Fetch user's public profile
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
+        try {
+            pubProfile.fetchIfNeeded();
+        } catch (ParseException e) {
+            return;
+        }
 
+        // Insert coordinates into the user's public profile lastKnownLocation
+        ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
+        pubProfile.setLastKnownLocation(userLoc);
     }
 
     protected void createLocationRequest() {
@@ -442,7 +449,7 @@ public class MainActivity extends ActionBarActivity implements
                 .target(new LatLng(mLatitude, mLongitude))      // Sets the center of the map
                 .zoom(10)
                 .build();                   // Creates a CameraPosition from the builder
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         for (int j = 0; j < hspotsList.size(); j++) {
             //Log.i(MainActivity.class.getSimpleName(), "hotspot:" + j + hspotsList.get(j));
             mMap.addMarker(new MarkerOptions().position(hspotsList.get(j))

@@ -174,13 +174,6 @@ public class RidingActivity extends ActionBarActivity {
 
         // 2) Find riders and create route
         findRoute();
-
-        // 3) Show page with information
-        if (this.matchRoute == null) {
-            Toast.makeText(RidingActivity.this, getString(R.string.progress_no_driver_found), Toast.LENGTH_SHORT).show();
-        } else {
-            startNextActivity();
-        }
     }
 
     private void createMatchRequest() {
@@ -208,6 +201,15 @@ public class RidingActivity extends ActionBarActivity {
         } catch (Exception e) {
             // Handle a save failure
             return;
+        }
+    }
+
+    private void processResult() {
+        // 3) Show page with information
+        if (this.matchRoute == null) {
+            Toast.makeText(RidingActivity.this, getString(R.string.progress_no_driver_found), Toast.LENGTH_SHORT).show();
+        } else {
+            startNextActivity();
         }
     }
 
@@ -299,6 +301,7 @@ public class RidingActivity extends ActionBarActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             pdLoading.dismiss();
+            processResult();
         }
     }
 }

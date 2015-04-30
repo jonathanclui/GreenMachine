@@ -182,13 +182,6 @@ public class DrivingActivity extends ActionBarActivity {
 
         // 2) Find riders and create route
         createRoute();
-
-        // 3) Show page with information
-        if (this.matchRoute == null) {
-            Toast.makeText(DrivingActivity.this, getString(R.string.progress_no_rider_found), Toast.LENGTH_SHORT).show();
-        } else {
-            startNextActivity();
-        }
     }
 
     private void createMatchRequest() {
@@ -288,6 +281,15 @@ public class DrivingActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    private void processResult() {
+        // 3) Show page with information
+        if (this.matchRoute == null) {
+            Toast.makeText(DrivingActivity.this, getString(R.string.progress_no_rider_found), Toast.LENGTH_SHORT).show();
+        } else {
+            startNextActivity();
+        }
+    }
+
     private class FindMatchTask extends AsyncTask<Void, Void, Void> {
         ProgressDialog pdLoading = new ProgressDialog(DrivingActivity.this);
 
@@ -307,6 +309,7 @@ public class DrivingActivity extends ActionBarActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             pdLoading.dismiss();
+            processResult();
         }
     }
 }

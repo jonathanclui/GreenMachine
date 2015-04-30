@@ -28,26 +28,33 @@ import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
+import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,OnMapReadyCallback {
+        LocationListener,OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -91,6 +98,9 @@ public class MainActivity extends ActionBarActivity implements
     private DrawerLayout mDrawer;
 
     private ActionBarDrawerToggle mDrawerToggle;
+
+    List<LatLng> hspotsList = Arrays.asList((new LatLng(37.5505658, -122.3094177)), (new LatLng(37.4971971, -122.2507095)), (new LatLng(37.5124492, -122.3324203)),
+            (new LatLng(37.6125996, -122.3973083)));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -328,10 +338,23 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     private void updateLocation() {
-        mLatitude=(mCurrentLocation.getLatitude());
-        mLongitude=(mCurrentLocation.getLongitude());
-        //mLastUpdateTimeTextView.setText(mLastUpdateTime);
         Log.i(MainActivity.class.getSimpleName(), "Lat:"+mLatitude+" Lon:" + mLongitude);
+
+        mLatitude = mCurrentLocation.getLatitude();
+        mLongitude = mCurrentLocation.getLongitude();
+
+        // Fetch user's public profile
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
+        try {
+            pubProfile.fetchIfNeeded();
+        } catch (ParseException e) {
+            return;
+        }
+
+        // Insert coordinates into the user's public profile lastKnownLocation
+        ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
+        pubProfile.setLastKnownLocation(userLoc);
     }
 
     protected void createLocationRequest() {
@@ -426,9 +449,37 @@ public class MainActivity extends ActionBarActivity implements
                 .target(new LatLng(mLatitude, mLongitude))      // Sets the center of the map
                 .zoom(10)
                 .build();                   // Creates a CameraPosition from the builder
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(mLatitude, mLongitude)).title("You are here"));
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        for (int j = 0; j < hspotsList.size(); j++) {
+            //Log.i(MainActivity.class.getSimpleName(), "hotspot:" + j + hspotsList.get(j));
+            mMap.addMarker(new MarkerOptions().position(hspotsList.get(j))
+                    .icon(BitmapDescriptorFactory.defaultMarker(30))
+                    .title("Hotspot " + j)
+                    .alpha(0.75f)
+            );
+            mMap.setOnMarkerClickListener((GoogleMap.OnMarkerClickListener)this);
+        }
     }
 
+    @Override
+    public boolean onMarkerClick(Marker m){
+     if (m.getAlpha()==0.75f) {
+        setMarker(m);
+     }
+     else{
+        resetMarker(m);
+     }
 
+     return true;
+    }
+
+    public void setMarker(Marker m){
+        m.setIcon(BitmapDescriptorFactory.defaultMarker(150));
+        m.setAlpha(1.0f);
+    }
+
+    public void resetMarker(Marker m){
+        m.setAlpha(0.75f);
+        m.setIcon(BitmapDescriptorFactory.defaultMarker(30));
+    }
 }

@@ -49,13 +49,13 @@ public class MainActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener,OnMapReadyCallback {
 
-    GoogleApiClient mGoogleApiClient=null;
-    Location mLastLocation=null;
-    Location mCurrentLocation=null;
-    double mLatitude ;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private Location mCurrentLocation;
+    double mLatitude;
     double mLongitude;
     private boolean mRequestingLocationUpdates = true;
-    private LocationRequest mLocationRequest=null;
+    private LocationRequest mLocationRequest;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1004;
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";

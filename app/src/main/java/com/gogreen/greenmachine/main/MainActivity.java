@@ -28,6 +28,7 @@ import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
+import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -44,13 +45,16 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.FindCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements
@@ -103,6 +107,25 @@ public class MainActivity extends ActionBarActivity implements
     List<LatLng> hspotsList = Arrays.asList((new LatLng(37.5505658, -122.3094177)), (new LatLng(37.4971971, -122.2507095)), (new LatLng(37.5124492, -122.3324203)),
             (new LatLng(37.6125996, -122.3973083)));
 
+    /* //TODO:to retrieve hotspots from Parse
+    ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
+    hotspotQuery.orderByDescending("hotspotId");
+
+    try {
+        this.hotspots = new HashSet<Hotspot>(hotspotQuery.find());
+        hotspotQuery.findInBackground(new FindCallback<Hotspot>() {
+
+            @Override
+            public void done(List<Hotspot> list,
+                             ParseException e) {
+                for(Hotspot h:list)
+                    Log.i(DrivingActivity.class.getSimpleName(),h.getParseGeoPoint().toString());
+            }
+        });
+    } catch (ParseException e) {
+        // Handle a server query fail
+        return;
+    }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -126,7 +126,11 @@
         <activity
             android:name=".main.match.RidingHotspotSelectActivity"
             android:label="@string/title_activity_rider_hotspot_select"
-            android:parentActivityName=".main.match.RidingActivity">
+            android:parentActivityName=".main.match.RidingActivity" >
+        </activity>
+        <activity
+            android:name=".main.AboutUsActivity"
+            android:label="@string/title_activity_about_us" >
         </activity>
     </application>
 

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +34,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import com.gc.materialdesign.views.ButtonRectangle;
 
 
 public class RidingActivity extends ActionBarActivity {
@@ -62,15 +65,49 @@ public class RidingActivity extends ActionBarActivity {
 
         mStartSpinner = (Spinner) findViewById(R.id.start_spinner);
         ArrayAdapter<CharSequence> startAdapter = ArrayAdapter.createFromResource(this,
-                R.array.destinations_array, android.R.layout.simple_spinner_item);
-        startAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.array.destinations_array, R.layout.spinner);
+        startAdapter.setDropDownViewResource(R.layout.spinner);
         mStartSpinner.setAdapter(startAdapter);
+
 
         mDestSpinner = (Spinner) findViewById(R.id.destination_spinner);
         ArrayAdapter<CharSequence> destAdapter = ArrayAdapter.createFromResource(this,
-                R.array.destinations_array, android.R.layout.simple_spinner_item);
-        destAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.array.destinations_array, R.layout.spinner);
+        destAdapter.setDropDownViewResource(R.layout.spinner);
         mDestSpinner.setAdapter(destAdapter);
+
+        mStartSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if(mStartSpinner.getSelectedItemPosition()==0){
+                    mDestSpinner.setSelection(1);
+                }else{
+                    mDestSpinner.setSelection(0);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+        mDestSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if(mDestSpinner.getSelectedItemPosition()==0){
+                    mStartSpinner.setSelection(1);
+                }else{
+                    mStartSpinner.setSelection(0);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
 
         matchByEditText = (EditText) findViewById(R.id.match_by_edit_text);
         leaveByEditText = (EditText) findViewById(R.id.leave_by_edit_text);
@@ -146,7 +183,7 @@ public class RidingActivity extends ActionBarActivity {
         });
 
         // Set up the handler for the match button click
-        Button matchButton = (Button) findViewById(R.id.rider_match_button);
+        ButtonRectangle matchButton = (ButtonRectangle) findViewById(R.id.rider_match_button);
         matchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 new FindMatchTask().execute();

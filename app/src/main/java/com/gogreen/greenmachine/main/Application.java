@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.helpers.ConfigHelper;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
+import com.gogreen.greenmachine.parseobjects.HotspotsData;
 import com.gogreen.greenmachine.parseobjects.MatchRequest;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
@@ -50,6 +51,7 @@ public class Application extends android.app.Application {
         ParseObject.registerSubclass(MatchRequest.class);
         ParseObject.registerSubclass(MatchRoute.class);
         ParseObject.registerSubclass(Hotspot.class);
+        ParseObject.registerSubclass(HotspotsData.class);
         Parse.initialize(this, APP_ID, CLIENT_KEY);
 
         preferences = getSharedPreferences("com.gogreen.greenmachine", Context.MODE_PRIVATE);

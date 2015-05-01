@@ -25,7 +25,9 @@
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:padding="30px"
+                android:layout_marginTop="20px"/>
 
             <EditText
                 android:id="@+id/password"
@@ -38,20 +40,27 @@
                 android:imeActionId="@+id/edittext_action_login"
                 android:imeActionLabel="@string/login"
                 android:imeOptions="actionUnspecified"
-                android:fontFamily="sans-serif" />
+                android:fontFamily="sans-serif"
+                android:padding="30px"/>
 
-            <Button
-                style="@style/PrimaryButton"
-                android:id="@+id/action_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="16dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:text="@string/login"
-                android:paddingEnd="5px" />
+
         </LinearLayout>
     </ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="30px"
+        android:id="@+id/rl">
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_button"
+            android:text="@string/login"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:padding="50px" />
+
+    </RelativeLayout>
 
 </merge>

@@ -35,13 +35,13 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         //Convert time from hourOfDay and minute to AM/PM time
-        String suffix = "AM";
+        String suffix = " AM";
         if (hourOfDay == 00){
             hourOfDay = 12;
         }
         else if (hourOfDay > 12){
             hourOfDay = hourOfDay - 12;
-            suffix = "PM";
+            suffix = " PM";
         }
         String time = hourOfDay + ":";
         if (minute < 10){

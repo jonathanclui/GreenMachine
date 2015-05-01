@@ -51,6 +51,7 @@
             android:name=".main.login.SignUpActivity"
             android:label="@string/title_activity_signup"
             android:parentActivityName=".main.WelcomeActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -88,31 +89,37 @@
         <activity
             android:name=".main.match.DriverMatchedActivity"
             android:label="@string/title_activity_driver_matched"
+            android:launchMode="singleTop"
             android:parentActivityName=".main.match.DrivingHotspotSelectActivity" >
         </activity>
         <activity
             android:name=".main.match.RiderMatchedActivity"
             android:label="@string/title_activity_rider_matched"
+            android:launchMode="singleTop"
             android:parentActivityName=".main.match.RidingHotspotSelectActivity" >
         </activity>
         <activity
             android:name=".profile.ProfileBasicInfoActivity"
-            android:label="@string/title_activity_profile_basic_info" >
+            android:label="@string/title_activity_profile_basic_info"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".profile.ProfileDriverInfoActivity"
             android:label="@string/title_activity_profile_driver_info"
-            android:parentActivityName=".profile.ProfileBasicInfoActivity" >
+            android:parentActivityName=".profile.ProfileBasicInfoActivity"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".profile.ProfileArriveByInfoActivity"
             android:label="@string/title_activity_profile_arrive_by_info"
-            android:parentActivityName=".profile.ProfileDriverInfoActivity" >
+            android:parentActivityName=".profile.ProfileDriverInfoActivity"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".profile.ProfileHotspotInfoActivity"
             android:label="@string/title_activity_profile_hotspot_info"
-            android:parentActivityName=".profile.ProfileArriveByInfoActivity" >
+            android:parentActivityName=".profile.ProfileArriveByInfoActivity"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".profile.ProfileInitDispatchActivity"
@@ -121,12 +128,19 @@
         <activity
             android:name=".main.match.DrivingHotspotSelectActivity"
             android:label="@string/title_activity_driving_hotspot_select"
+            android:launchMode="singleTop"
             android:parentActivityName=".main.match.DrivingActivity" >
         </activity>
         <activity
             android:name=".main.match.RidingHotspotSelectActivity"
             android:label="@string/title_activity_rider_hotspot_select"
+            android:launchMode="singleTop"
             android:parentActivityName=".main.match.RidingActivity">
+        </activity>
+        <activity
+            android:name=".main.AboutUsActivity"
+            android:label="@string/title_activity_about_us" >
+
         </activity>
     </application>
 

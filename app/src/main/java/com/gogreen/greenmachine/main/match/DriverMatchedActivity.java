@@ -1,34 +1,51 @@
 package com.gogreen.greenmachine.main.match;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gogreen.greenmachine.R;
-import com.gogreen.greenmachine.navigation.distmatrix.Element;
-import com.gogreen.greenmachine.navigation.distmatrix.Result;
-import com.gogreen.greenmachine.navigation.distmatrix.Row;
+import com.gogreen.greenmachine.navigation.RetrieveDistanceMatrix;
+import com.gogreen.greenmachine.parseobjects.Hotspot;
+import com.gogreen.greenmachine.parseobjects.MatchRoute;
+import com.gogreen.greenmachine.parseobjects.PublicProfile;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson.JacksonFactory;
-import com.gogreen.greenmachine.navigation.RetrieveDistanceMatrix;
-import java.io.IOException;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
-public class DriverMatchedActivity extends ActionBarActivity {
+public class DriverMatchedActivity extends ActionBarActivity implements OnMapReadyCallback {
 
     private Toolbar toolbar;
+
+    private GoogleMap mMap;
+    private ArrayList<ParseGeoPoint> riderLocations;
+    private ParseGeoPoint hotspotLocation;
 
     static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
     static final JsonFactory JSON_FACTORY = new JacksonFactory();
@@ -64,6 +81,13 @@ public class DriverMatchedActivity extends ActionBarActivity {
         Log.i(DriverMatchedActivity.class.getSimpleName(),url+" "+url);
         new RetrieveDistanceMatrix().execute(url);
 
+        // Initialize riders to be empty
+        this.riderLocations = new ArrayList<ParseGeoPoint>();
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        getInfo();
+        mapFragment.getMapAsync(this);
     }
 
 
@@ -78,5 +102,89 @@ public class DriverMatchedActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getInfo() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        List<MatchRoute> matchRoutes = new ArrayList<MatchRoute>();
+        boolean foundRoute = false;
+
+        // Query for all MatchRoutes
+        ParseQuery<MatchRoute> matchRoutesQuery = ParseQuery.getQuery("MatchRoute");
+        try {
+            matchRoutes = new ArrayList<MatchRoute>(matchRoutesQuery.find());
+        } catch (ParseException e) {
+            // handle later since low on time
+        }
+
+        Iterator routeIterator = matchRoutes.iterator();
+        while (routeIterator.hasNext() && !foundRoute) {
+            MatchRoute route = (MatchRoute) routeIterator.next();
+            try {
+                route.fetchIfNeeded();
+            } catch (ParseException e) {
+                // handle later since low on time
+            }
+
+            ArrayList<PublicProfile> riders = route.getRiders();
+            Iterator ridersIter = riders.iterator();
+            while (ridersIter.hasNext()) {
+                PublicProfile riderProfile = (PublicProfile) ridersIter.next();
+                try {
+                    riderProfile.fetchIfNeeded();
+                } catch (ParseException e) {
+                    // handle later if there is time
+                }
+
+                ParseGeoPoint riderLocation = riderProfile.getLastKnownLocation();
+                this.riderLocations.add(riderLocation);
+            }
+
+            Hotspot hotspot = route.getHotspot();
+            try {
+                hotspot.fetchIfNeeded();
+            } catch (ParseException e) {
+                // handle later since low on time
+            }
+
+            this.hotspotLocation = hotspot.getParseGeoPoint();
+            foundRoute = true;
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
+        ParseUser currUser = ParseUser.getCurrentUser();
+        PublicProfile myProfile = (PublicProfile) currUser.get("publicProfile");
+        try {
+            myProfile.fetchIfNeeded();
+        } catch (ParseException e) {
+            // handle later if time
+        }
+        ParseGeoPoint myLoc = myProfile.getLastKnownLocation();
+
+        double hotspotLat = this.hotspotLocation.getLatitude();
+        double hotspotLong = this.hotspotLocation.getLongitude();
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(myLoc.getLatitude(), myLoc.getLongitude()))      // Sets the center of the map
+                .zoom(10)
+                .build();                   // Creates a CameraPosition from the builder
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        LatLng hotspotLoc = new LatLng(hotspotLat, hotspotLong);
+
+        Iterator riderIter = this.riderLocations.iterator();
+        while (riderIter.hasNext()) {
+            ParseGeoPoint riderLoc = (ParseGeoPoint) riderIter.next();
+            LatLng riderMarker = new LatLng(riderLoc.getLatitude(), riderLoc.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(riderMarker)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_rider))
+                    .alpha(0.75f));
+        }
+        mMap.addMarker(new MarkerOptions().position(hotspotLoc)
+                .icon(BitmapDescriptorFactory.defaultMarker(30))
+                .alpha(0.75f));
     }
 }

@@ -115,8 +115,8 @@
     <orderEntry type="library" exported="" name="recyclerview-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="play-services-appstate-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-drive-7.0.0" level="project" />
-    <orderEntry type="library" exported="" name="play-services-analytics-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-games-7.0.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-analytics-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-nearby-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="google-http-client-jackson-1.18.0-rc" level="project" />
   </component>

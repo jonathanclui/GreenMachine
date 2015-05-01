@@ -409,7 +409,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
 
         try {
             this.matchRoute.fetch();
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             return false;
         }
         ArrayList<PublicProfile> riders = this.matchRoute.getRiders();
@@ -420,74 +420,6 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
             return false;
         }
     }
-
-    /*
-    // MatchRoute should be created so now we scan the server for riders
-        List<MatchRequest> matchRequests;
-        boolean matched = false;
-
-        ParseQuery<MatchRequest> matchQuery = ParseQuery.getQuery("MatchRequest");
-        matchQuery = matchQuery.whereEqualTo("status", MatchRequest.MatchStatus.ACTIVE.toString());
-        try {
-            matchRequests = new ArrayList<MatchRequest>(matchQuery.find());
-        } catch (ParseException e) {
-            // Handle server retrieval failure
-            return false;
-        }
-
-        Iterator iter = matchRequests.iterator();
-        while (iter.hasNext() && !matched) {
-            MatchRequest request = (MatchRequest) iter.next();
-            Set<Hotspot> other = request.getHotspots();
-            Set<Hotspot> intersection = new HashSet<Hotspot>(selectedHotspots);
-
-            // Find the intersection
-            intersection.retainAll(other);
-
-            // If there are hot spots in common then match the two
-            if (!intersection.isEmpty()) {
-                ParseUser rider = request.getRequester();
-                try {
-                    rider.fetchIfNeeded();
-                } catch (ParseException e) {
-                    return false;
-                }
-
-                // The rider cannot also be the driver!
-                if (!rider.equals(ParseUser.getCurrentUser())) {
-                    // Update parameters for the route
-                    PublicProfile riderProfile = (PublicProfile) rider.get("publicProfile");
-                    try {
-                        riderProfile = riderProfile.fetchIfNeeded();
-                    } catch (ParseException e) {
-                        return false;
-                    }
-
-                    Hotspot chosenHotspot = (Hotspot) intersection.iterator().next();
-
-                    // Check if there is capacity in the car
-                    int newCapacity = this.matchRoute.getCapacity() - 1;
-                    if (newCapacity < 0) {
-                        continue;
-                    } else {
-                        this.matchRoute.updateMatchRoute(chosenHotspot, riderProfile,
-                                MatchRoute.TripStatus.EN_ROUTE_HOTSPOT, newCapacity);
-                    }
-
-                    // Save the match route with changes
-                    try {
-                        this.matchRoute.save();
-                        matched = true;
-                        return true;
-                    } catch (ParseException e) {
-                        matched = false;
-                        return false;
-                    }
-                }
-            }
-        }
-        return false;
-     */
 
     private boolean createMatchRoute() {
         // Create a match route
@@ -551,7 +483,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         @Override
         protected Void doInBackground(Void... params) {
             // Loop through every 30 seconds and try to find a rider
-            for (int i = 0; i < 30; i++) {
+            for (int i = 0; i < 100; i++) {
                 if (!routeCreated) {
                     routeCreated = createMatchRoute();
                 } else if (!riderFound) {

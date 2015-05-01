@@ -14,8 +14,8 @@
     <string name="title_activity_driving">Driving</string>
     <string name="title_activity_driving_info">Arrange a Carpool</string>
     <string name="title_activity_matching">Matching</string>
-    <string name="title_activity_driver_matched">Driver Matched</string>
-    <string name="title_activity_rider_matched">Rider Matched</string>
+    <string name="title_activity_driver_matched">You\'ve been matched!</string>
+    <string name="title_activity_rider_matched">You\'ve been matched!</string>
     <string name="title_activity_profile_basic_info">Basic Profile Information</string>
     <string name="title_activity_profile_driver_info">Driving Information</string>
     <string name="title_activity_profile_arrive_by_info">Time Preferences</string>

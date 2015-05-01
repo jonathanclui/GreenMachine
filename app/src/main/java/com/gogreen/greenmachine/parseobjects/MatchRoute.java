@@ -1,12 +1,12 @@
 package com.gogreen.greenmachine.parseobjects;
 
 import com.parse.ParseClassName;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by jonathanlui on 4/26/15.
@@ -44,6 +44,14 @@ public class MatchRoute extends ParseObject {
         put("riders", riders);
     }
 
+    public ArrayList<Hotspot> getPotentialHotspots() {
+        return (ArrayList<Hotspot>) get("potentialHotspots");
+    }
+
+    public void setPotentialHotspots(ArrayList<Hotspot> value) {
+        put("potentialHotspots", value);
+    }
+
     public Hotspot getHotspot() {
         return (Hotspot) get("hotspot");
     }
@@ -52,20 +60,36 @@ public class MatchRoute extends ParseObject {
         put("hotspot", value);
     }
 
-    public ParseGeoPoint getDestination() {
-        return getParseGeoPoint("destination");
+    public Destination getDestination() {
+        return Destination.parse(getString("destination"));
     }
 
-    public void setDestination(ParseGeoPoint value) {
-        put("destination", value);
+    public void setDestination(Destination value) {
+        put("destination", value.toString());
+    }
+
+    public void setStatus(TripStatus value) {
+        put("tripStatus", value.toString());
     }
 
     public TripStatus getStatus() {
         return TripStatus.parse(getString("tripStatus"));
     }
 
-    public void setStatus(TripStatus value) {
-        put("tripStatus", value.toString());
+    public Date getMatchBy() {
+        return getDate("matchBy");
+    }
+
+    public void setMatchBy(Date value) {
+        put("matchBy", value);
+    }
+
+    public Date getArriveBy() {
+        return getDate("arriveBy");
+    }
+
+    public void setArriveBy(Date value) {
+        put("arriveBy", value);
     }
 
     public int getCapacity() {
@@ -80,21 +104,43 @@ public class MatchRoute extends ParseObject {
         return ParseQuery.getQuery(MatchRoute.class);
     }
 
-    public void populateMatchRoute(ParseUser driver, PublicProfile rider, Hotspot hotspot,
-                                     ParseGeoPoint destination, TripStatus status, int capacity) {
+    public void initializeMatchRoute(ParseUser driver, ArrayList<Hotspot> hotspots, Destination destination,
+                                     TripStatus status, int capacity, Date matchBy, Date arriveBy) {
         setDriver(driver);
-        addRider(rider);
-        setHotspot(hotspot);
+        setPotentialHotspots(hotspots);
         setDestination(destination);
         setStatus(status);
         setCapacity(capacity);
+        setMatchBy(matchBy);
+        setArriveBy(arriveBy);
+    }
+
+    public void updateMatchRoute(Hotspot hotspot, PublicProfile rider, TripStatus status, int capacity) {
+        setHotspot(hotspot);
+        addRider(rider);
+        setStatus(status);
+        setCapacity(capacity);
+    }
+
+    public enum Destination {
+        HQ,
+        HOME;
+
+        private static Destination parse(String s) {
+            if (s.equals("HQ")) {
+                return HQ;
+            } else {
+                return HOME;
+            }
+        }
     }
 
     public enum TripStatus {
         NOT_STARTED,
         EN_ROUTE_HOTSPOT,
         EN_ROUTE_DESTINATION,
-        COMPLETED;
+        COMPLETED,
+        CANCELED;
 
         private static TripStatus parse(String s) {
             if (s.equals("NOT_STARTED")) {

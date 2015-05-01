@@ -17,14 +17,6 @@ import java.util.Set;
 @ParseClassName("MatchRequest")
 public class MatchRequest extends ParseObject {
 
-    public RequestType getRequestType() {
-        return RequestType.parse(getString("type"));
-    }
-
-    public void setRequestType(RequestType value) {
-        put("type", value.toString());
-    }
-
     public ParseUser getRequester() {
         return getParseUser("user");
     }
@@ -65,14 +57,6 @@ public class MatchRequest extends ParseObject {
         put("status", value.toString());
     }
 
-    public int getSeats() {
-        return getInt("seats");
-    }
-
-    public void setSeats(int value) {
-        put("seats", value);
-    }
-
     public ParseGeoPoint getDestination() {
         return getParseGeoPoint("destination");
     }
@@ -85,15 +69,13 @@ public class MatchRequest extends ParseObject {
         return ParseQuery.getQuery(MatchRequest.class);
     }
 
-    public void populateMatchRequest(RequestType type, ParseUser user, Set<Hotspot> hotspots,
-                                      Date matchBy, Date arriveBy, MatchStatus status, int seats) {
-        setRequestType(type);
+    public void populateMatchRequest(ParseUser user, Set<Hotspot> hotspots,
+                                      Date matchBy, Date arriveBy, MatchStatus status) {
         setRequester(user);
         setHotspots(hotspots);
         setMatchByTime(matchBy);
         setArriveByTime(arriveBy);
         setStatus(status);
-        setSeats(seats);
     }
 
     public enum MatchStatus {
@@ -105,19 +87,6 @@ public class MatchRequest extends ParseObject {
                 return ACTIVE;
             } else {
                 return INACTIVE;
-            }
-        }
-    }
-
-    public enum RequestType {
-        DRIVER,
-        RIDER;
-
-        private static RequestType parse(String s) {
-            if (s.equals("DRIVER")) {
-                return DRIVER;
-            } else {
-                return RIDER;
             }
         }
     }

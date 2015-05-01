@@ -1,96 +1,125 @@
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.gogreen.greenmachine.main.match.RidingActivity">
+    tools:context=".om.gogreen.greenmachine.main.match.RidingActivity" >
 
-    <include
-        android:id="@+id/tool_bar"
-        layout="@layout/tool_bar">
-    </include>
 
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
 
-        <TextView
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/tool_bar">
+        </include>
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingRight="30px"
+            android:paddingLeft="30px"
+            android:layout_marginTop="50px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/match_info_start"
+                android:id="@+id/driver_match_start"
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_spinner"
+                android:paddingLeft="15px"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingRight="30px"
+            android:paddingLeft="30px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/match_info_by"
+                android:id="@+id/driver_match_by_start"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_marginLeft="50px"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="time"
+                android:ems="10"
+                android:text="@string/default_match_by"
+                android:id="@+id/match_by_edit_text"
+                android:paddingLeft="15px"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="50px"
+            android:paddingRight="30px"
+            android:paddingLeft="30px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/match_info_end"
+                android:id="@+id/driver_match_end"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:paddingRight="15px"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/destination_spinner"
+                android:paddingLeft="15px"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingRight="30px"
+            android:paddingLeft="30px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/match_info_by"
+                android:id="@+id/driver_match_by_end"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_marginLeft="50px"/>
+
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="time"
+                android:ems="10"
+                android:text="@string/default_arrive_by"
+                android:id="@+id/arrive_by_edit_text"
+                android:paddingLeft="15px"/>
+        </TableRow>
+    </TableLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="30px"
+        android:id="@+id/rl">
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/rider_match_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/match_info_start"
-            android:id="@+id/driver_match_start" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/start_spinner" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/match_info_by"
-            android:id="@+id/driver_match_by_start" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="time"
-            android:ems="10"
-            android:text="@string/default_match_by"
-            android:id="@+id/match_by_edit_text" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/match_info_end"
-            android:id="@+id/driver_match_end" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/destination_spinner" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/match_info_by"
-            android:id="@+id/driver_match_by_end" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="time"
-            android:ems="10"
-            android:text="@string/default_arrive_by"
-            android:id="@+id/arrive_by_edit_text" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <Button
-            style="@style/PrimaryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/text_dim_top"
+            android:background="@color/primary_button"
             android:text="@string/match_button_text"
-            android:id="@+id/rider_match_button"/>
-    </TableRow>
-
-</TableLayout>
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:padding="50px" />
+    </RelativeLayout>
+</merge>

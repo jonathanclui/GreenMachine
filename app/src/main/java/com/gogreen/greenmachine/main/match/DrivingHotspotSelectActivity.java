@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
+import com.gogreen.greenmachine.parseobjects.HotspotsData;
 import com.gogreen.greenmachine.parseobjects.MatchRequest;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
@@ -353,7 +354,13 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
                 this.selectedHotspots.add(hSpot);
                 break;
             }
+
+            //HotspotsData h=new HotspotsData;
+            //h.setDriverObj();
+
         }
+
+
     }
 
     private boolean isEqualParseGeoPoint(ParseGeoPoint p1, ParseGeoPoint p2) {

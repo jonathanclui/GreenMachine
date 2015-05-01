@@ -89,17 +89,17 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:id="@+id/linearLayout"
-            android:layout_marginTop="100px"
+            android:layout_marginTop="50px"
             >
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:id="@+id/imageButton2"
                 android:src="@drawable/ic_left_arrow"
                 android:padding="80px"
-                android:layout_marginTop="40px"
                 android:background="#80FFFFFF"
-                />
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical" />
             <ImageView android:id="@+id/train"
                 android:src="@drawable/train4of4"
                 android:layout_gravity="center"
@@ -107,6 +107,7 @@
                 android:layout_height="75dp"
                 android:padding="50px"
                 android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:layout_alignTop="@+id/next_button"
                 />
             <!--<com.gc.materialdesign.views.ButtonRectangle
@@ -118,14 +119,14 @@
                 android:padding="50px"
                 android:layout_alignParentRight="true" />-->
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:id="@+id/next_button"
                 android:src="@drawable/ic_right_arrow"
                 android:padding="80px"
-                android:layout_marginTop="40px"
                 android:background="#80FFFFFF"
-                />
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical" />
         </LinearLayout>
     </RelativeLayout>
 </merge>

@@ -30,9 +30,9 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="24dp"
-            android:background="#1E88E5"
+            android:background="@color/primary_dark"
             materialdesign:animate="true"
-            materialdesign:iconDrawable="@drawable/ic_car" />
+            materialdesign:iconDrawable="@drawable/ic_check" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.gogreen.greenmachine.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -55,7 +56,7 @@ public class LoginActivity extends ActionBarActivity {
         });
 
         // Set up the submit button click handler
-        Button actionButton = (Button) findViewById(R.id.action_button);
+        ButtonRectangle actionButton = (ButtonRectangle) findViewById(R.id.action_button);
         actionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 login();

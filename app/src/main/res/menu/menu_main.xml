@@ -9,10 +9,5 @@
         android:title="User"
         android:icon="@drawable/ic_user"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_search"
-        android:orderInCategory="200"
-        android:title="Search"
-        android:icon="@drawable/ic_search"
-        app:showAsAction="ifRoom" />
+
 </menu>

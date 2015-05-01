@@ -35,27 +35,46 @@
             android:orientation="horizontal"
             android:weightSum="101">
 
-            <Button
-                style="@style/PrimaryButton"
+            <com.gc.materialdesign.views.ButtonRectangle
+
+                android:background="@color/primary_button"
+
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:padding="50px"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="@string/driving"
                 android:layout_weight="50"
-                android:id="@+id/driving_button" />
+                android:id="@+id/driving_button"
+                android:layout_marginLeft="3dp"/>
+
+
+
 
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <Button
+            <com.gc.materialdesign.views.ButtonRectangle
+
+                android:background="@color/primary_button"
+
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:padding="50px"
+
+
+                android:layout_marginLeft="3dp"
                 style="@style/PrimaryButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="@string/riding"
                 android:id="@+id/riding_button"
                 android:layout_weight="50"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="3dp"/>
         </LinearLayout>
 
     </LinearLayout>

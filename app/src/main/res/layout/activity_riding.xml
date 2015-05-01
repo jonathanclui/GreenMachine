@@ -102,7 +102,7 @@
                 android:inputType="time"
                 android:ems="10"
                 android:text="@string/default_arrive_by"
-                android:id="@+id/leave_by_edit_text"
+                android:id="@+id/arrive_by_edit_text"
                 android:paddingLeft="15px"/>
         </TableRow>
     </TableLayout>

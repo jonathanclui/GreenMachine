@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Created by arbkhan on 4/30/2015.
  */
-public class RetrieveDistanceMatrix extends AsyncTask<GenericUrl,Void,Integer> {
+public class RetrieveDistanceMatrix extends AsyncTask<GenericUrl,Result,Result> {
     static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
     static final JsonFactory JSON_FACTORY = new JacksonFactory();
     HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(new HttpRequestInitializer() {
@@ -34,30 +34,30 @@ public class RetrieveDistanceMatrix extends AsyncTask<GenericUrl,Void,Integer> {
             request.setParser(new JsonObjectParser(JSON_FACTORY));
         }
     });
-
+    Result distResult;
     @Override
-    protected Integer doInBackground(GenericUrl... urls){
+    protected Result doInBackground(GenericUrl... urls){
         try {
             HttpRequest request = requestFactory.buildGetRequest(urls[0]);
             HttpResponse httpResponse = request.execute();
-            Result distResult = httpResponse.parseAs(Result.class);
-            List<Row> rows = distResult.rows;
+            distResult = httpResponse.parseAs(Result.class);
+            /*List<Row> rows = distResult.rows;
             for (Row row : rows) {
                 List<Element> elements = row.elements;
                 for (Element e : elements) {
                     Log.i(RetrieveDistanceMatrix.class.getSimpleName(), e.distance.text + " " + e.distance.value);
                 }
-            }
-            return 1;
+            }*/
+            return distResult;
         }
         catch (IOException e){
             e.printStackTrace();
-            return 0;
+            return (Result)null;
         }
     }
-
-    protected void onPostExecute() {
-
+    @Override
+    protected void onPostExecute(Result r) {
+        return;
     }
 
 }

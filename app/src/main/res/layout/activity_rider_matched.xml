@@ -1,7 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="100"
+    android:orientation="vertical"
     tools:context="com.gogreen.greenmachine.main.match.RiderMatchedActivity">
 
     <include
@@ -12,20 +14,22 @@
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/map"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_below="@+id/tool_bar"
+        android:layout_weight="80"
         android:name="com.google.android.gms.maps.MapFragment"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:id="@+id/linearLayout"
         android:layout_marginTop="0px"
         android:gravity="center_vertical"
-        android:background="#FFFFFF">
+        android:background="#FFFFFF"
+        android:layout_weight="20">
         <ImageView android:id="@+id/icon"
             android:src="@drawable/theresa_lee"
             android:layout_gravity="center"
@@ -63,4 +67,4 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
             </LinearLayout>
         </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

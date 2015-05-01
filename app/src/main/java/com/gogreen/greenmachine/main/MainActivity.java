@@ -334,7 +334,6 @@ public class MainActivity extends ActionBarActivity implements
             case R.id.action_user:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }

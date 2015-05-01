@@ -15,8 +15,6 @@ import android.widget.Toast;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
-import com.gogreen.greenmachine.parseobjects.HotspotsData;
-import com.gogreen.greenmachine.parseobjects.MatchRequest;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.google.android.gms.common.ConnectionResult;
@@ -45,7 +43,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 public class DrivingHotspotSelectActivity extends ActionBarActivity implements
@@ -407,8 +404,25 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         return serverHotspots;
     }
 
-    private boolean findRiders() {
-        // MatchRoute should be created so now we scan the server for riders
+    private boolean checkForRiders() {
+        // MatchRoute should be created so now we peridically check if a rider gets added to our request
+
+        try {
+            this.matchRoute.fetch();
+        } catch(ParseException e) {
+            return false;
+        }
+        ArrayList<PublicProfile> riders = this.matchRoute.getRiders();
+        boolean foundRider = !riders.isEmpty();
+        if (foundRider) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /*
+    // MatchRoute should be created so now we scan the server for riders
         List<MatchRequest> matchRequests;
         boolean matched = false;
 
@@ -473,34 +487,26 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
             }
         }
         return false;
-    }
+     */
 
     private boolean createMatchRoute() {
-        boolean createdRoute = false;
-        List<MatchRequest> matchRequests;
-
-        ParseQuery<MatchRequest> matchQuery = ParseQuery.getQuery("MatchRequest");
-        matchQuery.whereEqualTo("status", MatchRequest.MatchStatus.ACTIVE.toString());
-        try {
-            matchRequests = new ArrayList<MatchRequest>(matchQuery.find());
-        } catch (ParseException e) {
-            // Handle server retrieval failure
-            return false;
-        }
-
         // Create a match route
         this.matchRoute = new MatchRoute();
         ArrayList<Hotspot> selectedHotspotsList = new ArrayList<Hotspot>(selectedHotspots);
         matchRoute.initializeMatchRoute(ParseUser.getCurrentUser(), selectedHotspotsList, destination,
-                MatchRoute.TripStatus.NOT_STARTED, currentCapacity, matchByDate, arriveByDate);
-        matchRoute.saveInBackground();
-
-        return true;
+                MatchRoute.TripStatus.NOT_STARTED, currentCapacity, matchByDate,
+                arriveByDate, new ArrayList<PublicProfile>());
+        try {
+            matchRoute.save();
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 
     private void processResult() {
         ArrayList<PublicProfile> riders = this.matchRoute.getRiders();
-        if (riders == null) {
+        if (riders.isEmpty()) {
             Toast.makeText(DrivingHotspotSelectActivity.this, getString(R.string.progress_no_rider_found), Toast.LENGTH_SHORT).show();
         } else {
             startNextActivity();
@@ -545,11 +551,11 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         @Override
         protected Void doInBackground(Void... params) {
             // Loop through every 30 seconds and try to find a rider
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 30; i++) {
                 if (!routeCreated) {
                     routeCreated = createMatchRoute();
                 } else if (!riderFound) {
-                    riderFound = findRiders();
+                    riderFound = checkForRiders();
                 } else if (riderFound) {
                     break;
                 }

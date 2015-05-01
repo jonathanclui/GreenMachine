@@ -111,13 +111,13 @@ public class SettingsActivity extends ActionBarActivity {
                 mTimePicker = new TimePickerDialog(SettingsActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        String suffix = "AM";
+                        String suffix = " AM";
                         if (selectedHour == 00){
                             selectedHour = 12;
                         }
                         else if (selectedHour > 12){
                             selectedHour = selectedHour - 12;
-                            suffix = "PM";
+                            suffix = " PM";
                         }
                         String time = selectedHour + ":";
                         if (selectedMinute < 10){
@@ -146,13 +146,13 @@ public class SettingsActivity extends ActionBarActivity {
                 mTimePicker = new TimePickerDialog(SettingsActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        String suffix = "AM";
+                        String suffix = " AM";
                         if (selectedHour == 00){
                             selectedHour = 12;
                         }
                         else if (selectedHour > 12){
                             selectedHour = selectedHour - 12;
-                            suffix = "PM";
+                            suffix = " PM";
                         }
                         String time = selectedHour + ":";
                         if (selectedMinute < 10){

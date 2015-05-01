@@ -6,7 +6,7 @@
     <string-array name="navigation_drawer_titles">
         <item>Home</item>
         <item>Badges</item>
-        <item>Hotspots</item>
+        <item>Pickup Locations</item>
         <item>About Us</item>
         <item>Log out</item>
     </string-array>

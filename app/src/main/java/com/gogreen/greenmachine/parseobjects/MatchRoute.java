@@ -105,7 +105,8 @@ public class MatchRoute extends ParseObject {
     }
 
     public void initializeMatchRoute(ParseUser driver, ArrayList<Hotspot> hotspots, Destination destination,
-                                     TripStatus status, int capacity, Date matchBy, Date arriveBy) {
+                                     TripStatus status, int capacity, Date matchBy, Date arriveBy,
+                                     ArrayList<PublicProfile> riders) {
         setDriver(driver);
         setPotentialHotspots(hotspots);
         setDestination(destination);
@@ -113,6 +114,7 @@ public class MatchRoute extends ParseObject {
         setCapacity(capacity);
         setMatchBy(matchBy);
         setArriveBy(arriveBy);
+        setRiders(riders);
     }
 
     public void updateMatchRoute(Hotspot hotspot, PublicProfile rider, TripStatus status, int capacity) {

@@ -433,11 +433,15 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
 
     private boolean createMatchRequest() {
         // Create a match request
-        riderRequest = new MatchRequest();
-        riderRequest.populateMatchRequest(ParseUser.getCurrentUser(), this.selectedHotspots,
+        this.riderRequest = new MatchRequest();
+        this.riderRequest.populateMatchRequest(ParseUser.getCurrentUser(), this.selectedHotspots,
                 matchByDate, arriveByDate, MatchRequest.MatchStatus.ACTIVE);
-        riderRequest.saveInBackground();
-        return true;
+        try {
+            this.riderRequest.save();
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 
     private boolean findDriver() {
@@ -504,7 +508,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                         this.matchRoute.setStatus(MatchRoute.TripStatus.EN_ROUTE_HOTSPOT);
                         try {
                             this.matchRoute.save();
-                            matched = true;
                             return true;
                         } catch (ParseException e) {
                             return false;
@@ -575,7 +578,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         }
         @Override
         protected Void doInBackground(Void... params) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 100; i++) {
                 if (!requestCreated) {
                     requestCreated = createMatchRequest();
                 } else if (!driverFound) {

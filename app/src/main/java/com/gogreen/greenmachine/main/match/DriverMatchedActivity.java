@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.navigation.RetrieveDistanceMatrix;
@@ -47,6 +48,8 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
     private ArrayList<ParseGeoPoint> riderLocations;
     private ParseGeoPoint hotspotLocation;
 
+    private TextView riderText;
+
     static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
     static final JsonFactory JSON_FACTORY = new JacksonFactory();
     HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(new HttpRequestInitializer() {
@@ -80,6 +83,9 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
         url.put("key", key);
         Log.i(DriverMatchedActivity.class.getSimpleName(),url+" "+url);
         new RetrieveDistanceMatrix().execute(url);
+
+        // Initialize rider textview
+        this.riderText = (TextView) findViewById(R.id.rider_name_text);
 
         // Initialize riders to be empty
         this.riderLocations = new ArrayList<ParseGeoPoint>();
@@ -135,6 +141,8 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
                 } catch (ParseException e) {
                     // handle later if there is time
                 }
+
+                this.riderText.setText(riderProfile.getFirstName());
 
                 ParseGeoPoint riderLocation = riderProfile.getLastKnownLocation();
                 this.riderLocations.add(riderLocation);

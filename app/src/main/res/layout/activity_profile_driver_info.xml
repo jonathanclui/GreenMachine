@@ -56,19 +56,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/prompt_driving"
-                    android:id="@+id/switch1"
+                    android:id="@+id/driving_switch"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:padding="5px"
                     android:textOn="YES"
-                    android:textOff="NO" />
+                    android:textOff="NO"
+                    android:checked="true"
+                    />
 
-    <EditText
+    <!--<EditText
         android:id="@+id/driving_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/prompt_driving"
         android:maxLines="1"
-        android:singleLine="true" />
+        android:singleLine="true" />-->
+                <LinearLayout
+                    android:id="@+id/isdriving"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/describe_car"
+                    android:padding="5px"
+                    android:id="@+id/textView2"
+                    android:layout_marginTop="15px"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#000000" />
 
     <EditText
         android:id="@+id/car_edit_text"
@@ -77,6 +95,25 @@
         android:hint="@string/prompt_car"
         android:maxLines="1"
         android:singleLine="true" />
+
+                <TextView
+                    android:layout_marginTop="15px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/num_passengers"
+                    android:id="@+id/textView3"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#000000"
+                    android:padding="5px"/>
+                <EditText
+                    android:id="@+id/passengers_edit_text"
+                    android:layout_width="100px"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:hint="@string/prompt_passengers"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+                    </LinearLayout>
                 </LinearLayout>
                 </LinearLayout>
             </ScrollView>
@@ -103,7 +140,7 @@
                 android:id="@+id/imageButton2"
                 android:src="@drawable/ic_left_arrow"
                 android:background="@color/primary_background"
-                android:visibility="invisible"
+
                 />
 
             <ImageView android:id="@+id/train"
@@ -125,6 +162,7 @@
                 android:background="@color/primary_background"
                 />
         </LinearLayout>
+
 
 
     </RelativeLayout>

@@ -511,6 +511,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
 
     private class FindMatchTask extends AsyncTask<Void, Void, Void> {
         ProgressDialog pdLoading = new ProgressDialog(DrivingHotspotSelectActivity.this);
+        Boolean routeCreated = false;
 
         @Override
         protected void onPreExecute() {
@@ -521,7 +522,11 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         @Override
         protected Void doInBackground(Void... params) {
             // Loop through every 30 seconds and try to find a rider
-            findRiders();
+            if (!routeCreated) {
+                routeCreated = createMatchRoute();
+            } else {
+                findRiders();
+            }
             return null;
         }
 

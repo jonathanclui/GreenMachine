@@ -10,11 +10,15 @@
     <string name="prompt_phone">Phone</string>
     <string name="prompt_driving">I will be a driver</string>
     <string name="prompt_car">Car Make, Model, Year</string>
-    <string name="prompt_arrive_hq_by">Arrive to HQ by</string>
-    <string name="prompt_arrive_home_by">Arrive Home by</string>
+    <string name="prompt_arrive_hq_by">I usually get to HQ by</string>
+    <string name="prompt_arrive_home_by">I usually get home by</string>
     <string name="prompt_latitude">Latitude</string>
     <string name="prompt_longitude">Longitude</string>
-
+    <string name="describe_car">Describe your car:</string>
+    <string name="num_passengers">How many passengers can you take?</string>
+    <string name="prompt_passengers">#</string>prompt_passengers
+    <string name="title_profile_arrive_by_info">What\'s your daily schedule?</string>
+    <string name="title_hotspot_info">Here\'s our pickup and dropoff locations. Select a few near your home.</string>
     <string name="switch_label_driving">Driving?</string>
     <string name="progress_update_profile">Updating Profile</string>
     <string name="profile_saved">Profile saved!</string>

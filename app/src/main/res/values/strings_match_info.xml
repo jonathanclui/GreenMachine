@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="match_info_car">I am driving a</string>
-    <string name="match_info_seats">Seats available</string>
+    <string name="match_info_car">Driving a</string>
+    <string name="match_info_seats">Passengers</string>
     <string name="match_info_start">Leave</string>
     <string name="match_info_by">by</string>
     <string name="match_info_end">Arrive at</string>

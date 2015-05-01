@@ -10,7 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TableRow;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -48,6 +51,7 @@ public class SettingsActivity extends ActionBarActivity {
     private boolean isDriver;
 
     private Toolbar toolbar;
+    private TableRow carReveal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,17 +90,24 @@ public class SettingsActivity extends ActionBarActivity {
         mArriveHQBy.setText(userProfile.getArriveHQBy());
         mArriveHomeBy.setText(userProfile.getArriveHomeBy());
 
+        // Set up Edit Texts and Switch
+        carReveal = (TableRow) findViewById(R.id.driver_car_row);
         isDriver = userProfile.getDriverStatus();
         mDriving.setChecked(isDriver);
+        if (!isDriver){
+            carReveal.setVisibility(View.INVISIBLE);
+        }
 
         mDriving.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+                if (mDriving.isChecked()) {
                     // The toggle is enabled
                     isDriver = true;
+                    carReveal.setVisibility(View.VISIBLE);
                 } else {
                     // The toggle is disabled
                     isDriver = false;
+                    carReveal.setVisibility(View.INVISIBLE);
                 }
             }
         });

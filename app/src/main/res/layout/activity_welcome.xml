@@ -4,14 +4,12 @@
     android:layout_height="match_parent"
     tools:context=".WelcomeActivity"
     android:background="#efeff2"
-    android:orientation="vertical"
-    android:id="@+id/">
+    android:orientation="vertical">
     <include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar"
         >
-    </include>
-
+    </include>g
     <TextView
         android:id="@+id/slogan"
         android:layout_width="wrap_content"
@@ -32,7 +30,7 @@
         android:background="@layout/welcome_button"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="75dp"
         android:id="@+id/new_user_layout"
         android:orientation="horizontal">
 

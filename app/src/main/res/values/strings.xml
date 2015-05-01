@@ -22,6 +22,8 @@
     <string name="title_activity_profile_hotspot_info">Hotspots</string>
     <string name="title_activity_splash"></string>
     <string name="title_activity_login">Log in</string>
+    <string name="title_activity_driving_hotspot_select">Pickup Locations</string>
+    <string name="title_activity_rider_hotspot_select">Pickup Locations</string>
 
     <string name="submit">Submit</string>
     <string name="powered_by">Powered by</string>

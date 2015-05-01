@@ -8,7 +8,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
-
             >
 
             <LinearLayout
@@ -49,7 +48,6 @@
                 style="@style/LoginFormContainer"
                 android:orientation="vertical"
                 android:padding="30px"
-
                 >
 
                 <Switch
@@ -75,9 +73,7 @@
                     android:id="@+id/isdriving"
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    >
+                    android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -109,8 +105,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/car_spinner" />
-
-
                     </LinearLayout>
                 </LinearLayout>
                 </LinearLayout>
@@ -138,18 +132,16 @@
                 android:id="@+id/imageButton2"
                 android:src="@drawable/ic_left_arrow"
                 android:background="@color/primary_background"
-
                 />
 
             <ImageView android:id="@+id/train"
-                android:src="@drawable/train4of4"
+                android:src="@drawable/train2of4"
                 android:layout_gravity="center"
                 android:layout_width="150dp"
                 android:layout_height="75dp"
                 android:padding="50px"
                 android:layout_centerHorizontal="true"
                 android:layout_alignTop="@+id/next_button"
-
                 />
 
             <ImageButton
@@ -160,11 +152,5 @@
                 android:background="@color/primary_background"
                 />
         </LinearLayout>
-
-
-
-
     </RelativeLayout>
-
-
 </merge>

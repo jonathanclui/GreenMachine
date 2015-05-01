@@ -508,7 +508,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                         this.matchRoute.setStatus(MatchRoute.TripStatus.EN_ROUTE_HOTSPOT);
                         try {
                             this.matchRoute.save();
-                            matched = true;
                             return true;
                         } catch (ParseException e) {
                             return false;

@@ -162,6 +162,9 @@ public class ProfileHotspotInfoActivity extends ActionBarActivity {
                 .build();                   // Creates a CameraPosition from the builder
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         mMap.addMarker(new MarkerOptions().position(new LatLng(37.775, -122.4183333)).title("San Francisco"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(37.783973,-122.401375 )).title("Moscone"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(37.776439,-122.394256 )).title("SF Caltrain"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(37.600675,-122.385764 )).title("Millbrae BART"));
     }
 
 

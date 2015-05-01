@@ -137,8 +137,27 @@ public class MainActivity extends ActionBarActivity implements
             makeLatLng(37.614686, -122.405623),
             makeLatLng(37.613819, -122.404786)
     );
+
+    public List<LatLng> simulatePoints_2=Arrays.asList(
+    makeLatLng(37.463092,-122.224885),
+    makeLatLng(37.465645,-122.224472),
+    makeLatLng(37.469213,-122.223528),
+    makeLatLng(37.471163,-122.223056),
+    makeLatLng(37.473335,-122.222523),
+    makeLatLng(37.475430,-122.221943),
+    makeLatLng(37.477158,-122.221364),
+    makeLatLng(37.476213,-122.220817),
+    makeLatLng(37.476221,-122.221471),
+    makeLatLng(37.477073,-122.222684),
+    makeLatLng(37.478614,-122.224722),
+    makeLatLng(37.480768,-122.227876),
+    makeLatLng(37.482258,-122.229786),
+    makeLatLng(37.483999,-122.231900));
+
     public int simulateStep=0;
     Marker simulatedDriver;
+    public int simulateStep_2=0;
+    Marker simulatedDriver_2;
 
     /* //TODO:to retrieve hotspots from Parse
     ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
@@ -181,6 +200,10 @@ public class MainActivity extends ActionBarActivity implements
         // Set up recycler and provide it with the proper adapter
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
+
+        Log.i(MainActivity.class.getSimpleName(),"email:"+ParseUser.getCurrentUser().getEmail());
+        EMAIL=ParseUser.getCurrentUser().getEmail();
+        NAME=ParseUser.getCurrentUser().getUsername();
         mAdapter = new NavDrawerAdapter(navRowTitles, ICONS, NAME, EMAIL, PROFILE, this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -375,17 +398,27 @@ public class MainActivity extends ActionBarActivity implements
     public void simulateDriverStep(){
         if (simulateStep==0){
             simulatedDriver = mMap.addMarker(new MarkerOptions().position(simulatePoints.get(0))
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_black))
                             .title("Jaden Smith")
-                            .alpha(0.75f)
-            );
+                            .alpha(0.75f));
+
+            simulatedDriver_2 = mMap.addMarker(new MarkerOptions().position(simulatePoints_2.get(0))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_black))
+                            .title("Will Smith")
+                            .alpha(0.75f));
+
             simulateStep+=1;
         }
         else{
            if (simulateStep<simulatePoints.size()){
                simulatedDriver.setPosition(simulatePoints.get(simulateStep));
-               simulateStep+=1;
+
            }
+           if (simulateStep<simulatePoints_2.size()){
+                simulatedDriver_2.setPosition(simulatePoints_2.get(simulateStep));
+            }
+
+            simulateStep+=1;
 
         }
     }
@@ -552,14 +585,14 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onMarkerClick(Marker m){
-     if (m.getAlpha()==0.75f) {
+     /*if (m.getAlpha()==0.75f) {
         setMarker(m);
      }
      else{
         resetMarker(m);
      }
-
-     return true;
+    */
+     return false;
     }
 
     public void setMarker(Marker m){

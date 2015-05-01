@@ -3,6 +3,7 @@ package com.gogreen.greenmachine.main.match;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -10,6 +11,7 @@ import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -18,6 +20,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -28,12 +31,14 @@ import java.util.Iterator;
 import java.util.List;
 
 
+
 public class RiderMatchedActivity extends ActionBarActivity implements OnMapReadyCallback {
 
     private Toolbar toolbar;
     private GoogleMap mMap;
     private ParseGeoPoint driverLocation;
     private ParseGeoPoint hotspotLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +51,12 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         getInfo();
         mapFragment.getMapAsync(this);
+
     }
 
 

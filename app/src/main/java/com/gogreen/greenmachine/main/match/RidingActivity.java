@@ -10,53 +10,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.gogreen.greenmachine.R;
-import com.gogreen.greenmachine.parseobjects.Hotspot;
-import com.gogreen.greenmachine.parseobjects.MatchRequest;
-import com.gogreen.greenmachine.parseobjects.MatchRoute;
 
 import java.util.Calendar;
-import java.util.Set;
-
-
-import com.gc.materialdesign.views.ButtonRectangle;
 
 public class RidingActivity extends ActionBarActivity {
-    private Spinner mCarSpinner;
     private Spinner mStartSpinner;
     private Spinner mDestSpinner;
-
-    private Set<Hotspot> hotspots;
-    private MatchRequest driverRequest;
-    private MatchRoute matchRoute;
 
     private Toolbar toolbar;
 
     // UI references.
     private EditText matchByEditText;
-    private EditText leaveByEditText;
+    private EditText arriveByEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_driving);
+        setContentView(R.layout.activity_riding);
 
         // Set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
-        mCarSpinner = (Spinner) findViewById(R.id.car_spinner);
-        ArrayAdapter<CharSequence> carAdapter = ArrayAdapter.createFromResource(this,
-                R.array.car_seats_array, android.R.layout.simple_spinner_item);
-        carAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mCarSpinner.setAdapter(carAdapter);
 
         mStartSpinner = (Spinner) findViewById(R.id.start_spinner);
         ArrayAdapter<CharSequence> startAdapter = ArrayAdapter.createFromResource(this,
@@ -104,7 +86,7 @@ public class RidingActivity extends ActionBarActivity {
         });
 
         matchByEditText = (EditText) findViewById(R.id.match_by_edit_text);
-        leaveByEditText = (EditText) findViewById(R.id.leave_by_edit_text);
+        arriveByEditText = (EditText) findViewById(R.id.arrive_by_edit_text);
 
         matchByEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +123,7 @@ public class RidingActivity extends ActionBarActivity {
 
         });
 
-        leaveByEditText.setOnClickListener(new View.OnClickListener() {
+        arriveByEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar mcurrentTime = Calendar.getInstance();
@@ -167,7 +149,7 @@ public class RidingActivity extends ActionBarActivity {
                             time = time + selectedMinute;
                         }
                         time = time + suffix;
-                        leaveByEditText.setText(time);
+                        arriveByEditText.setText(time);
                     }
                 }, hour, minute, false);//use AM/PM time
                 mTimePicker.setTitle("Select Time");
@@ -177,7 +159,6 @@ public class RidingActivity extends ActionBarActivity {
         });
 
         // Set up the handler for the match button click
-
         ButtonRectangle matchButton = (ButtonRectangle) findViewById(R.id.rider_match_button);
         matchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -201,6 +182,9 @@ public class RidingActivity extends ActionBarActivity {
 
     private void startNextActivity() {
         Intent intent = new Intent(RidingActivity.this, RidingHotspotSelectActivity.class);
+        intent.putExtra("matchDate", matchByEditText.getText().toString());
+        intent.putExtra("arriveDate", arriveByEditText.getText().toString());
+        intent.putExtra("destination", mDestSpinner.getSelectedItem().toString());
         startActivity(intent);
     }
 }

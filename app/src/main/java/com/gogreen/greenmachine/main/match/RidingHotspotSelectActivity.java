@@ -38,8 +38,13 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class RidingHotspotSelectActivity extends ActionBarActivity implements
@@ -68,20 +73,39 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     private MatchRequest riderRequest;
     private MatchRoute matchRoute;
     private Set<Hotspot> serverHotspots;
+    private Set<Hotspot> selectedHotspots;
+    private Date matchByDate;
+    private Date arriveByDate;
+    private boolean riderMatched = false;
+    private MatchRoute.Destination destination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_riding_hotspot_select);
 
+        // Process intent items
+        this.matchByDate = convertToDateObject(getIntent().getExtras().get("matchDate").toString());
+        this.arriveByDate = convertToDateObject(getIntent().getExtras().get("arriveDate").toString());
+        this.destination = processDestination(getIntent().getExtras().get("destination").toString());
+
+
+        this.riderMatched = false;
+
         // Grab server hotspots
         this.serverHotspots = getAllHotspots();
+
+        // Initialize selectedHotspots
+        this.selectedHotspots = new HashSet<Hotspot>();
 
         // Set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        // Initialize selectedHotspots
+        this.selectedHotspots = new HashSet<Hotspot>();
 
         ButtonFloat matchButton = (ButtonFloat) findViewById(R.id.buttonFloat);
         matchButton.setOnClickListener(new View.OnClickListener() {
@@ -254,6 +278,31 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                 .build();
         createLocationRequest();
     }
+
+    private Date convertToDateObject(String s) {
+        SimpleDateFormat ft = new SimpleDateFormat ("h:m a");
+
+        String input = s;
+
+        Date t = new Date();
+
+        try {
+            t = ft.parse(input);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return t;
+    }
+
+    private MatchRoute.Destination processDestination(String s) {
+        if (s.equals("HQ")) {
+            return MatchRoute.Destination.HQ;
+        } else {
+            return MatchRoute.Destination.HOME;
+        }
+    }
+
     /**
      * Method to verify google play services on the device
      * */
@@ -318,11 +367,51 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     public void setMarker(Marker m){
         m.setIcon(BitmapDescriptorFactory.defaultMarker(150));
         m.setAlpha(1.0f);
+        // Grab location & add to Hotspot set
+        LatLng mPoint = m.getPosition();
+        ParseGeoPoint hPoint = new ParseGeoPoint(mPoint.latitude, mPoint.longitude);
+
+        // Find the original hotspot item and add it to the set
+        Iterator iter = this.serverHotspots.iterator();
+        while (iter.hasNext()) {
+            Hotspot hSpot = (Hotspot) iter.next();
+            try {
+                hSpot.fetchIfNeeded();
+            } catch (ParseException e) {
+                return;
+            }
+            if (isEqualParseGeoPoint(hPoint, hSpot.getParseGeoPoint())) {
+                this.selectedHotspots.add(hSpot);
+                break;
+            }
+        }
+    }
+
+    private boolean isEqualParseGeoPoint(ParseGeoPoint p1, ParseGeoPoint p2) {
+        return (p1.getLatitude() == p2.getLatitude() && p1.getLongitude() == p2.getLongitude());
     }
 
     public void resetMarker(Marker m){
         m.setAlpha(0.75f);
         m.setIcon(BitmapDescriptorFactory.defaultMarker(30));
+
+        LatLng mPoint = m.getPosition();
+        ParseGeoPoint hPoint = new ParseGeoPoint(mPoint.latitude, mPoint.longitude);
+
+        // Find the original hotspot item and add it to the set
+        Iterator iter = this.serverHotspots.iterator();
+        while (iter.hasNext()) {
+            Hotspot hSpot = (Hotspot) iter.next();
+            try {
+                hSpot.fetchIfNeeded();
+            } catch (ParseException e) {
+                return;
+            }
+            if (isEqualParseGeoPoint(hPoint, hSpot.getParseGeoPoint())) {
+                this.selectedHotspots.remove(hSpot);
+                break;
+            }
+        }
     }
 
     private Set<Hotspot> getAllHotspots() {
@@ -341,108 +430,141 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         return serverHotspots;
     }
 
-    /*
-    private void findMatch() {
-        // 1) Create a match request
-        createMatchRequest();
-
-        // 2) Find riders and create route
-        createRoute();
-    }
-
-    private void createMatchRequest() {
-        // Fake Date data
-        Date matchBy = new Date();
-        Date arriveBy = new Date();
-
+    private boolean createMatchRequest() {
         // Create a match request
         riderRequest = new MatchRequest();
-        riderRequest.populateMatchRequest(MatchRequest.RequestType.DRIVER, ParseUser.getCurrentUser(), this.serverHotspots,
-                matchBy, arriveBy, MatchRequest.MatchStatus.ACTIVE, 3);
-        try {
-            riderRequest.save();
-        } catch (Exception e) {
-            // Handle a save failure
-            return;
-        }
+        riderRequest.populateMatchRequest(ParseUser.getCurrentUser(), this.selectedHotspots,
+                matchByDate, arriveByDate, MatchRequest.MatchStatus.ACTIVE);
+        riderRequest.saveInBackground();
+        return true;
     }
 
-    private void createRoute() {
-        List<MatchRequest> matchRequests;
+    private boolean findDriver() {
+        List<MatchRoute> matchRoute;
         boolean matched = false;
 
-        ParseQuery<MatchRequest> matchQuery = ParseQuery.getQuery("MatchRequest");
-        matchQuery.whereEqualTo("status", MatchRequest.MatchStatus.ACTIVE.toString());
+        // Grab all routes from the server
+        ParseQuery<MatchRoute> notStartedQuery = ParseQuery.getQuery("MatchRoute");
+        notStartedQuery = notStartedQuery.whereEqualTo("tripStatus", MatchRoute.TripStatus.NOT_STARTED.toString());
+
+        ParseQuery<MatchRoute> enRouteQuery = ParseQuery.getQuery("MatchRoute");
+        enRouteQuery = enRouteQuery.whereEqualTo("tripStatus", MatchRoute.TripStatus.EN_ROUTE_HOTSPOT.toString());
+
+        //ParseQuery.or
+        ParseQuery<MatchRoute> finalQuery = ParseQuery.or(Arrays.asList(notStartedQuery, enRouteQuery));
+
         try {
-            matchRequests = new ArrayList<MatchRequest>(matchQuery.find());
+            matchRoute = new ArrayList<MatchRoute>(finalQuery.find());
         } catch (ParseException e) {
             // Handle server retrieval failure
-            return;
+            return false;
         }
 
-        Iterator iter = matchRequests.iterator();
+        // Loop through routes to find a route for the same hotspots
+        Iterator iter = matchRoute.iterator();
         while (iter.hasNext() && !matched) {
-            MatchRequest request = (MatchRequest) iter.next();
-            Set<Hotspot> other = request.getHotspots();
-            Set<Hotspot> intersection = new HashSet<Hotspot>(this.serverHotspots);
-
-            // Find the intersection
-            intersection.retainAll(other);
-
-            // If there are hot spots in common then match the two
-            ParseGeoPoint hq = new ParseGeoPoint(37.5311942, -122.2646403);
-            if (!intersection.isEmpty()) {
-                ParseUser rider = request.getRequester();
+            MatchRoute route = (MatchRoute) iter.next();
+            ArrayList<Hotspot> potentialHotspots = (ArrayList<Hotspot>) route.getPotentialHotspots();
+            // First check if the potential hotspots is empty. It is cleared if there was a prev. match
+            if (potentialHotspots.isEmpty()) {
+                // Use the hotspot
+                Hotspot routeHotspot = (Hotspot) route.getHotspot();
                 try {
-                    rider.fetchIfNeeded();
+                    routeHotspot.fetchIfNeeded();
                 } catch (ParseException e) {
-                    return;
+                    return false;
                 }
-                // The rider can't also be the driver!
-                if (!rider.equals(ParseUser.getCurrentUser())) {
-                    // Create a new match route
-                    this.matchRoute = new MatchRoute();
-                    PublicProfile riderProfile = (PublicProfile) rider.get("publicProfile");
+
+                // Check if the route hotspot is in selected hotspots
+                if (this.selectedHotspots.contains(routeHotspot)) {
+                    // If it is check that the rider isn't already in the route rider (sync issues)
+                    boolean alreadyRider = false;
+                    ArrayList<PublicProfile> riders = (ArrayList<PublicProfile>) route.getRiders();
+                    PublicProfile myProfile = (PublicProfile) ParseUser.getCurrentUser().get("publicProfile");
                     try {
-                        riderProfile = riderProfile.fetchIfNeeded();
+                        myProfile.fetchIfNeeded();
                     } catch (ParseException e) {
-                        return;
+                        return false;
                     }
-                    matchRoute.populateMatchRoute(ParseUser.getCurrentUser(), riderProfile,
-                            (Hotspot) intersection.iterator().next(),
-                            hq, MatchRoute.TripStatus.NOT_STARTED, 3);
+
+                    Iterator profIterator = riders.iterator();
+                    while (profIterator.hasNext()) {
+                        PublicProfile riderProfile = (PublicProfile) profIterator.next();
+                        if (riderProfile.equals(myProfile)) {
+                            alreadyRider = true;
+                            break;
+                        }
+                    }
+                    int remainingCapacity = route.getCapacity();
+                    if (!alreadyRider && remainingCapacity > 0) {
+                        this.matchRoute = route;
+                        this.matchRoute.setCapacity(remainingCapacity - 1);
+                        this.matchRoute.addRider(myProfile);
+                        this.matchRoute.setStatus(MatchRoute.TripStatus.EN_ROUTE_HOTSPOT);
+                        try {
+                            this.matchRoute.save();
+                            matched = true;
+                            return true;
+                        } catch (ParseException e) {
+                            return false;
+                        }
+                    }
+                }
+            } else {
+                // Search for an intersection to initialize the hotspot and clear the online potentialHotspots list
+                Set<Hotspot> routesOnline = new HashSet<Hotspot>(potentialHotspots);
+                Set<Hotspot> intersection = new HashSet<Hotspot>(selectedHotspots);
+
+                intersection.retainAll(routesOnline);
+
+                if (!intersection.isEmpty()) {
+                    Iterator hspotIterator = intersection.iterator();
+                    Hotspot hotspot = (Hotspot) hspotIterator.next();
                     try {
-                        matchRoute.save();
-                        matched = true;
+                        hotspot.fetchIfNeeded();
                     } catch (ParseException e) {
-                        return;
+                        return false;
+                    }
+                    int remainingCapacity = route.getCapacity();
+                    if (remainingCapacity > 0) {
+                        PublicProfile myProfile = (PublicProfile) ParseUser.getCurrentUser().get("publicProfile");
+                        try {
+                            myProfile.fetchIfNeeded();
+                        } catch (ParseException e) {
+                            return false;
+                        }
+                        this.matchRoute = route;
+                        this.matchRoute.setCapacity(remainingCapacity - 1);
+                        this.matchRoute.addRider(myProfile);
+                        this.matchRoute.setPotentialHotspots(new ArrayList<Hotspot>());
+                        this.matchRoute.setStatus(MatchRoute.TripStatus.EN_ROUTE_HOTSPOT);
+                        this.matchRoute.setHotspot(hotspot);
+                        try {
+                            this.matchRoute.save();
+                            matched = true;
+                            return true;
+                        } catch (ParseException e) {
+                            return false;
+                        }
                     }
                 }
             }
         }
-        // If not matched then we want to erase the match status
-        if (!matched) {
-            this.riderRequest.setStatus(MatchRequest.MatchStatus.INACTIVE);
-            try {
-                this.riderRequest.save();
-            } catch (ParseException e) {
-                return;
-            }
-        }
+        return false;
     }
 
     private void processResult() {
-        if (this.matchRoute == null) {
-            Toast.makeText(RidingHotspotSelectActivity.this, getString(R.string.progress_no_rider_found), Toast.LENGTH_SHORT).show();
+        if (!this.riderMatched) {
+            Toast.makeText(RidingHotspotSelectActivity.this, getString(R.string.progress_no_driver_found), Toast.LENGTH_SHORT).show();
         } else {
             startNextActivity();
         }
     }
-    */
-
 
     private class FindMatchTask extends AsyncTask<Void, Void, Void> {
         ProgressDialog pdLoading = new ProgressDialog(RidingHotspotSelectActivity.this);
+        boolean requestCreated = false;
+        boolean driverFound = false;
 
         @Override
         protected void onPreExecute() {
@@ -452,7 +574,22 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         }
         @Override
         protected Void doInBackground(Void... params) {
-            //findMatch();
+            for (int i = 0; i < 5; i++) {
+                if (!requestCreated) {
+                    requestCreated = createMatchRequest();
+                } else if (!driverFound) {
+                    driverFound = findDriver();
+                } else if (driverFound) {
+                }
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+
+                }
+            }
+
+            riderMatched = driverFound;
+            riderRequest.setStatus(MatchRequest.MatchStatus.INACTIVE);
             return null;
         }
 
@@ -460,7 +597,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             pdLoading.dismiss();
-            //processResult();
+            processResult();
         }
     }
 }

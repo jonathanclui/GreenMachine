@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -58,6 +59,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -134,7 +136,8 @@ public class MainActivity extends ActionBarActivity implements
             makeLatLng(37.615035, -122.405966),
             makeLatLng(37.614185, -122.405140),
             makeLatLng(37.614686, -122.405623),
-            makeLatLng(37.613819, -122.404786)
+            makeLatLng(37.613819, -122.404786),
+            makeLatLng(37.609642, -122.400763)
     );
 
     public List<LatLng> simulatePoints_2=Arrays.asList(
@@ -151,6 +154,9 @@ public class MainActivity extends ActionBarActivity implements
     makeLatLng(37.484701, -122.233096),
     makeLatLng(37.485374, -122.234019),
     makeLatLng(37.486787, -122.235553),
+    makeLatLng(37.487179, -122.236015),
+    makeLatLng(37.487179, -122.236015),
+    makeLatLng(37.487179, -122.236015),
     makeLatLng(37.487179, -122.236015)
     );
 
@@ -415,6 +421,7 @@ public class MainActivity extends ActionBarActivity implements
                             .alpha(0.75f));
 
             simulateStep+=1;
+
         }
         else{
            if (simulateStep<simulatePoints.size()){
@@ -426,7 +433,8 @@ public class MainActivity extends ActionBarActivity implements
             }
 
             simulateStep+=1;
-
+            if (simulateStep>Math.min(simulatePoints.size()-1,simulatePoints_2.size()-1))
+                simulateStep=Math.min(simulatePoints.size()-1,simulatePoints_2.size()-1);
         }
     }
 
@@ -575,6 +583,12 @@ public class MainActivity extends ActionBarActivity implements
             Iterator iter = this.serverHotspots.iterator();
             while (iter.hasNext()) {
                 Hotspot h = (Hotspot) iter.next();
+                try{
+                    h.fetchIfNeeded();
+                }
+                catch (ParseException e){
+                    e.printStackTrace();
+                };
                 ParseGeoPoint parsePoint = h.getParseGeoPoint();
                 LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
                 Marker m=mMap.addMarker(new MarkerOptions().position(hotspotLoc)
@@ -604,6 +618,40 @@ public class MainActivity extends ActionBarActivity implements
      return false;
     }
 
+
+    private class updateMarkers extends AsyncTask<Hotspot, String, String> {
+        ProgressDialog pdLoading = new ProgressDialog(MainActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdLoading.setMessage("");
+            pdLoading.show();
+        }
+        @Override
+        protected String doInBackground(Hotspot... params) {
+            // Loop through every 30 seconds and try to find a rider
+            Hotspot h=params[0];
+            String origins="";
+            ArrayList<PublicProfile> drivers_pub_prof = getActiveDrivers(h);
+            int size_i=drivers_pub_prof.size()-1;
+
+            //get locations of all the drivers headed towards this hotspot
+            for(PublicProfile p:drivers_pub_prof){
+                ParseGeoPoint lkl=p.getLastKnownLocation();
+                origins+=(Double.toString(lkl.getLatitude())+","+Double.toString(lkl.getLongitude()));
+                if (size_i!=0) origins+="|";
+            }
+            return origins;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            pdLoading.dismiss();
+        }
+    }
+
     public int getHotspotId(Marker m){
         Iterator iter = this.serverHotspots.iterator();
         int i=1;
@@ -629,11 +677,6 @@ public class MainActivity extends ActionBarActivity implements
         int i=1;
         while (iter.hasNext()) {
             Hotspot h = (Hotspot) iter.next();
-            try {
-                h.fetchIfNeeded();
-            } catch (ParseException e) {
-
-            }
             ParseGeoPoint parsePoint = h.getParseGeoPoint();
             LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
             if (m.getPosition().longitude==parsePoint.getLongitude() && m.getPosition().latitude==parsePoint.getLatitude()){
@@ -645,24 +688,27 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     public void updateMarkerTags(Marker m){
-        Log.i(MainActivity.class.getSimpleName(),Integer.toString(getHotspotId(m)));
+        //Log.i(MainActivity.class.getSimpleName(),Integer.toString(getHotspotId(m)));
         //TODO:oncoming driver's hotspot should be at this marker
         Hotspot h = getMyHotspot(m);
-        Log.i(MainActivity.class.getSimpleName(),"myHotspot-"+h.getName());
+        //Log.i(MainActivity.class.getSimpleName(),"myHotspot-"+h.getName());
         if (h==null){
             m.setTitle("Next Pickup: N/A");
             return;
         }
         else {
-            ArrayList<PublicProfile> drivers_pub_prof = getActiveDrivers(h);
+            //Log.i(MainActivity.class.getSimpleName(),"myHotspot-"+h.getName());
             String origins="";
-            int size_i=drivers_pub_prof.size()-1;
-
-            //get locations of all the drivers headed towards this hotspot
-            for(PublicProfile p:drivers_pub_prof){
-                ParseGeoPoint lkl=p.getLastKnownLocation();
-                origins+=(Double.toString(lkl.getLatitude())+","+Double.toString(lkl.getLongitude()));
-                if (size_i!=0) origins+="|";
+            try {
+                origins = new updateMarkers().execute(h).get();
+            }
+            catch (Exception e){
+                Log.i(MainActivity.class.getSimpleName(),"updateMarks:"+e.getMessage());
+                e.printStackTrace();
+            }
+            if (origins=="") {
+                m.setTitle("Next Pickup: N/A");
+                m.setSnippet("no drivers yet");
             }
             Log.i(MainActivity.class.getSimpleName(),"drivers@-"+origins);
             int minTime=24*60*60;  //pickupTime in seconds
@@ -698,6 +744,7 @@ public class MainActivity extends ActionBarActivity implements
                 Log.i(MainActivity.class.getSimpleName(),e.getMessage());
                 e.printStackTrace();
             }
+
             //if minTime has not been reduced, possibly no drivers on the hotspot
             if (minTime<1440){
                 m.setTitle("Next Pickup: "+(minTime/60)+" min");
@@ -708,9 +755,11 @@ public class MainActivity extends ActionBarActivity implements
                 m.setSnippet("no drivers yet");
             }
         }
-
-        boolean myHotspot=(getHotspotId(m)==6);
-        if (myHotspot) {
+        boolean condition =(getHotspotId(m)==6);
+        Log.i(MainActivity.class.getSimpleName(),"myHotspot"+getMyHotspot(m).getName());
+        condition=getMyHotspot(m).getName().startsWith("Hills");
+        boolean myHotspot=condition;
+        if (myHotspot && simulateStep<simulatePoints.size()) {
             String origins=Double.toString(simulatePoints.get(simulateStep).latitude)+","+Double.toString(simulatePoints.get(simulateStep).longitude);
             String destinations=Double.toString(m.getPosition().latitude)+","+Double.toString(m.getPosition().longitude);
             String mode="driving";

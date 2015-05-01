@@ -3,16 +3,27 @@ package com.gogreen.greenmachine.main.match;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.parseobjects.Hotspot;
+import com.gogreen.greenmachine.parseobjects.MatchRoute;
+import com.gogreen.greenmachine.parseobjects.PublicProfile;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class RiderMatchedActivity extends ActionBarActivity {
 
     private Toolbar toolbar;
-
+    PublicProfile myDriver=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +34,7 @@ public class RiderMatchedActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        
     }
 
 

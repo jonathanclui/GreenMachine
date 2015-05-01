@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.main.badges.BadgeActivity;
 import com.gogreen.greenmachine.main.login.DispatchActivity;
@@ -277,7 +278,7 @@ public class MainActivity extends ActionBarActivity implements
         mDrawerToggle.syncState();
 
         // Set up the handler for the driving button click
-        Button drivingButton = (Button) findViewById(R.id.driving_button);
+        ButtonRectangle drivingButton = (ButtonRectangle) findViewById(R.id.driving_button);
         drivingButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, DrivingActivity.class);
@@ -286,7 +287,7 @@ public class MainActivity extends ActionBarActivity implements
         });
 
         // Set up the handler for the riding button click
-        Button ridingButton = (Button) findViewById(R.id.riding_button);
+        ButtonRectangle ridingButton = (ButtonRectangle) findViewById(R.id.riding_button);
         ridingButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RidingActivity.class);
@@ -326,8 +327,7 @@ public class MainActivity extends ActionBarActivity implements
             case R.id.action_user:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 return true;
-            case R.id.action_search:
-                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

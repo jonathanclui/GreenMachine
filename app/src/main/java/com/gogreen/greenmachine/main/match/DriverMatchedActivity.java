@@ -180,7 +180,7 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
             ParseGeoPoint riderLoc = (ParseGeoPoint) riderIter.next();
             LatLng riderMarker = new LatLng(riderLoc.getLatitude(), riderLoc.getLongitude());
             mMap.addMarker(new MarkerOptions().position(riderMarker)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_black))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_rider))
                     .alpha(0.75f));
         }
         mMap.addMarker(new MarkerOptions().position(hotspotLoc)

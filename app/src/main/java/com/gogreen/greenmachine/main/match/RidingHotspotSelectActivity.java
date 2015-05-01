@@ -578,7 +578,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         }
         @Override
         protected Void doInBackground(Void... params) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 100; i++) {
                 if (!requestCreated) {
                     requestCreated = createMatchRequest();
                 } else if (!driverFound) {

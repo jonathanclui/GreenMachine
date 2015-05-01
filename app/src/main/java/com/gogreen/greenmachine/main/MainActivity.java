@@ -30,6 +30,7 @@ import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
 
 import com.gogreen.greenmachine.parseobjects.Hotspot;
+import com.gogreen.greenmachine.parseobjects.HotspotsData;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 
 
@@ -117,6 +118,28 @@ public class MainActivity extends ActionBarActivity implements
 
     private Set<Hotspot> serverHotspots;
 
+    public List<LatLng> simulatePoints=Arrays.asList(
+            makeLatLng(37.6476749,-122.4066639),
+            makeLatLng(37.641694,-122.405891),
+            makeLatLng(37.6347100,-122.4067497),
+            makeLatLng(37.634042,-122.4136162),
+            makeLatLng(37.6338779,-122.4170494),
+            makeLatLng(37.6330622,-122.4191952),
+            makeLatLng(37.6307511,-122.4178219),
+            makeLatLng(37.6292556,-122.4167061),
+            makeLatLng(37.6270124,-122.415247),
+            makeLatLng(37.6246331,-122.4138737),
+            makeLatLng(37.6226617,-122.4121571),
+            makeLatLng(37.6202823,-122.4104404),
+            makeLatLng(37.6155912,-122.4064922),
+            makeLatLng(37.615035, -122.405966),
+            makeLatLng(37.614185, -122.405140),
+            makeLatLng(37.614686, -122.405623),
+            makeLatLng(37.613819, -122.404786)
+    );
+    public int simulateStep=0;
+    Marker simulatedDriver;
+
     /* //TODO:to retrieve hotspots from Parse
     ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
     hotspotQuery.orderByDescending("hotspotId");
@@ -140,6 +163,7 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         // Grab server hotspots
         this.serverHotspots = getAllHotspots();
@@ -345,6 +369,25 @@ public class MainActivity extends ActionBarActivity implements
         mCurrentLocation = location;
         //mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateLocation();
+        simulateDriverStep();
+    }
+
+    public void simulateDriverStep(){
+        if (simulateStep==0){
+            simulatedDriver = mMap.addMarker(new MarkerOptions().position(simulatePoints.get(0))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car))
+                            .title("Jaden Smith")
+                            .alpha(0.75f)
+            );
+            simulateStep+=1;
+        }
+        else{
+           if (simulateStep<simulatePoints.size()){
+               simulatedDriver.setPosition(simulatePoints.get(simulateStep));
+               simulateStep+=1;
+           }
+
+        }
     }
 
     @Override
@@ -395,8 +438,8 @@ public class MainActivity extends ActionBarActivity implements
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setInterval(500);
+        mLocationRequest.setFastestInterval(100);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -506,6 +549,7 @@ public class MainActivity extends ActionBarActivity implements
         }
     }
 
+
     @Override
     public boolean onMarkerClick(Marker m){
      if (m.getAlpha()==0.75f) {
@@ -521,6 +565,7 @@ public class MainActivity extends ActionBarActivity implements
     public void setMarker(Marker m){
         m.setIcon(BitmapDescriptorFactory.defaultMarker(150));
         m.setAlpha(1.0f);
+
     }
 
     public void resetMarker(Marker m){
@@ -542,5 +587,28 @@ public class MainActivity extends ActionBarActivity implements
         }
 
         return serverHotspots;
+    }
+    public LatLng makeLatLng(double a, double b){
+        return new LatLng(a,b);
+    }
+
+    public static int computePoints(Marker m){
+        String id=m.getTitle();
+
+        LatLng l=m.getPosition();
+
+        //grab the driver(s) headed to hotspot with above id in this time window
+        //need a table of hotspotId|timeWindow|driverObj|numriders --> To fill this table, find time from driver's location to hotspotID(s)
+        //---------------------------------------------------------> when a rider is matched, add numriders to the hotspot against the matched time window
+        //(DateObj.getHours()*60 + minutes)/15
+
+        // if no drivers in this window, print no drivers around
+
+        //pickup time =  (driver's leave by time + time from driver's location to this hotspot) - (current_time)
+        //double dist=find distance to destination from hotspot
+
+        //return dist/number_riders
+
+        return 1;
     }
 }

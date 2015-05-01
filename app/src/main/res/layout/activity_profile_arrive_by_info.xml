@@ -1,41 +1,116 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.gogreen.greenmachine.profile.ProfileBasicInfoActivity">
 
-    <include
+    <ScrollView
+        android:id="@+id/signup_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
+        <LinearLayout
+            style="@style/LoginFormContainer"
+            android:orientation="vertical"
+            android:weightSum="1">
+            <LinearLayout
+                style="@style/LoginFormContainer"
+                android:orientation="vertical"
+                android:background="#1976D2"
+                android:layout_weight="0.17">
+    <!--include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar">
-    </include>
+    </include-->
+        <ImageView android:id="@+id/icon"
+            android:src="@drawable/ic_clock"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="50px" />
+        <TextView
+            android:layout_width="301dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/title_profile_arrive_by_info"
+            android:id="@+id/textView"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:padding="10px"
+            android:gravity="center_horizontal" />
+        </LinearLayout>
+                <LinearLayout style="@style/LoginFormContainer"
+                    android:orientation="vertical"
+                    android:padding="30px">
+                    <EditText
+                        android:id="@+id/arrive_hq_by_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_arrive_hq_by"
+                        android:maxLines="1"
+                        android:windowSoftInputMode="stateHidden"
+                        android:singleLine="true" />
 
-    <EditText
-        android:id="@+id/arrive_hq_by_edit_text"
+                    <EditText
+                        android:id="@+id/arrive_home_by_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_arrive_home_by"
+                        android:maxLines="1"
+                        android:windowSoftInputMode="stateHidden"
+                        android:singleLine="true" />
+                </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/prompt_arrive_hq_by"
-        android:maxLines="1"
-        android:singleLine="true" />
+        android:layout_height="match_parent"
+        android:padding="30px"
+        android:id="@+id/rl"
+        android:transitionGroup="false"
 
-    <EditText
-        android:id="@+id/arrive_home_by_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/prompt_arrive_home_by"
-        android:maxLines="1"
-        android:singleLine="true" />
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/linearLayout"
+            >
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:id="@+id/imageButton2"
+                android:src="@drawable/ic_left_arrow"
+                android:background="@color/primary_background"
+                />
 
-    <Button
-        style="@style/PrimaryButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/text_dim_top"
-        android:text="@string/next"
-        android:id="@+id/next_button"
-        android:layout_gravity="end"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+            <ImageView android:id="@+id/train"
+                android:src="@drawable/train3of4"
+                android:layout_gravity="center"
+                android:layout_width="150dp"
+                android:layout_height="75dp"
+                android:padding="50px"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/next_button"
 
-</LinearLayout>
+                />
+            <!--<com.gc.materialdesign.views.ButtonRectangle
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/primary_button"
+                android:text="@string/setprofile"
+                android:padding="50px"
+                android:layout_alignParentRight="true" />-->
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="100dp"
+                android:id="@+id/next_button"
+                android:src="@drawable/ic_right_arrow"
+                android:background="@color/primary_background"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+ </merge>

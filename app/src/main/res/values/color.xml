@@ -3,6 +3,7 @@
     <!-- Theme Colors -->
     <color name="primary">#8bc34a</color>
     <color name="primary_dark">#558b2f</color>
+    <color name="primary_background">#efeff2</color>
 
     <!-- Button Related Colors -->
     <color name="primary_button">#00bcd4</color>

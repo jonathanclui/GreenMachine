@@ -28,7 +28,14 @@ import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
+
+import com.gogreen.greenmachine.parseobjects.Hotspot;
+import com.gogreen.greenmachine.parseobjects.PrivateProfile;
+
+
+import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -44,13 +51,22 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.FindCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.Arrays;
+import java.util.HashSet;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -99,13 +115,34 @@ public class MainActivity extends ActionBarActivity implements
 
     private ActionBarDrawerToggle mDrawerToggle;
 
-    List<LatLng> hspotsList = Arrays.asList((new LatLng(37.5505658, -122.3094177)), (new LatLng(37.4971971, -122.2507095)), (new LatLng(37.5124492, -122.3324203)),
-            (new LatLng(37.6125996, -122.3973083)));
+    private Set<Hotspot> serverHotspots;
 
+    /* //TODO:to retrieve hotspots from Parse
+    ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
+    hotspotQuery.orderByDescending("hotspotId");
+
+    try {
+        this.hotspots = new HashSet<Hotspot>(hotspotQuery.find());
+        hotspotQuery.findInBackground(new FindCallback<Hotspot>() {
+
+            @Override
+            public void done(List<Hotspot> list,
+                             ParseException e) {
+                for(Hotspot h:list)
+                    Log.i(DrivingActivity.class.getSimpleName(),h.getParseGeoPoint().toString());
+            }
+        });
+    } catch (ParseException e) {
+        // Handle a server query fail
+        return;
+    }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Grab server hotspots
+        this.serverHotspots = getAllHotspots();
 
         // Grab appropriate data for adapter
         navRowTitles = getResources().getStringArray(R.array.navigation_drawer_titles);
@@ -271,9 +308,6 @@ public class MainActivity extends ActionBarActivity implements
         startActivity(intent);
     }
 
-
-// ARBAZ CHANGES
-
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(MainActivity.class.getSimpleName(), "Connected to GoogleApiClient");
@@ -338,23 +372,25 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     private void updateLocation() {
-        Log.i(MainActivity.class.getSimpleName(), "Lat:"+mLatitude+" Lon:" + mLongitude);
+        Log.i(MainActivity.class.getSimpleName(), "Lat:" + mLatitude + " Lon:" + mLongitude);
 
-        mLatitude = mCurrentLocation.getLatitude();
-        mLongitude = mCurrentLocation.getLongitude();
+        if (mCurrentLocation!=null){
+            mLatitude = mCurrentLocation.getLatitude();
+            mLongitude = mCurrentLocation.getLongitude();
 
-        // Fetch user's public profile
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
-        try {
-            pubProfile.fetchIfNeeded();
-        } catch (ParseException e) {
-            return;
+            // Fetch user's public profile
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
+            try {
+                pubProfile.fetchIfNeeded();
+            } catch (ParseException e) {
+                return;
+            }
+
+            // Insert coordinates into the user's public profile lastKnownLocation
+            ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
+            pubProfile.setLastKnownLocation(userLoc);
         }
-
-        // Insert coordinates into the user's public profile lastKnownLocation
-        ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
-        pubProfile.setLastKnownLocation(userLoc);
     }
 
     protected void createLocationRequest() {
@@ -441,6 +477,7 @@ public class MainActivity extends ActionBarActivity implements
         }
         return true;
     }
+
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
@@ -450,14 +487,22 @@ public class MainActivity extends ActionBarActivity implements
                 .zoom(10)
                 .build();                   // Creates a CameraPosition from the builder
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        for (int j = 0; j < hspotsList.size(); j++) {
-            //Log.i(MainActivity.class.getSimpleName(), "hotspot:" + j + hspotsList.get(j));
-            mMap.addMarker(new MarkerOptions().position(hspotsList.get(j))
-                    .icon(BitmapDescriptorFactory.defaultMarker(30))
-                    .title("Hotspot " + j)
-                    .alpha(0.75f)
-            );
-            mMap.setOnMarkerClickListener((GoogleMap.OnMarkerClickListener)this);
+
+        if (this.serverHotspots != null) {
+            Iterator iter = this.serverHotspots.iterator();
+            while (iter.hasNext()) {
+                Hotspot h = (Hotspot) iter.next();
+                ParseGeoPoint parsePoint = h.getParseGeoPoint();
+                LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(hotspotLoc)
+                                .icon(BitmapDescriptorFactory.defaultMarker(30))
+                                .title(h.getName())
+                                .alpha(0.75f)
+                );
+                mMap.setOnMarkerClickListener((GoogleMap.OnMarkerClickListener)this);
+            }
+        } else {
+            // Handle the server not getting hotspots
         }
     }
 
@@ -481,5 +526,21 @@ public class MainActivity extends ActionBarActivity implements
     public void resetMarker(Marker m){
         m.setAlpha(0.75f);
         m.setIcon(BitmapDescriptorFactory.defaultMarker(30));
+    }
+
+    private Set<Hotspot> getAllHotspots() {
+        Set<Hotspot> serverHotspots = new HashSet<Hotspot>();
+
+        // Grab the hotspot set from the server
+        ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
+        hotspotQuery.orderByDescending("hotspotId");
+        try {
+            serverHotspots = new HashSet<Hotspot>(hotspotQuery.find());
+        } catch (ParseException e) {
+            // Handle a server query fail
+            return null;
+        }
+
+        return serverHotspots;
     }
 }

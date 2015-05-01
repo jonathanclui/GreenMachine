@@ -1,6 +1,7 @@
 package com.gogreen.greenmachine.parseobjects;
 
 import com.parse.ParseClassName;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -70,6 +71,14 @@ public class MatchRequest extends ParseObject {
 
     public void setSeats(int value) {
         put("seats", value);
+    }
+
+    public ParseGeoPoint getDestination() {
+        return getParseGeoPoint("destination");
+    }
+
+    public void setDestination(ParseGeoPoint value) {
+        put("destination", value);
     }
 
     public static ParseQuery<MatchRequest> getQuery() {

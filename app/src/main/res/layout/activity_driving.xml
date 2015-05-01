@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/match_info_by"
-            android:id="@+id/driver_match_by_end" />
+            android:id="@+id/driver_arrive_by_end" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -111,7 +111,7 @@
             android:inputType="time"
             android:ems="10"
             android:text="@string/default_arrive_by"
-            android:id="@+id/leave_by_edit_text" />
+            android:id="@+id/arrive_by_edit_text" />
     </TableRow>
 
     <TableRow

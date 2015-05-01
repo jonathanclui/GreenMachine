@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.R;
@@ -40,11 +41,12 @@ public class ProfileHotspotInfoActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_hotspot_info);
 
+        /*
         // Set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);*/
 
         hotspotLatEditText = (EditText) findViewById(R.id.hotspot_lat_edit_text);
         hotspotLongEditText = (EditText) findViewById(R.id.hotspot_long_edit_text);
@@ -54,7 +56,7 @@ public class ProfileHotspotInfoActivity extends ActionBarActivity {
         hotspotLongEditText.setVisibility(View.GONE);
 
         // Set up the handler for the next button click
-        Button nextButton = (Button) findViewById(R.id.next_button);
+        ImageButton nextButton = (ImageButton) findViewById(R.id.next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 submit();

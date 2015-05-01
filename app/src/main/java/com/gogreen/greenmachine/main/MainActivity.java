@@ -239,6 +239,7 @@ public class MainActivity extends ActionBarActivity implements
                         case HOTSPOTS:
                             return true;
                         case ABOUT_US:
+                            startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
                             return true;
                         case LOGOUT:
                             logout();

@@ -5,7 +5,7 @@
     <string name="match_info_start">Leave</string>
     <string name="match_info_by">by</string>
     <string name="match_info_end">Arrive at</string>
-    <string name="match_button_text">Match Me!</string>
+    <string name="match_button_text">Next</string>
     <string name="matching_textview">Ok, we\'re working on it, we\'ll let you know
         if there is a match by</string>
     <string name="matched">You\'ve been matched!</string>

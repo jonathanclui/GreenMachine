@@ -31,5 +31,6 @@
 
     <!-- Remove when done with project - this is recreated with each activity -->
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_about_us">AboutUsActivity</string>
 
 </resources>

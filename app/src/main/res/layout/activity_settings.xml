@@ -18,7 +18,9 @@
             <TableRow
                 android:id="@+id/first_name_row"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:paddingLeft="30px"
+                android:paddingRight="30px">
 
                 <TextView
                     android:layout_width="0px"
@@ -39,7 +41,9 @@
             <TableRow
                 android:id="@+id/last_name_row"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:paddingLeft="30px"
+                android:paddingRight="30px">
 
                 <TextView
                     android:layout_width="0px"
@@ -60,7 +64,9 @@
             <TableRow
                 android:id="@+id/home_city_row"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:paddingLeft="30px"
+                android:paddingRight="30px">
 
                 <TextView
                     android:layout_width="0px"
@@ -81,7 +87,9 @@
             <TableRow
                 android:id="@+id/phone_number_row"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:paddingLeft="30px"
+                android:paddingRight="30px">
 
                 <TextView
                     android:layout_width="0px"
@@ -102,7 +110,9 @@
             <TableRow
                 android:id="@+id/driver_row"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:paddingLeft="30px"
+                android:paddingRight="30px">
 
                 <Switch
                     android:layout_width="wrap_content"
@@ -116,7 +126,9 @@
             <TableRow
                 android:id="@+id/driver_car_row"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:paddingLeft="30px"
+                android:paddingRight="30px">
 
                 <TextView
                     android:layout_width="0px"
@@ -135,7 +147,9 @@
             <TableRow
                 android:id="@+id/arrive_hq_by_row"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:paddingLeft="30px"
+                android:paddingRight="30px">
 
                 <TextView
                     android:layout_width="0px"
@@ -158,7 +172,9 @@
             <TableRow
                 android:id="@+id/arrive_home_by_row"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:paddingLeft="30px"
+                android:paddingRight="30px">
 
                 <TextView
                     android:layout_width="0px"

@@ -522,6 +522,7 @@ public class MainActivity extends ActionBarActivity implements
     public void setMarker(Marker m){
         m.setIcon(BitmapDescriptorFactory.defaultMarker(150));
         m.setAlpha(1.0f);
+
     }
 
     public void resetMarker(Marker m){
@@ -551,5 +552,25 @@ public class MainActivity extends ActionBarActivity implements
             allHotspots.add(new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude()));
         }
         return allHotspots;
+    }
+
+    public static int computePoints(Marker m){
+        String id=m.getTitle();
+
+        LatLng l=m.getPosition();
+
+        //grab the drivers headed to hotspot with above id in this time window
+        //need a table of hotspotId|timeWindow|driverObj|numriders --> To fill this table, find time from driver's location to hotspotID(s)
+        //---------------------------------------------------------> when a rider is matched, add numriders to the hotspot against the matched time window
+        //(DateObj.getHours()*60 + minutes)/15
+
+        // if no drivers in this window, print no drivers around
+
+        //pickup time =  (driver's leave by time + time from driver's location to this hotspot) - (current_time)
+        //double dist=find distance to destination from hotspot
+
+        //return dist/number_riders
+
+        return 1;
     }
 }

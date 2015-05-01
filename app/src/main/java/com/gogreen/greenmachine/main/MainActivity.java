@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.gc.materialdesign.views.ButtonRectangle;
@@ -30,19 +29,13 @@ import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.RetrieveDistanceMatrix;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
-
 import com.gogreen.greenmachine.navigation.distmatrix.Element;
 import com.gogreen.greenmachine.navigation.distmatrix.Result;
 import com.gogreen.greenmachine.navigation.distmatrix.Row;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
-import com.gogreen.greenmachine.parseobjects.HotspotsData;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
-
-
-import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -59,21 +52,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.api.client.http.GenericUrl;
-import com.parse.FindCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
-
 import java.util.List;
 import java.util.Set;
 
@@ -108,8 +97,8 @@ public class MainActivity extends ActionBarActivity implements
             R.drawable.ic_about,
             R.drawable.ic_logout};
 
-    String NAME = "Connor Horton";
-    String EMAIL = "connor.horton@oracle.com";
+    private String NAME;
+    private String EMAIL;
     int PROFILE = R.drawable.jonathan_lui;
 
     private String[] navRowTitles;
@@ -212,9 +201,17 @@ public class MainActivity extends ActionBarActivity implements
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
 
-        Log.i(MainActivity.class.getSimpleName(),"email:"+ParseUser.getCurrentUser().getEmail());
-        EMAIL=ParseUser.getCurrentUser().getEmail();
-        NAME=ParseUser.getCurrentUser().getUsername();
+        ParseUser currUser = ParseUser.getCurrentUser();
+
+        EMAIL = currUser.getEmail();
+        PrivateProfile privProfile = (PrivateProfile) currUser.get("privateProfile");
+        try {
+            privProfile.fetchIfNeeded();
+        } catch (ParseException e) {
+            NAME = "Connor Horton";
+        }
+
+        NAME = privProfile.getFirstName() + " " + privProfile.getLastName();
         mAdapter = new NavDrawerAdapter(navRowTitles, ICONS, NAME, EMAIL, PROFILE, this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -612,6 +609,11 @@ public class MainActivity extends ActionBarActivity implements
         int i=1;
         while (iter.hasNext()) {
             Hotspot h = (Hotspot) iter.next();
+            try {
+                h.fetchIfNeeded();
+            } catch (ParseException e) {
+
+            }
             ParseGeoPoint parsePoint = h.getParseGeoPoint();
             LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
             if (m.getPosition().longitude==parsePoint.getLongitude() && m.getPosition().latitude==parsePoint.getLatitude()){
@@ -627,6 +629,11 @@ public class MainActivity extends ActionBarActivity implements
         int i=1;
         while (iter.hasNext()) {
             Hotspot h = (Hotspot) iter.next();
+            try {
+                h.fetchIfNeeded();
+            } catch (ParseException e) {
+
+            }
             ParseGeoPoint parsePoint = h.getParseGeoPoint();
             LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
             if (m.getPosition().longitude==parsePoint.getLongitude() && m.getPosition().latitude==parsePoint.getLatitude()){
@@ -759,6 +766,11 @@ public class MainActivity extends ActionBarActivity implements
             matchRoute = new ArrayList<MatchRoute>(query.find());
             for(MatchRoute r:matchRoute){
                 ParseUser driver=r.getDriver();
+                try {
+                    driver.fetchIfNeeded();
+                } catch (ParseException e) {
+
+                }
                 PublicProfile pub_prof= (PublicProfile) driver.get("publicProfile");
                 try {
                     pub_prof.fetchIfNeeded();

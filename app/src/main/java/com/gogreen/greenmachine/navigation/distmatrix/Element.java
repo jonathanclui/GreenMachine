@@ -8,4 +8,7 @@ import com.google.api.client.util.Key;
 public class Element {
     @Key("distance")
     public Distance distance;
+
+    @Key("duration")
+    public Duration duration;
 }

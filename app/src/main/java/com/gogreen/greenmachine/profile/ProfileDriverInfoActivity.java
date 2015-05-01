@@ -7,9 +7,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.CompoundButton;
 
@@ -24,6 +26,7 @@ public class ProfileDriverInfoActivity extends ActionBarActivity {
     private  Switch drivingSwitch;
     private EditText carEditText;
     private LinearLayout carReveal;
+    private Spinner mCarSpinner;
 
     private Toolbar toolbar;
 
@@ -56,7 +59,11 @@ public class ProfileDriverInfoActivity extends ActionBarActivity {
 
         });
         carEditText = (EditText) findViewById(R.id.car_edit_text);
-
+        mCarSpinner = (Spinner) findViewById(R.id.car_spinner);
+        ArrayAdapter<CharSequence> carAdapter = ArrayAdapter.createFromResource(this,
+                R.array.car_seats_array, android.R.layout.simple_spinner_item);
+        carAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mCarSpinner.setAdapter(carAdapter);
 
         // Set up the handler for the next button click
         ImageButton nextButton = (ImageButton) findViewById(R.id.next_button);

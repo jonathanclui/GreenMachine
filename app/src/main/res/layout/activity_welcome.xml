@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     tools:context=".WelcomeActivity"
     android:background="#efeff2"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/">
     <include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar"
@@ -24,106 +25,90 @@
         android:textSize="85px"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="75px"
+        android:layout_height="40dp"
         android:background="@layout/welcome_button"
-        android:layout_marginLeft="8px"
-        android:layout_marginRight="8px"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="55dp"
+        android:id="@+id/new_user_layout"
+        android:orientation="horizontal">
 
-        android:layout_marginTop="33dp"
-        android:id="@+id/linearLayout2"
-        >
         <ImageView
-            android:layout_width="75px"
-            android:layout_height="75px"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
             android:id="@+id/imageView1"
-            android:src="@drawable/logo_green"
-            android:layout_centerHorizontal="true"
-
-            android:layout_gravity="center_vertical" />
+            android:src="@drawable/logo_green" />
 
         <Button
             style="@style/PrimaryButton"
             android:id="@+id/signup_button"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/signup"
-
             android:layout_below="@+id/slogan"
-
-
             android:textStyle="bold" />
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="75px"
+        android:layout_height="40dp"
         android:background="@layout/welcome_button"
-        android:layout_marginLeft="8px"
-        android:layout_marginRight="8px"
-        android:id="@+id/linearLayout3"
-        android:layout_marginTop="10px"
-        >
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:id="@+id/sign_in_layout"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
         <ImageView
-            android:layout_width="75px"
-            android:layout_height="75px"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
             android:id="@+id/imageView3"
-            android:src="@drawable/logo_green"
-            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/logo_green" />
 
-            />
-
-    <Button
-        style="@style/PrimaryButton"
-        android:id="@+id/login_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:text="@string/login"
-
-
-        android:background="@layout/welcome_button"
-        android:layout_marginLeft="10px"
-        android:layout_marginRight="10px"
-        android:textStyle="bold" />
+        <Button
+            style="@style/PrimaryButton"
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:background="@layout/welcome_button"
+            android:textStyle="bold" />
     </LinearLayout>
-
-
-
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/signgoogle_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/signgoogle"
-
-       />
+        android:text="@string/signgoogle" />
 
     <RelativeLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent">
-    <TextView
-        android:id="@+id/powered_by"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-android:layout_marginTop="20px"
-        android:text="@string/powered_by"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_centerHorizontal="true" />
+        <TextView
+            android:id="@+id/powered_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/powered_by"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_centerHorizontal="true" />
 
-    <ImageView
-        android:layout_width="240px"
-        android:layout_height="180px"
-        android:id="@+id/imageView"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/oracle_logo"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="20px"
-        android:layout_gravity="center_horizontal" />
-    </RelativeLayout>
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="90dp"
+            android:id="@+id/imageView"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/oracle_logo"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="20dp"
+            android:layout_gravity="center_horizontal" />
+        </RelativeLayout>
 
     <!--<TextView
         android:id="@+id/oracle"

@@ -64,7 +64,6 @@ public class RidingActivity extends ActionBarActivity {
         startAdapter.setDropDownViewResource(R.layout.spinner);
         mStartSpinner.setAdapter(startAdapter);
 
-
         mDestSpinner = (Spinner) findViewById(R.id.destination_spinner);
         ArrayAdapter<CharSequence> destAdapter = ArrayAdapter.createFromResource(this,
                 R.array.destinations_array, R.layout.spinner);

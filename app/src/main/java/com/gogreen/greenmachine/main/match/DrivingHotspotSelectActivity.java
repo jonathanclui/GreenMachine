@@ -1,41 +1,24 @@
-package com.gogreen.greenmachine.main;
+package com.gogreen.greenmachine.main.match;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ButtonFloat;
 import com.gogreen.greenmachine.R;
-import com.gogreen.greenmachine.main.badges.BadgeActivity;
-import com.gogreen.greenmachine.main.login.DispatchActivity;
-import com.gogreen.greenmachine.main.match.DrivingActivity;
-import com.gogreen.greenmachine.main.match.RidingActivity;
-import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
-import com.gogreen.greenmachine.navigation.SettingsActivity;
-
+import com.gogreen.greenmachine.main.MainActivity;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
-import com.gogreen.greenmachine.parseobjects.PrivateProfile;
-
-
-import com.gogreen.greenmachine.parseobjects.Hotspot;
+import com.gogreen.greenmachine.parseobjects.MatchRequest;
+import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -51,26 +34,25 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.FindCallback;
-import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-
 import java.util.List;
 import java.util.Set;
 
-public class MainActivity extends ActionBarActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
+public class DrivingHotspotSelectActivity extends ActionBarActivity implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener,
+        OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener {
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -86,67 +68,32 @@ public class MainActivity extends ActionBarActivity implements
     protected String mLastUpdateTime;
     protected GoogleMap mMap;
 
-    // Menu positions
-    private final int HOME = 1;
-    private final int BADGES = 2;
-    private final int HOTSPOTS = 3;
-    private final int ABOUT_US = 4;
-    private final int LOGOUT = 5;
-
-    private int ICONS[] = {R.drawable.ic_home,
-            R.drawable.ic_badges,
-            R.drawable.ic_hotspots,
-            R.drawable.ic_about,
-            R.drawable.ic_logout};
-
-    String NAME = "Connor Horton";
-    String EMAIL = "connor.horton@oracle.com";
-    int PROFILE = R.drawable.jonathan_lui;
-
-    private String[] navRowTitles;
-    private TypedArray navRowIcons;
-
     private Toolbar toolbar;
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private DrawerLayout mDrawer;
-
-    private ActionBarDrawerToggle mDrawerToggle;
-
+    private MatchRoute matchRoute;
     private Set<Hotspot> serverHotspots;
+    private int currentCapacity;
+    private Date matchByDate;
+    private Date arriveByDate;
+    private MatchRoute.Destination destination;
+    private Set<Hotspot> selectedHotspots;
 
-    /* //TODO:to retrieve hotspots from Parse
-    ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
-    hotspotQuery.orderByDescending("hotspotId");
-
-    try {
-        this.hotspots = new HashSet<Hotspot>(hotspotQuery.find());
-        hotspotQuery.findInBackground(new FindCallback<Hotspot>() {
-
-            @Override
-            public void done(List<Hotspot> list,
-                             ParseException e) {
-                for(Hotspot h:list)
-                    Log.i(DrivingActivity.class.getSimpleName(),h.getParseGeoPoint().toString());
-            }
-        });
-    } catch (ParseException e) {
-        // Handle a server query fail
-        return;
-    }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_driving_hotspot_select);
+
+        // Proces intent items
+        this.currentCapacity = (int) getIntent().getExtras().get("capacity");
+        this.matchByDate = convertToDateObject(getIntent().getExtras().get("matchDate").toString());
+        this.arriveByDate = convertToDateObject(getIntent().getExtras().get("arriveDate").toString());
+        this.destination = processDestination(getIntent().getExtras().get("destination").toString());
 
         // Grab server hotspots
         this.serverHotspots = getAllHotspots();
 
-        // Grab appropriate data for adapter
-        navRowTitles = getResources().getStringArray(R.array.navigation_drawer_titles);
-        navRowIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icons);
+        // Initialize selectedHotspots
+        this.selectedHotspots = new HashSet<Hotspot>();
 
         // Set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -154,96 +101,16 @@ public class MainActivity extends ActionBarActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        // Set up recycler and provide it with the proper adapter
-        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
-        mRecyclerView.setHasFixedSize(true);
-        mAdapter = new NavDrawerAdapter(navRowTitles, ICONS, NAME, EMAIL, PROFILE, this);
-        mRecyclerView.setAdapter(mAdapter);
-
-        final GestureDetector mGestureDetector = new GestureDetector(MainActivity.this,
-                new GestureDetector.SimpleOnGestureListener() {
-                    @Override public boolean onSingleTapUp(MotionEvent e) {
-                        return true;
-                }
-        });
-
-        mRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-                View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-
-                if(child != null && mGestureDetector.onTouchEvent(motionEvent)){
-                    int childPosition = recyclerView.getChildPosition(child);
-                    mDrawer.closeDrawers();
-                    switch(childPosition) {
-                        case HOME:
-                            return true;
-                        case BADGES:
-                            startActivity(new Intent(MainActivity.this, BadgeActivity.class));
-                            return true;
-                        case HOTSPOTS:
-                            return true;
-                        case ABOUT_US:
-                            return true;
-                        case LOGOUT:
-                            logout();
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-            }
-        });
-
-        // Set the proper layout
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // Set the drawer
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this,
-                mDrawer,
-                toolbar,
-                R.string.open_drawer,
-                R.string.close_drawer) {
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-                syncState();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                invalidateOptionsMenu();
-                syncState();
-            }
-        };
-        mDrawer.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
-
-        // Set up the handler for the driving button click
-        Button drivingButton = (Button) findViewById(R.id.driving_button);
-        drivingButton.setOnClickListener(new View.OnClickListener() {
+        ButtonFloat matchButton = (ButtonFloat) findViewById(R.id.buttonFloat);
+        matchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DrivingActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Set up the handler for the riding button click
-        Button ridingButton = (Button) findViewById(R.id.riding_button);
-        ridingButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RidingActivity.class);
-                startActivity(intent);
+                // Create a route and only execute it if it is succesfully created
+                if (createMatchRoute()) {
+                    new FindMatchTask().execute();
+                } else {
+                    Toast.makeText(getApplicationContext(),"We are running into problems. We're working on it!",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -255,62 +122,19 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_driving_hotspot_select, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_user:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                return true;
-            case R.id.action_search:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void logout() {
-        final ProgressDialog dialog = new ProgressDialog(MainActivity.this);
-        dialog.setMessage(getString(R.string.progress_logout));
-        dialog.show();
-
-        ParseUser.logOutInBackground(new LogOutCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    dialog.dismiss();
-                    startNextActivity();
-                }
-            }
-        });
-    }
-
     private void startNextActivity() {
-        // Start and intent for the dispatch activity
-        Intent intent = new Intent(MainActivity.this, DispatchActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(DrivingHotspotSelectActivity.this, DriverMatchedActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.i(MainActivity.class.getSimpleName(), "Connected to GoogleApiClient");
+        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Connected to GoogleApiClient");
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
@@ -337,7 +161,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        Log.i(MainActivity.class.getSimpleName(), "Connection failed: ConnectionResult.getErrorCode() = "
+        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Connection failed: ConnectionResult.getErrorCode() = "
                 + result.getErrorCode());
         Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
     }
@@ -372,25 +196,23 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     private void updateLocation() {
-        Log.i(MainActivity.class.getSimpleName(), "Lat:" + mLatitude + " Lon:" + mLongitude);
+        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Lat:"+mLatitude+" Lon:" + mLongitude);
 
-        if (mCurrentLocation!=null){
-            mLatitude = mCurrentLocation.getLatitude();
-            mLongitude = mCurrentLocation.getLongitude();
+        mLatitude = mCurrentLocation.getLatitude();
+        mLongitude = mCurrentLocation.getLongitude();
 
-            // Fetch user's public profile
-            ParseUser currentUser = ParseUser.getCurrentUser();
-            PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
-            try {
-                pubProfile.fetchIfNeeded();
-            } catch (ParseException e) {
-                return;
-            }
-
-            // Insert coordinates into the user's public profile lastKnownLocation
-            ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
-            pubProfile.setLastKnownLocation(userLoc);
+        // Fetch user's public profile
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
+        try {
+            pubProfile.fetchIfNeeded();
+        } catch (ParseException e) {
+            return;
         }
+
+        // Insert coordinates into the user's public profile lastKnownLocation
+        ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
+        pubProfile.setLastKnownLocation(userLoc);
     }
 
     protected void createLocationRequest() {
@@ -414,7 +236,6 @@ public class MainActivity extends ActionBarActivity implements
         savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY,
                 mRequestingLocationUpdates);
         savedInstanceState.putParcelable(LOCATION_KEY, mCurrentLocation);
-        //savedInstanceState.putString(LAST_UPDATED_TIME_STRING_KEY, mLastUpdateTime);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -424,7 +245,7 @@ public class MainActivity extends ActionBarActivity implements
      * @param savedInstanceState The activity state saved in the Bundle.
      */
     private void updateValuesFromBundle(Bundle savedInstanceState) {
-        Log.i(MainActivity.class.getSimpleName(), "Updating values from bundle");
+        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Updating values from bundle");
         if (savedInstanceState != null) {
             // Update the value of mRequestingLocationUpdates from the Bundle, and make sure that
             // the Start Updates and Stop Updates buttons are correctly enabled or disabled.
@@ -508,20 +329,37 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onMarkerClick(Marker m){
-     if (m.getAlpha()==0.75f) {
-        setMarker(m);
-     }
-     else{
-        resetMarker(m);
-     }
+        if (m.getAlpha() == 0.75f) {
+            setMarker(m);
+        }
+        else{
+            resetMarker(m);
+        }
 
-     return true;
+        return true;
     }
 
     public void setMarker(Marker m){
         m.setIcon(BitmapDescriptorFactory.defaultMarker(150));
         m.setAlpha(1.0f);
+        // Grab location & add to Hotspot set
+        LatLng mPoint = m.getPosition();
+        ParseGeoPoint hPoint = new ParseGeoPoint(mPoint.latitude, mPoint.longitude);
 
+        // Find the original hotspot item and add it to the set
+        Iterator iter = this.serverHotspots.iterator();
+        while (iter.hasNext()) {
+            Hotspot hSpot = (Hotspot) iter.next();
+            try {
+                hSpot.fetchIfNeeded();
+            } catch (ParseException e) {
+                return;
+            }
+            if (hSpot.getParseGeoPoint().equals(hPoint)) {
+                this.selectedHotspots.add(hSpot);
+                break;
+            }
+        }
     }
 
     public void resetMarker(Marker m){
@@ -545,23 +383,158 @@ public class MainActivity extends ActionBarActivity implements
         return serverHotspots;
     }
 
-    public static int computePoints(Marker m){
-        String id=m.getTitle();
+    private void findRiders() {
+        // MatchRoute should be created so now we scan the server for riders
+        List<MatchRequest> matchRequests;
+        boolean matched = false;
 
-        LatLng l=m.getPosition();
+        ParseQuery<MatchRequest> matchQuery = ParseQuery.getQuery("MatchRequest");
+        matchQuery.whereEqualTo("status", MatchRequest.MatchStatus.ACTIVE.toString());
+        try {
+            matchRequests = new ArrayList<MatchRequest>(matchQuery.find());
+        } catch (ParseException e) {
+            // Handle server retrieval failure
+            return;
+        }
 
-        //grab the drivers headed to hotspot with above id in this time window
-        //need a table of hotspotId|timeWindow|driverObj|numriders --> To fill this table, find time from driver's location to hotspotID(s)
-        //---------------------------------------------------------> when a rider is matched, add numriders to the hotspot against the matched time window
-        //(DateObj.getHours()*60 + minutes)/15
+        Iterator iter = matchRequests.iterator();
+        while (iter.hasNext() && !matched) {
+            MatchRequest request = (MatchRequest) iter.next();
+            Set<Hotspot> other = request.getHotspots();
+            Set<Hotspot> intersection = new HashSet<Hotspot>(selectedHotspots);
 
-        // if no drivers in this window, print no drivers around
+            // Find the intersection
+            intersection.retainAll(other);
 
-        //pickup time =  (driver's leave by time + time from driver's location to this hotspot) - (current_time)
-        //double dist=find distance to destination from hotspot
+            // If there are hot spots in common then match the two
+            if (!intersection.isEmpty()) {
+                ParseUser rider = request.getRequester();
+                try {
+                    rider.fetchIfNeeded();
+                } catch (ParseException e) {
+                    return;
+                }
 
-        //return dist/number_riders
+                // The rider cannot also be the driver!
+                if (!rider.equals(ParseUser.getCurrentUser())) {
+                    // Update parameters for the route
+                    PublicProfile riderProfile = (PublicProfile) rider.get("publicProfile");
+                    try {
+                        riderProfile = riderProfile.fetchIfNeeded();
+                    } catch (ParseException e) {
+                        return;
+                    }
 
-        return 1;
+                    Hotspot chosenHotspot = (Hotspot) intersection.iterator().next();
+
+                    // Check if there is capacity in the car
+                    int newCapacity = this.matchRoute.getCapacity() - 1;
+                    if (newCapacity < 0) {
+                        continue;
+                    } else {
+                        this.matchRoute.updateMatchRoute(chosenHotspot, riderProfile,
+                                MatchRoute.TripStatus.EN_ROUTE_HOTSPOT, newCapacity);
+                    }
+
+                    // Save the match route with changes
+                    try {
+                        this.matchRoute.save();
+                        matched = true;
+                    } catch (ParseException e) {
+                        matched = false;
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean createMatchRoute() {
+        boolean createdRoute = false;
+        List<MatchRequest> matchRequests;
+
+        ParseQuery<MatchRequest> matchQuery = ParseQuery.getQuery("MatchRequest");
+        matchQuery.whereEqualTo("status", MatchRequest.MatchStatus.ACTIVE.toString());
+        try {
+            matchRequests = new ArrayList<MatchRequest>(matchQuery.find());
+        } catch (ParseException e) {
+            // Handle server retrieval failure
+            return false;
+        }
+
+        // Create a match route
+        this.matchRoute = new MatchRoute();
+        ArrayList<Hotspot> selectedHotspotsList = new ArrayList<Hotspot>(selectedHotspots);
+        matchRoute.initializeMatchRoute(ParseUser.getCurrentUser(), selectedHotspotsList, destination,
+                MatchRoute.TripStatus.NOT_STARTED, currentCapacity, matchByDate, arriveByDate);
+        try {
+            matchRoute.save();
+            createdRoute = true;
+        } catch (ParseException e) {
+            Log.i(MainActivity.class.getSimpleName(), e.getMessage());
+            createdRoute = false;
+        }
+
+        return createdRoute;
+    }
+
+    private void processResult() {
+        if (this.matchRoute == null) {
+            Toast.makeText(DrivingHotspotSelectActivity.this, getString(R.string.progress_no_rider_found), Toast.LENGTH_SHORT).show();
+        } else {
+            startNextActivity();
+        }
+    }
+
+    private Date convertToDateObject(String s) {
+        SimpleDateFormat ft = new SimpleDateFormat ("h:m a");
+
+        String input = s;
+
+        Date t = new Date();
+
+        try {
+            t = ft.parse(input);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return t;
+    }
+
+    private MatchRoute.Destination processDestination(String s) {
+        if (s.equals("HQ")) {
+            return MatchRoute.Destination.HQ;
+        } else {
+            return MatchRoute.Destination.HOME;
+        }
+    }
+
+    private class FindMatchTask extends AsyncTask<Void, Void, Void> {
+        ProgressDialog pdLoading = new ProgressDialog(DrivingHotspotSelectActivity.this);
+        Boolean routeCreated = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdLoading.setMessage(getString(R.string.progress_matching_driver));
+            pdLoading.show();
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            // Loop through every 30 seconds and try to find a rider
+            if (!routeCreated) {
+                routeCreated = createMatchRoute();
+            } else {
+                findRiders();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            pdLoading.dismiss();
+            processResult();
+        }
     }
 }

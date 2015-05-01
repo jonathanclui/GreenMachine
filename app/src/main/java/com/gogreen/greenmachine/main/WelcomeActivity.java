@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -201,10 +203,30 @@ public class WelcomeActivity extends ActionBarActivity {
             this.mEmail = name;
         }
 
+        public void attemptLogin(ParseUser user, String token,String username) {
+
+            user.logInInBackground(username, token, new LogInCallback() {
+                @Override
+                public void done(ParseUser user, ParseException f) {
+                    //dialog.dismiss();
+                    if (f != null) {
+                        // Show the error message
+                        Log.i(WelcomeActivity.class.getSimpleName(),"Attempting Done failed.");
+                        Toast.makeText(WelcomeActivity.this, f.getMessage(), Toast.LENGTH_LONG).show();
+                    } else {
+                        // Start an intent for the dispatch activity
+                        Log.i(WelcomeActivity.class.getSimpleName(),"Attempting Done passed.");
+                        Intent intent = new Intent(WelcomeActivity.this, DispatchActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
         @Override
         protected Object doInBackground(Object[] params) {
             try {
-                String token = fetchToken();
+                final String token = fetchToken();
                 String url = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token;
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(new HttpGet(url));
@@ -215,8 +237,8 @@ public class WelcomeActivity extends ActionBarActivity {
                     String responseString = out.toString();
                     out.close();
                     JSONObject jObject = new JSONObject(responseString);
-                    String username = jObject.getString("name");
-                    ParseUser user = new ParseUser();
+                    final String username = jObject.getString("name");
+                    final ParseUser user = new ParseUser();
                     user.setUsername(username);
                     user.setEmail(this.mEmail);
                     user.setPassword(token);
@@ -229,7 +251,9 @@ public class WelcomeActivity extends ActionBarActivity {
                             //dialog.dismiss();
                             if (e != null) {
                                 // Show the error message
-                                Toast.makeText(WelcomeActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                //Log.i(WelcomeActivity.class.getSimpleName(),"Looks like an error here.");
+                                //Toast.makeText(WelcomeActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                attemptLogin(user, token, username);
                             } else {
                                 // Start an intent for the dispatch activity
                                 Intent intent = new Intent(WelcomeActivity.this, DispatchActivity.class);

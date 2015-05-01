@@ -41,6 +41,7 @@ import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -507,9 +508,9 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
     }
 
     private Date convertToDateObject(String s) {
-        SimpleDateFormat ft = new SimpleDateFormat ("h:m a");
-
-        String input = s;
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd h:m a");
+        Calendar cal = Calendar.getInstance();
+        String input = cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +s;
 
         Date t = new Date();
 
@@ -518,7 +519,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
-
+        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(),"input:"+input+" "+"orig:"+s+"parsed:"+t);
         return t;
     }
 

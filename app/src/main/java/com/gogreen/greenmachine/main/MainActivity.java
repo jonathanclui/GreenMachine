@@ -28,10 +28,15 @@ import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
+import com.gogreen.greenmachine.navigation.RetrieveDistanceMatrix;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
 
+import com.gogreen.greenmachine.navigation.distmatrix.Element;
+import com.gogreen.greenmachine.navigation.distmatrix.Result;
+import com.gogreen.greenmachine.navigation.distmatrix.Row;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.HotspotsData;
+import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 
 
@@ -53,6 +58,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.api.client.http.GenericUrl;
 import com.parse.FindCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
@@ -61,6 +67,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import java.util.ArrayList;
@@ -119,6 +126,8 @@ public class MainActivity extends ActionBarActivity implements
 
     private Set<Hotspot> serverHotspots;
 
+
+
     public List<LatLng> simulatePoints=Arrays.asList(
             makeLatLng(37.6476749,-122.4066639),
             makeLatLng(37.641694,-122.405891),
@@ -138,8 +147,28 @@ public class MainActivity extends ActionBarActivity implements
             makeLatLng(37.614686, -122.405623),
             makeLatLng(37.613819, -122.404786)
     );
+
+    public List<LatLng> simulatePoints_2=Arrays.asList(
+    makeLatLng(37.475430,-122.221943),
+    makeLatLng(37.477158,-122.221364),
+    makeLatLng(37.476213,-122.220817),
+    makeLatLng(37.476221,-122.221471),
+    makeLatLng(37.477073,-122.222684),
+    makeLatLng(37.478614,-122.224722),
+    makeLatLng(37.480768,-122.227876),
+    makeLatLng(37.482258,-122.229786),
+    makeLatLng(37.483999,-122.231900),
+    makeLatLng(37.485689, -122.234341),
+    makeLatLng(37.484701, -122.233096),
+    makeLatLng(37.485374, -122.234019),
+    makeLatLng(37.486787, -122.235553),
+    makeLatLng(37.487179, -122.236015)
+    );
+
     public int simulateStep=0;
     Marker simulatedDriver;
+    public int simulateStep_2=0;
+    Marker simulatedDriver_2;
 
     /* //TODO:to retrieve hotspots from Parse
     ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
@@ -182,6 +211,10 @@ public class MainActivity extends ActionBarActivity implements
         // Set up recycler and provide it with the proper adapter
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
+
+        Log.i(MainActivity.class.getSimpleName(),"email:"+ParseUser.getCurrentUser().getEmail());
+        EMAIL=ParseUser.getCurrentUser().getEmail();
+        NAME=ParseUser.getCurrentUser().getUsername();
         mAdapter = new NavDrawerAdapter(navRowTitles, ICONS, NAME, EMAIL, PROFILE, this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -375,17 +408,27 @@ public class MainActivity extends ActionBarActivity implements
     public void simulateDriverStep(){
         if (simulateStep==0){
             simulatedDriver = mMap.addMarker(new MarkerOptions().position(simulatePoints.get(0))
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_black))
                             .title("Jaden Smith")
-                            .alpha(0.75f)
-            );
+                            .alpha(0.75f));
+
+            simulatedDriver_2 = mMap.addMarker(new MarkerOptions().position(simulatePoints_2.get(0))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_black))
+                            .title("Will Smith")
+                            .alpha(0.75f));
+
             simulateStep+=1;
         }
         else{
            if (simulateStep<simulatePoints.size()){
                simulatedDriver.setPosition(simulatePoints.get(simulateStep));
-               simulateStep+=1;
+
            }
+           if (simulateStep<simulatePoints_2.size()){
+                simulatedDriver_2.setPosition(simulatePoints_2.get(simulateStep));
+            }
+
+            simulateStep+=1;
 
         }
     }
@@ -537,11 +580,12 @@ public class MainActivity extends ActionBarActivity implements
                 Hotspot h = (Hotspot) iter.next();
                 ParseGeoPoint parsePoint = h.getParseGeoPoint();
                 LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(hotspotLoc)
+                Marker m=mMap.addMarker(new MarkerOptions().position(hotspotLoc)
                                 .icon(BitmapDescriptorFactory.defaultMarker(30))
-                                .title(h.getName())
+                                .title("Next Pickup: N/A")
                                 .alpha(0.75f)
                 );
+
                 mMap.setOnMarkerClickListener((GoogleMap.OnMarkerClickListener)this);
             }
         } else {
@@ -552,16 +596,193 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onMarkerClick(Marker m){
-     if (m.getAlpha()==0.75f) {
+     /*if (m.getAlpha()==0.75f) {
         setMarker(m);
      }
      else{
         resetMarker(m);
      }
-
-     return true;
+    */
+     updateMarkerTags(m);
+     return false;
     }
 
+    public int getHotspotId(Marker m){
+        Iterator iter = this.serverHotspots.iterator();
+        int i=1;
+        while (iter.hasNext()) {
+            Hotspot h = (Hotspot) iter.next();
+            ParseGeoPoint parsePoint = h.getParseGeoPoint();
+            LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
+            if (m.getPosition().longitude==parsePoint.getLongitude() && m.getPosition().latitude==parsePoint.getLatitude()){
+                return i;
+            }
+            i+=1;
+        }
+        return -1;
+    }
+
+    public Hotspot getMyHotspot(Marker m){
+        Iterator iter = this.serverHotspots.iterator();
+        int i=1;
+        while (iter.hasNext()) {
+            Hotspot h = (Hotspot) iter.next();
+            ParseGeoPoint parsePoint = h.getParseGeoPoint();
+            LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
+            if (m.getPosition().longitude==parsePoint.getLongitude() && m.getPosition().latitude==parsePoint.getLatitude()){
+                return h;
+            }
+            i+=1;
+        }
+        return (Hotspot)null;
+    }
+
+    public void updateMarkerTags(Marker m){
+        Log.i(MainActivity.class.getSimpleName(),Integer.toString(getHotspotId(m)));
+        //TODO:oncoming driver's hotspot should be at this marker
+        Hotspot h = getMyHotspot(m);
+        Log.i(MainActivity.class.getSimpleName(),"myHotspot-"+h.getName());
+        if (h==null){
+            m.setTitle("Next Pickup: N/A");
+            return;
+        }
+        else {
+            ArrayList<PublicProfile> drivers_pub_prof = getActiveDrivers(h);
+            String origins="";
+            int size_i=drivers_pub_prof.size()-1;
+
+            //get locations of all the drivers headed towards this hotspot
+            for(PublicProfile p:drivers_pub_prof){
+                ParseGeoPoint lkl=p.getLastKnownLocation();
+                origins+=(Double.toString(lkl.getLatitude())+","+Double.toString(lkl.getLongitude()));
+                if (size_i!=0) origins+="|";
+            }
+            Log.i(MainActivity.class.getSimpleName(),"drivers@-"+origins);
+            int minTime=24*60*60;  //pickupTime in seconds
+
+            //pack the query for distance matrix
+            String destinations=Double.toString(m.getPosition().latitude)+","+Double.toString(m.getPosition().longitude);
+            String mode="driving";
+            String language="US-EN";
+            String key="AIzaSyCzhOo4mqXFIMa73xk5N-2A5mifzcpINfo";
+            String urlString="https://maps.googleapis.com/maps/api/distancematrix/json";
+
+            GenericUrl url = new GenericUrl(urlString);
+            url.put("origins", origins);
+            url.put("destinations", destinations);
+            url.put("mode", mode);
+            url.put("language", language);
+            url.put("key", key);
+
+            Log.i(MainActivity.class.getSimpleName(),url+" "+url);
+            try {
+                Result r = new RetrieveDistanceMatrix().execute(url).get();
+                List<Row> rows = r.rows;
+                for (Row row : rows) {
+                    List<Element> elements = row.elements;
+                    for (Element e : elements) {
+                        Log.i(RetrieveDistanceMatrix.class.getSimpleName(), e.distance.text + " " + e.distance.value);
+                        minTime=Math.min(minTime,e.duration.value);
+                    }
+                }
+
+            }
+            catch (Exception e){
+                Log.i(MainActivity.class.getSimpleName(),e.getMessage());
+                e.printStackTrace();
+            }
+            //if minTime has not been reduced, possibly no drivers on the hotspot
+            if (minTime<1440){
+                m.setTitle("Next Pickup: "+(minTime/60)+" min");
+                m.setSnippet("Text @ 650-290-2120");
+            }
+            else {
+                m.setTitle("Next Pickup: N/A");
+                m.setSnippet("no drivers yet");
+            }
+        }
+
+        boolean myHotspot=(getHotspotId(m)==6);
+        if (myHotspot) {
+            String origins=Double.toString(simulatePoints.get(simulateStep).latitude)+","+Double.toString(simulatePoints.get(simulateStep).longitude);
+            String destinations=Double.toString(m.getPosition().latitude)+","+Double.toString(m.getPosition().longitude);
+            String mode="driving";
+            String language="US-EN";
+            String key="AIzaSyCzhOo4mqXFIMa73xk5N-2A5mifzcpINfo";
+            String urlString="https://maps.googleapis.com/maps/api/distancematrix/json";
+
+            GenericUrl url = new GenericUrl(urlString);
+            url.put("origins", origins);
+            url.put("destinations", destinations);
+            url.put("mode", mode);
+            url.put("language", language);
+            url.put("key", key);
+            int timeValue=-1;
+            Log.i(MainActivity.class.getSimpleName(),url+" "+url);
+            try {
+                Result r = new RetrieveDistanceMatrix().execute(url).get();
+                List<Row> rows = r.rows;
+                for (Row row : rows) {
+                    List<Element> elements = row.elements;
+                    for (Element e : elements) {
+                        Log.i(RetrieveDistanceMatrix.class.getSimpleName(), e.distance.text + " " + e.distance.value);
+                        timeValue=e.duration.value;
+                    }
+                }
+
+            }
+            catch (Exception e){
+                Log.i(MainActivity.class.getSimpleName(),e.getMessage());
+                e.printStackTrace();
+            }
+
+            if (timeValue!=-1) {
+                m.setTitle("Next Pickup: "+(timeValue/60)+" min");
+                m.setSnippet("Text @ 650-290-2120");
+            }
+            else {
+                m.setTitle("Next Pickup: N/A");
+                m.setSnippet("no drivers yet");
+            }
+        }
+    }
+
+    //get drivers headed towards this headspot
+    public ArrayList<PublicProfile> getActiveDrivers(Hotspot h){
+        ArrayList<MatchRoute> matchRoute;
+        ArrayList<PublicProfile> drivers_pub_prof = new ArrayList<PublicProfile>();
+        ParseQuery<MatchRoute> query = ParseQuery.getQuery("MatchRoute");
+        //query = query.whereEqualTo("tripStatus", MatchRoute.TripStatus.NOT_STARTED.toString());
+        HashMap<Hotspot, PublicProfile> hash = new HashMap<>();
+
+        try {
+            matchRoute = new ArrayList<MatchRoute>(query.find());
+            for(MatchRoute r:matchRoute){
+                ParseUser driver=r.getDriver();
+                PublicProfile pub_prof= (PublicProfile) driver.get("publicProfile");
+                try {
+                    pub_prof.fetchIfNeeded();
+                } catch (ParseException e) {
+                    continue;
+                }
+                ParseGeoPoint lkl=pub_prof.getLastKnownLocation();
+                Log.i(MainActivity.class.getSimpleName(),"getActiveDrivers:"+lkl);
+                Hotspot g=r.getHotspot();
+                if (g!=null) {
+                    if (g.getObjectId() == h.getObjectId()) {
+                        drivers_pub_prof.add(pub_prof);
+                    }
+                }
+            }
+            return drivers_pub_prof;
+
+        } catch (ParseException e) {
+            // Handle server retrieval failure
+            Log.i(MainActivity.class.getSimpleName(),"activeDrivers:"+e.getMessage());
+            e.printStackTrace();
+            return (null);
+        }
+    }
     public void setMarker(Marker m){
         m.setIcon(BitmapDescriptorFactory.defaultMarker(150));
         m.setAlpha(1.0f);

@@ -89,11 +89,13 @@
         <activity
             android:name=".main.match.DriverMatchedActivity"
             android:label="@string/title_activity_driver_matched"
+            android:launchMode="singleTop"
             android:parentActivityName=".main.match.DrivingHotspotSelectActivity" >
         </activity>
         <activity
             android:name=".main.match.RiderMatchedActivity"
             android:label="@string/title_activity_rider_matched"
+            android:launchMode="singleTop"
             android:parentActivityName=".main.match.RidingHotspotSelectActivity" >
         </activity>
         <activity
@@ -126,11 +128,13 @@
         <activity
             android:name=".main.match.DrivingHotspotSelectActivity"
             android:label="@string/title_activity_driving_hotspot_select"
+            android:launchMode="singleTop"
             android:parentActivityName=".main.match.DrivingActivity" >
         </activity>
         <activity
             android:name=".main.match.RidingHotspotSelectActivity"
             android:label="@string/title_activity_rider_hotspot_select"
+            android:launchMode="singleTop"
             android:parentActivityName=".main.match.RidingActivity">
         </activity>
     </application>

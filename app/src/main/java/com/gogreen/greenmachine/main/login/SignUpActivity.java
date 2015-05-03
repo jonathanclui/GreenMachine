@@ -11,11 +11,17 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.parseobjects.PrivateProfile;
+import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.ArrayList;
 
 
 public class SignUpActivity extends ActionBarActivity {
@@ -87,12 +93,35 @@ public class SignUpActivity extends ActionBarActivity {
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
-                dialog.dismiss();
+
                 if (e != null) {
                     // Show the error message
                     Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                 } else {
                     // Start an intent for the dispatch activity
+                    ParseUser curUser = ParseUser.getCurrentUser();
+                    PrivateProfile privProfile = new PrivateProfile();
+
+                    privProfile.initializePrivateProfile(curUser, "", "", "", "",
+                            true, "", "9:00 AM", "5:00 PM", new ArrayList<ParseGeoPoint>());
+                    try {
+                        privProfile.save();
+                        curUser.put("privateProfile", privProfile);
+                        curUser.saveInBackground();
+                    } catch (ParseException err) {
+
+                    }
+
+                    PublicProfile pubProfile = new PublicProfile();
+                    pubProfile.initializePublicProfile(curUser, "", "", "");
+                    try {
+                        pubProfile.save();
+                        curUser.put("publicProfile", pubProfile);
+                        curUser.saveInBackground();
+                    } catch (ParseException error) {
+
+                    }
+                    dialog.dismiss();
                     Intent intent = new Intent(SignUpActivity.this, DispatchActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

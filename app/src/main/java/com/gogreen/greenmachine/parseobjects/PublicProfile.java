@@ -28,6 +28,14 @@ public class PublicProfile extends ParseObject {
         put("firstName", value);
     }
 
+    public String getLastName() {
+        return getString("lastName");
+    }
+
+    public void setLastName(String value) {
+        put("lastName", value);
+    }
+
     public String getPhoneNumber() {
         return getString("phoneNumber");
     }
@@ -46,6 +54,13 @@ public class PublicProfile extends ParseObject {
 
     public static ParseQuery<PublicProfile> getQuery() {
         return ParseQuery.getQuery(PublicProfile.class);
+    }
+
+    public void initializePublicProfile(ParseUser user, String firstName, String lastName, String phone) {
+        setUser(user);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setPhoneNumber(phone);
     }
 
 }

@@ -23,6 +23,8 @@ import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.main.login.LoginActivity;
 import com.gogreen.greenmachine.main.login.SignUpActivity;
+import com.gogreen.greenmachine.parseobjects.PrivateProfile;
+import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
@@ -32,6 +34,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -46,6 +49,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class WelcomeActivity extends ActionBarActivity {
@@ -56,8 +60,10 @@ public class WelcomeActivity extends ActionBarActivity {
     static final int REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR = 1001;
     static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1002;
     private static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
-    private String mEmail; // Received from newChooseAccountIntent(); passed to getToken()
-    private ProgressDialog mDialog;
+
+    private String email;
+    private String firstName;
+    private String lastName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +97,6 @@ public class WelcomeActivity extends ActionBarActivity {
         signGoogleButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Starts an intent for the sign up activity
-                mDialog = new ProgressDialog(WelcomeActivity.this);
                 login();
             }
         });
@@ -125,8 +130,7 @@ public class WelcomeActivity extends ActionBarActivity {
         if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
             // Receiving a result from the AccountPicker
             if (resultCode == RESULT_OK) {
-                mEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-
+                email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 // With the account name acquired, go get the auth token
                 getToken();
             } else if (resultCode == RESULT_CANCELED) {
@@ -143,11 +147,11 @@ public class WelcomeActivity extends ActionBarActivity {
     }
 
     private void getToken() {
-        if (mEmail == null) {
+        if (email == null) {
             pickUserAccount();
         } else {
             if (isDeviceOnline()) {
-                new getTokenTask(WelcomeActivity.this, mEmail, SCOPE).execute();
+                new getTokenTask(WelcomeActivity.this, email, SCOPE).execute();
             } else {
                 Toast.makeText(this, "Not online", Toast.LENGTH_LONG).show();
             }
@@ -197,22 +201,23 @@ public class WelcomeActivity extends ActionBarActivity {
         String mScope;
         String mEmail;
 
+        final ProgressDialog dialog = new ProgressDialog(WelcomeActivity.this);
+
         getTokenTask(Activity activity, String name, String scope) {
             this.mActivity = activity;
             this.mScope = scope;
             this.mEmail = name;
         }
 
-        public void attemptLogin(ParseUser user, String token,String username) {
+        public void attemptLogin(ParseUser user, String token, String username) {
 
             user.logInInBackground(username, token, new LogInCallback() {
                 @Override
-                public void done(ParseUser user, ParseException f) {
-                    //dialog.dismiss();
-                    if (f != null) {
+                public void done(ParseUser user, ParseException e) {
+                    if (e != null) {
                         // Show the error message
                         Log.i(WelcomeActivity.class.getSimpleName(),"Attempting Done failed.");
-                        Toast.makeText(WelcomeActivity.this, f.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(WelcomeActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     } else {
                         // Start an intent for the dispatch activity
                         Log.i(WelcomeActivity.class.getSimpleName(),"Attempting Done passed.");
@@ -223,6 +228,13 @@ public class WelcomeActivity extends ActionBarActivity {
                 }
             });
         }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage(getString(R.string.progress_signin));
+            dialog.show();
+        }
+
         @Override
         protected Object doInBackground(Object[] params) {
             try {
@@ -237,12 +249,16 @@ public class WelcomeActivity extends ActionBarActivity {
                     String responseString = out.toString();
                     out.close();
                     JSONObject jObject = new JSONObject(responseString);
-                    final String username = jObject.getString("name");
                     final ParseUser user = new ParseUser();
-                    user.setUsername(username);
+                    final String username = jObject.getString("name");
+                    user.setUsername(this.mEmail);
                     user.setEmail(this.mEmail);
                     user.setPassword(token);
                     user.put("profileComplete", false);
+
+                    String[] nameParts = username.split("\\s+");
+                    firstName = nameParts[0];
+                    lastName = nameParts[1];
 
                     // Call the parseobjects signup method
                     user.signUpInBackground(new SignUpCallback() {
@@ -250,12 +266,33 @@ public class WelcomeActivity extends ActionBarActivity {
                         public void done(ParseException e) {
                             //dialog.dismiss();
                             if (e != null) {
-                                // Show the error message
-                                //Log.i(WelcomeActivity.class.getSimpleName(),"Looks like an error here.");
-                                //Toast.makeText(WelcomeActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                attemptLogin(user, token, username);
+                                dialog.dismiss();
+                                attemptLogin(user, token, mEmail);
                             } else {
                                 // Start an intent for the dispatch activity
+                                ParseUser curUser = ParseUser.getCurrentUser();
+                                PrivateProfile privProfile = new PrivateProfile();
+
+                                privProfile.initializePrivateProfile(curUser, firstName, lastName, "", "",
+                                        true, "", "9:00 AM", "5:00 PM", new ArrayList<ParseGeoPoint>());
+                                try {
+                                    privProfile.save();
+                                    curUser.put("privateProfile", privProfile);
+                                    curUser.saveInBackground();
+                                } catch (ParseException err) {
+                                }
+
+                                PublicProfile pubProfile = new PublicProfile();
+                                pubProfile.initializePublicProfile(curUser, firstName, lastName, "");
+                                try {
+                                    pubProfile.save();
+                                    curUser.put("publicProfile", pubProfile);
+                                    curUser.saveInBackground();
+                                } catch (ParseException error) {
+
+                                }
+
+                                dialog.dismiss();
                                 Intent intent = new Intent(WelcomeActivity.this, DispatchActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);

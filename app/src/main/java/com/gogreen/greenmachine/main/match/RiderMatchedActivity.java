@@ -38,10 +38,14 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
 
     private Toolbar toolbar;
     private GoogleMap mMap;
+
     private ParseGeoPoint driverLocation;
     private ParseGeoPoint hotspotLocation;
+    private String driverPhone;
+    private String driverName;
 
-    private TextView phoneNumber;
+    private TextView mDriverPhoneTextView;
+    private TextView mDriverName;
 
 
     @Override
@@ -61,7 +65,11 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
         getInfo();
         mapFragment.getMapAsync(this);
 
-        phoneNumber = (TextView) findViewById(R.id.driver_phone_text);
+        mDriverPhoneTextView = (TextView) findViewById(R.id.driver_phone_text);
+        mDriverPhoneTextView.setText(this.driverPhone);
+
+        mDriverName = (TextView) findViewById(R.id.driver_name_text);
+        mDriverName.setText(this.driverName);
 
         ImageView callButton = (ImageView) findViewById(R.id.call);
         callButton.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +77,7 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
             public void onClick(View view) {
                 // Allow a phone call
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + phoneNumber.getText().toString()));
+                callIntent.setData(Uri.parse("tel:" + driverPhone));
                 startActivity(callIntent);
             }
         });
@@ -134,6 +142,8 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
 
             this.hotspotLocation = hotspot.getParseGeoPoint();
             this.driverLocation = driverProfile.getLastKnownLocation();
+            this.driverPhone = driverProfile.getPhoneNumber();
+            this.driverName = driverProfile.getFirstName();
             foundRoute = true;
         }
     }

@@ -52,8 +52,9 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
     private ArrayList<ParseGeoPoint> riderLocations;
     private ParseGeoPoint hotspotLocation;
 
-    private TextView riderText;
-    private TextView phoneNumber;
+    private TextView mRiderText;
+    private TextView mRiderPhoneTextView;
+    private String riderNumber;
 
     static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
     static final JsonFactory JSON_FACTORY = new JacksonFactory();
@@ -91,7 +92,7 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
         new RetrieveDistanceMatrix().execute(url);
 
         // Initialize rider textview
-        this.riderText = (TextView) findViewById(R.id.rider_name_text);
+        this.mRiderText = (TextView) findViewById(R.id.rider_name_text);
 
         // Initialize riders to be empty
         this.riderLocations = new ArrayList<ParseGeoPoint>();
@@ -101,7 +102,8 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
         getInfo();
         mapFragment.getMapAsync(this);
 
-        phoneNumber = (TextView) findViewById(R.id.rider_phone_text);
+        mRiderPhoneTextView = (TextView) findViewById(R.id.rider_phone_text);
+        mRiderPhoneTextView.setText(riderNumber);
 
         ImageView callButton = (ImageView) findViewById(R.id.call);
         callButton.setOnClickListener(new View.OnClickListener() {
@@ -109,12 +111,11 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
             public void onClick(View view) {
                 // Allow a phone call
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + phoneNumber.getText().toString()));
+                callIntent.setData(Uri.parse("tel:" + riderNumber));
                 startActivity(callIntent);
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -161,10 +162,11 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
                     // handle later if there is time
                 }
 
-                this.riderText.setText(riderProfile.getFirstName());
+                this.mRiderText.setText(riderProfile.getFirstName());
 
                 ParseGeoPoint riderLocation = riderProfile.getLastKnownLocation();
                 this.riderLocations.add(riderLocation);
+                this.riderNumber = riderProfile.getPhoneNumber();
             }
 
             Hotspot hotspot = route.getHotspot();

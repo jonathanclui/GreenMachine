@@ -18,7 +18,6 @@ import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -55,16 +54,16 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Location mCurrentLocation;
-    double mLatitude;
-    double mLongitude;
-    private boolean mRequestingLocationUpdates = true;
+    private double mLatitude;
+    private double mLongitude;
+    private boolean mRequestingLocationUpdates;
     private LocationRequest mLocationRequest;
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1004;
-    protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
-    protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
-    protected final static String LOCATION_KEY = "location-key";
-    protected String mLastUpdateTime;
-    protected GoogleMap mMap;
+
+    private final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
+    private final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
+    private final static String LOCATION_KEY = "location-key";
+    private String mLastUpdateTime;
+    private GoogleMap mMap;
 
     private Toolbar toolbar;
 
@@ -86,6 +85,9 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         this.matchByDate = convertToDateObject(getIntent().getExtras().get("matchDate").toString());
         this.arriveByDate = convertToDateObject(getIntent().getExtras().get("arriveDate").toString());
         this.destination = processDestination(getIntent().getExtras().get("destination").toString());
+
+        // Turn on location updates
+        this.mRequestingLocationUpdates = true;
 
         // Grab server hotspots
         this.serverHotspots = getAllHotspots();
@@ -141,26 +143,21 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
             startLocationUpdates();
         }
         //map can be loaded after the current location is known
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onConnectionSuspended(int code) {
-        Toast.makeText(getApplicationContext(), "Connection Aborted.. Retrying", Toast.LENGTH_SHORT).show();
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Connection failed: ConnectionResult.getErrorCode() = "
-                + result.getErrorCode());
-        Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
     }
+
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
-        //mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateLocation();
     }
 
@@ -232,30 +229,17 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Updates fields based on data stored in the bundle.
-     *
-     * @param savedInstanceState The activity state saved in the Bundle.
-     */
     private void updateValuesFromBundle(Bundle savedInstanceState) {
-        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Updating values from bundle");
         if (savedInstanceState != null) {
-            // Update the value of mRequestingLocationUpdates from the Bundle, and make sure that
-            // the Start Updates and Stop Updates buttons are correctly enabled or disabled.
             if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
                 mRequestingLocationUpdates = savedInstanceState.getBoolean(
                         REQUESTING_LOCATION_UPDATES_KEY);
             }
 
-            // Update the value of mCurrentLocation from the Bundle and update the UI to show the
-            // correct latitude and longitude.
             if (savedInstanceState.keySet().contains(LOCATION_KEY)) {
-                // Since LOCATION_KEY was found in the Bundle, we can be sure that mCurrentLocation
-                // is not null.
                 mCurrentLocation = savedInstanceState.getParcelable(LOCATION_KEY);
             }
 
-            // Update the value of mLastUpdateTime from the Bundle and update the UI.
             if (savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
                 mLastUpdateTime = savedInstanceState.getString(LAST_UPDATED_TIME_STRING_KEY);
             }
@@ -270,26 +254,6 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
                 .addApi(LocationServices.API)
                 .build();
         createLocationRequest();
-    }
-    /**
-     * Method to verify google play services on the device
-     * */
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "This device is not supported.", Toast.LENGTH_LONG)
-                        .show();
-                finish();
-            }
-            return false;
-        }
-        return true;
     }
 
     @Override
@@ -318,6 +282,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         } else {
             // Handle the server not getting hotspots
         }
+        mMap.setMyLocationEnabled(true);
     }
 
     @Override
@@ -328,7 +293,6 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         else{
             resetMarker(m);
         }
-
         return true;
     }
 
@@ -352,10 +316,6 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
                 this.selectedHotspots.add(hSpot);
                 break;
             }
-
-            //HotspotsData h=new HotspotsData;
-            //h.setDriverObj();
-
         }
 
 
@@ -389,8 +349,6 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
     }
 
     private Set<Hotspot> getAllHotspots() {
-        Set<Hotspot> serverHotspots = new HashSet<Hotspot>();
-
         // Grab the hotspot set from the server
         ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
         hotspotQuery.orderByDescending("hotspotId");
@@ -457,7 +415,6 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
-        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(),"input:"+input+" "+"orig:"+s+"parsed:"+t);
         return t;
     }
 

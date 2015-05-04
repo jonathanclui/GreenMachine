@@ -28,6 +28,8 @@
 
     <string name="description_logo">Button logo</string>
     <string name="description_oracle_logo">Oracle logo</string>
+    <string name="description_next_arrow">Next arrow on profile workflow</string>
+    <string name="description_back_arrow">Back arrow on profile worflow</string>
 
     <string name="notification_location_on">Please turn on GPS</string>
     <string name="notification_device_unsupported">This device is not supported</string>

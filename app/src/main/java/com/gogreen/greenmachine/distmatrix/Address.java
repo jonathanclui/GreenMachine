@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine.navigation.distmatrix;
+package com.gogreen.greenmachine.distmatrix;
 
 import java.util.List;
 

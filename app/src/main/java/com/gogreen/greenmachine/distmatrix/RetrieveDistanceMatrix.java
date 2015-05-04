@@ -1,12 +1,7 @@
-package com.gogreen.greenmachine.navigation.distmatrix;
+package com.gogreen.greenmachine.distmatrix;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.gogreen.greenmachine.main.match.DriverMatchedActivity;
-import com.gogreen.greenmachine.navigation.distmatrix.Element;
-import com.gogreen.greenmachine.navigation.distmatrix.Result;
-import com.gogreen.greenmachine.navigation.distmatrix.Row;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
@@ -19,8 +14,6 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson.JacksonFactory;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.List;
 
 /**
  * Created by arbkhan on 4/30/2015.

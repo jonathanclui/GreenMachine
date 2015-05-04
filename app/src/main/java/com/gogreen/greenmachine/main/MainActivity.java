@@ -29,10 +29,10 @@ import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.navigation.AboutUsActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
-import com.gogreen.greenmachine.navigation.distmatrix.Element;
-import com.gogreen.greenmachine.navigation.distmatrix.Result;
-import com.gogreen.greenmachine.navigation.distmatrix.RetrieveDistanceMatrix;
-import com.gogreen.greenmachine.navigation.distmatrix.Row;
+import com.gogreen.greenmachine.distmatrix.Element;
+import com.gogreen.greenmachine.distmatrix.Result;
+import com.gogreen.greenmachine.distmatrix.RetrieveDistanceMatrix;
+import com.gogreen.greenmachine.distmatrix.Row;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
@@ -345,7 +345,7 @@ public class MainActivity extends ActionBarActivity implements
                 };
                 ParseGeoPoint parsePoint = h.getParseGeoPoint();
                 LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
-                Marker m=mMap.addMarker(new MarkerOptions().position(hotspotLoc)
+                Marker m = mMap.addMarker(new MarkerOptions().position(hotspotLoc)
                                 .icon(BitmapDescriptorFactory.defaultMarker(30))
                                 .title("Next Pickup: N/A")
                                 .alpha(0.75f)
@@ -670,7 +670,7 @@ public class MainActivity extends ActionBarActivity implements
                     .title("Will Smith")
                     .alpha(0.75f));
 
-            simulateStep+=1;
+            simulateStep += 1;
 
         }
         else{
@@ -767,16 +767,18 @@ public class MainActivity extends ActionBarActivity implements
         @Override
         protected String doInBackground(Hotspot... params) {
             // Loop through every 30 seconds and try to find a rider
-            Hotspot h=params[0];
-            String origins="";
+            Hotspot h = params[0];
+            String origins = "";
             ArrayList<PublicProfile> drivers_pub_prof = getActiveDrivers(h);
             int size_i=drivers_pub_prof.size()-1;
 
             //get locations of all the drivers headed towards this hotspot
             for(PublicProfile p:drivers_pub_prof){
-                ParseGeoPoint lkl=p.getLastKnownLocation();
-                origins+=(Double.toString(lkl.getLatitude())+","+Double.toString(lkl.getLongitude()));
-                if (size_i!=0) origins+="|";
+                ParseGeoPoint lkl = p.getLastKnownLocation();
+                origins+=(Double.toString(lkl.getLatitude()) + "," + Double.toString(lkl.getLongitude()));
+                if (size_i != 0) {
+                    origins += "|";
+                }
             }
             return origins;
         }

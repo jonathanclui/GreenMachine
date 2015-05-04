@@ -11,4 +11,10 @@
 
     <!-- Text Colors -->
     <color name="text_slogan">#558b2f</color>
+
+    <!-- Material Colors -->
+    <color name="material_red">#F44336</color>
+
+    <!-- Miscellaneous Colors -->
+    <color name="plain_white">#FFFFFF</color>
 </resources>

@@ -1,7 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="100"
+    android:orientation="vertical"
     tools:context="com.gogreen.greenmachine.main.match.RiderMatchedActivity">
 
     <include
@@ -12,47 +14,65 @@
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/map"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_below="@+id/tool_bar"
+        android:layout_weight="80"
         android:name="com.google.android.gms.maps.MapFragment"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:id="@+id/linearLayout"
-        android:layout_marginTop="0px"
         android:gravity="center_vertical"
-        android:background="#FFFFFF">
+        android:background="#FFFFFF"
+        android:layout_weight="20">
+
         <ImageView android:id="@+id/icon"
             android:src="@drawable/theresa_lee"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10px" />
+            android:padding="5dp" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
             <TextView
-            android:text="Olivia Quinn"
-            android:id="@+id/driver_name_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-            <TextView
-                android:text="(650)123-4567"
-                android:id="@+id/driver_phone_text"
+                android:text="Olivia Quinn"
+                android:id="@+id/driver_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="10">
+                <TextView
+                    android:text="(650)123-4567"
+                    android:id="@+id/driver_phone_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight="2"
+                    android:src="@drawable/ic_call"
+                    android:id="@+id/call"/>
+            </LinearLayout>
+
             <TextView
                 android:text="Blue Toyota Camry"
                 android:id="@+id/driver_car_text"
@@ -61,6 +81,7 @@
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
+
             </LinearLayout>
         </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

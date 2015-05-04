@@ -93,6 +93,21 @@ public class PrivateProfile extends ParseObject {
         put("preferredHotspots", value);
     }
 
+    public void initializePrivateProfile(ParseUser user, String firstName, String lastName, String homeCity,
+                                         String phoneNumber, Boolean driverStatus, String driverCar,
+                                        String arriveHQBy, String arriveHomeBy, ArrayList<ParseGeoPoint> hspots) {
+        setUser(user);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setHomeCity(homeCity);
+        setPhoneNumber(phoneNumber);
+        setDriverStatus(driverStatus);
+        setDriverCar(driverCar);
+        setArriveHQBy(arriveHQBy);
+        setArriveHomeBy(arriveHomeBy);
+        setPreferredHotspots(hspots);
+    }
+
     public static ParseQuery<PrivateProfile> getQuery() {
         return ParseQuery.getQuery(PrivateProfile.class);
     }

@@ -9,8 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
-import com.gc.materialdesign.views.ButtonRectangle;
 
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
@@ -45,6 +43,8 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
         homeCityEditText = (EditText) findViewById(R.id.home_city_edit_text);
         phoneEditText = (EditText) findViewById(R.id.phone_edit_text);
 
+        prePopulateFields();
+
         // Set up the handler for the next button click
         ImageButton nextButton = (ImageButton) findViewById(R.id.next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +68,23 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void prePopulateFields() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        PrivateProfile privProfile = (PrivateProfile) currentUser.get("privateProfile");
+        try {
+            privProfile.fetchIfNeeded();
+        } catch (ParseException e) {
+
+        }
+
+        this.firstNameEditText.setText(privProfile.getFirstName());
+        this.lastNameEditText.setText(privProfile.getLastName());
+        this.homeCityEditText.setText(privProfile.getHomeCity());
+        this.phoneEditText.setText(privProfile.getPhoneNumber());
+    }
+
     private void submit() {
-        // Set up public profile with data
+        // Set up private profile with data
         final ParseUser currentUser = ParseUser.getCurrentUser();
         String firstName = firstNameEditText.getText().toString().trim();
         String lastName = lastNameEditText.getText().toString().trim();
@@ -77,38 +92,7 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
         String phone = phoneEditText.getText().toString().trim();
 
         savePrivateProfile(firstName, lastName, homeCity, phone);
-        try {
-            // Check if the profile was not previously initiated
-            if (currentUser.get("publicProfile") == null) {
-                // Set up private profile
-                final PublicProfile publicProfile = new PublicProfile();
-                publicProfile.setUser(currentUser);
-                publicProfile.setFirstName(firstName);
-                publicProfile.setPhoneNumber(phone);
-
-                publicProfile.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e != null) {
-                            // Show the error message
-                            Toast.makeText(ProfileBasicInfoActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        } else {
-                            // Start an intent for the dispatch activity
-                            currentUser.put("publicProfile", publicProfile);
-                            currentUser.saveInBackground();
-                            startNextActivity();
-                        }
-                    }
-                });
-            } else {
-                savePublicProfile(firstName, phone);
-                startNextActivity();
-            }
-        } catch (Exception e) {
-            Toast.makeText(ProfileBasicInfoActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(ProfileBasicInfoActivity.this, ProfileBasicInfoActivity.class);
-            startActivity(intent);
-        }
+        savePublicProfile(firstName, lastName, phone);
     }
 
     private void savePrivateProfile(String firstName, String lastName, String homeCity, String phone) {
@@ -120,11 +104,17 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
         privProfile.saveInBackground();
     }
 
-    private void savePublicProfile(String firstName, String phone) {
+    private void savePublicProfile(String firstName, String lastName, String phone) {
         PublicProfile pubProfile = (PublicProfile) ParseUser.getCurrentUser().get("publicProfile");
         pubProfile.setFirstName(firstName);
+        pubProfile.setLastName(lastName);
         pubProfile.setPhoneNumber(phone);
-        pubProfile.saveInBackground();
+        pubProfile.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                startNextActivity();
+            }
+        });
     }
 
     private void startNextActivity() {

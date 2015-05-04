@@ -13,9 +13,9 @@
 
     <array name="navigation_drawer_icons">
         <item>@drawable/ic_home</item>
-        <item>@drawable/ic_home</item>
-        <item>@drawable/ic_home</item>
-        <item>@drawable/ic_home</item>
-        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_badges</item>
+        <item>@drawable/ic_hotspots</item>
+        <item>@drawable/ic_about</item>
+        <item>@drawable/ic_logout</item>
     </array>
 </resources>

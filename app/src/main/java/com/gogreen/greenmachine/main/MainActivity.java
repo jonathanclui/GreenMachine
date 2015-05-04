@@ -27,8 +27,9 @@ import com.gogreen.greenmachine.main.badges.BadgeActivity;
 import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
+import com.gogreen.greenmachine.navigation.AboutUsActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
-import com.gogreen.greenmachine.navigation.RetrieveDistanceMatrix;
+import com.gogreen.greenmachine.navigation.distmatrix.RetrieveDistanceMatrix;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
 import com.gogreen.greenmachine.navigation.distmatrix.Element;
 import com.gogreen.greenmachine.navigation.distmatrix.Result;
@@ -59,7 +60,6 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -75,8 +75,8 @@ public class MainActivity extends ActionBarActivity implements
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Location mCurrentLocation;
-    double mLatitude;
-    double mLongitude;
+    private double mLatitude;
+    private double mLongitude;
     private boolean mRequestingLocationUpdates = true;
     private LocationRequest mLocationRequest;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1004;
@@ -93,16 +93,10 @@ public class MainActivity extends ActionBarActivity implements
     private final int ABOUT_US = 4;
     private final int LOGOUT = 5;
 
-    private int ICONS[] = {R.drawable.ic_home,
-            R.drawable.ic_badges,
-            R.drawable.ic_hotspots,
-            R.drawable.ic_about,
-            R.drawable.ic_logout};
-
-    private String NAME;
-    private String EMAIL;
-    int PROFILE = R.drawable.jonathan_lui;
-
+    // Nav drawer resources
+    private String navDrawerName;
+    private String navDrawerEmail;
+    private int navDrawerProfileImage = R.drawable.jonathan_lui;
     private String[] navRowTitles;
     private TypedArray navRowIcons;
 
@@ -117,47 +111,45 @@ public class MainActivity extends ActionBarActivity implements
 
     private Set<Hotspot> serverHotspots;
 
-
-
     public List<LatLng> simulatePoints=Arrays.asList(
-            makeLatLng(37.6476749,-122.4066639),
-            makeLatLng(37.641694,-122.405891),
-            makeLatLng(37.6347100,-122.4067497),
-            makeLatLng(37.634042,-122.4136162),
-            makeLatLng(37.6338779,-122.4170494),
-            makeLatLng(37.6330622,-122.4191952),
-            makeLatLng(37.6307511,-122.4178219),
-            makeLatLng(37.6292556,-122.4167061),
-            makeLatLng(37.6270124,-122.415247),
-            makeLatLng(37.6246331,-122.4138737),
-            makeLatLng(37.6226617,-122.4121571),
-            makeLatLng(37.6202823,-122.4104404),
-            makeLatLng(37.6155912,-122.4064922),
-            makeLatLng(37.615035, -122.405966),
-            makeLatLng(37.614185, -122.405140),
-            makeLatLng(37.614686, -122.405623),
-            makeLatLng(37.613819, -122.404786),
-            makeLatLng(37.609642, -122.400763)
+        makeLatLng(37.6476749,-122.4066639),
+        makeLatLng(37.641694,-122.405891),
+        makeLatLng(37.6347100,-122.4067497),
+        makeLatLng(37.634042,-122.4136162),
+        makeLatLng(37.6338779,-122.4170494),
+        makeLatLng(37.6330622,-122.4191952),
+        makeLatLng(37.6307511,-122.4178219),
+        makeLatLng(37.6292556,-122.4167061),
+        makeLatLng(37.6270124,-122.415247),
+        makeLatLng(37.6246331,-122.4138737),
+        makeLatLng(37.6226617,-122.4121571),
+        makeLatLng(37.6202823,-122.4104404),
+        makeLatLng(37.6155912,-122.4064922),
+        makeLatLng(37.615035, -122.405966),
+        makeLatLng(37.614185, -122.405140),
+        makeLatLng(37.614686, -122.405623),
+        makeLatLng(37.613819, -122.404786),
+        makeLatLng(37.609642, -122.400763)
     );
 
     public List<LatLng> simulatePoints_2=Arrays.asList(
-    makeLatLng(37.475430,-122.221943),
-    makeLatLng(37.477158,-122.221364),
-    makeLatLng(37.476213,-122.220817),
-    makeLatLng(37.476221,-122.221471),
-    makeLatLng(37.477073,-122.222684),
-    makeLatLng(37.478614,-122.224722),
-    makeLatLng(37.480768,-122.227876),
-    makeLatLng(37.482258,-122.229786),
-    makeLatLng(37.483999,-122.231900),
-    makeLatLng(37.485689, -122.234341),
-    makeLatLng(37.484701, -122.233096),
-    makeLatLng(37.485374, -122.234019),
-    makeLatLng(37.486787, -122.235553),
-    makeLatLng(37.487179, -122.236015),
-    makeLatLng(37.487179, -122.236015),
-    makeLatLng(37.487179, -122.236015),
-    makeLatLng(37.487179, -122.236015)
+        makeLatLng(37.475430,-122.221943),
+        makeLatLng(37.477158,-122.221364),
+        makeLatLng(37.476213,-122.220817),
+        makeLatLng(37.476221,-122.221471),
+        makeLatLng(37.477073,-122.222684),
+        makeLatLng(37.478614,-122.224722),
+        makeLatLng(37.480768,-122.227876),
+        makeLatLng(37.482258,-122.229786),
+        makeLatLng(37.483999,-122.231900),
+        makeLatLng(37.485689, -122.234341),
+        makeLatLng(37.484701, -122.233096),
+        makeLatLng(37.485374, -122.234019),
+        makeLatLng(37.486787, -122.235553),
+        makeLatLng(37.487179, -122.236015),
+        makeLatLng(37.487179, -122.236015),
+        makeLatLng(37.487179, -122.236015),
+        makeLatLng(37.487179, -122.236015)
     );
 
     public int simulateStep=0;
@@ -165,30 +157,10 @@ public class MainActivity extends ActionBarActivity implements
     public int simulateStep_2=0;
     Marker simulatedDriver_2;
 
-    /* //TODO:to retrieve hotspots from Parse
-    ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
-    hotspotQuery.orderByDescending("hotspotId");
-
-    try {
-        this.hotspots = new HashSet<Hotspot>(hotspotQuery.find());
-        hotspotQuery.findInBackground(new FindCallback<Hotspot>() {
-
-            @Override
-            public void done(List<Hotspot> list,
-                             ParseException e) {
-                for(Hotspot h:list)
-                    Log.i(DrivingActivity.class.getSimpleName(),h.getParseGeoPoint().toString());
-            }
-        });
-    } catch (ParseException e) {
-        // Handle a server query fail
-        return;
-    }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         // Grab server hotspots
         this.serverHotspots = getAllHotspots();
@@ -209,16 +181,18 @@ public class MainActivity extends ActionBarActivity implements
 
         ParseUser currUser = ParseUser.getCurrentUser();
 
-        EMAIL = currUser.getEmail();
+        navDrawerEmail = currUser.getEmail();
         PrivateProfile privProfile = (PrivateProfile) currUser.get("privateProfile");
         try {
             privProfile.fetchIfNeeded();
         } catch (ParseException e) {
-            NAME = "Connor Horton";
+            navDrawerName = "Connor Horton";
         }
 
-        NAME = privProfile.getFirstName() + " " + privProfile.getLastName();
-        mAdapter = new NavDrawerAdapter(navRowTitles, ICONS, NAME, EMAIL, PROFILE, this);
+        navRowIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icons);
+        navDrawerName = privProfile.getFirstName() + " " + privProfile.getLastName();
+
+        mAdapter = new NavDrawerAdapter(navRowTitles, navRowIcons, navDrawerName, navDrawerEmail, navDrawerProfileImage, this);
         mRecyclerView.setAdapter(mAdapter);
 
         final GestureDetector mGestureDetector = new GestureDetector(MainActivity.this,

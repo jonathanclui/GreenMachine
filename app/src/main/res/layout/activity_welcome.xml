@@ -5,11 +5,12 @@
     tools:context=".WelcomeActivity"
     android:background="#efeff2"
     android:orientation="vertical">
+
     <include
         android:id="@+id/tool_bar"
-        layout="@layout/tool_bar"
-        >
-    </include>g
+        layout="@layout/tool_bar">
+    </include>
+
     <TextView
         android:id="@+id/slogan"
         android:layout_width="wrap_content"
@@ -18,9 +19,7 @@
         android:text="@string/slogan"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/text_slogan"
-        android:layout_below="@+id/tool_bar"
-        android:layout_centerHorizontal="true"
-        android:textSize="85px"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal" />
 
@@ -35,9 +34,10 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:contentDescription="@string/description_logo"
             android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:id="@+id/imageView1"
             android:src="@drawable/logo_green" />
 
@@ -45,12 +45,13 @@
             style="@style/PrimaryButton"
             android:id="@+id/signup_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/signup"
-            android:layout_below="@+id/slogan"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:background="@layout/welcome_button" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -60,11 +61,13 @@
         android:id="@+id/sign_in_layout"
         android:layout_marginTop="4dp"
         android:orientation="horizontal">
+
         <ImageView
+            android:contentDescription="@string/description_logo"
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:id="@+id/imageView3"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/logo_green" />
 
         <Button
@@ -75,6 +78,7 @@
             android:text="@string/login"
             android:background="@layout/welcome_button"
             android:textStyle="bold" />
+
     </LinearLayout>
 
     <com.google.android.gms.common.SignInButton
@@ -86,6 +90,7 @@
     <RelativeLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent">
+
         <TextView
             android:id="@+id/powered_by"
             android:layout_width="wrap_content"
@@ -98,6 +103,7 @@
             android:layout_centerHorizontal="true" />
 
         <ImageView
+            android:contentDescription="@string/description_oracle_logo"
             android:layout_width="120dp"
             android:layout_height="90dp"
             android:id="@+id/imageView"
@@ -107,17 +113,5 @@
             android:paddingTop="20dp"
             android:layout_gravity="center_horizontal" />
         </RelativeLayout>
-
-    <!--<TextView
-        android:id="@+id/oracle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/powered_by"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="19dp"
-        android:text="@string/oracle"
-        android:textAppearance="?android:attr/textAppearanceMedium" />-->
-
-
 
 </LinearLayout>

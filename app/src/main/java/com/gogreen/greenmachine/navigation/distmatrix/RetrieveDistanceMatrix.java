@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine.navigation;
+package com.gogreen.greenmachine.navigation.distmatrix;
 
 import android.os.AsyncTask;
 import android.util.Log;

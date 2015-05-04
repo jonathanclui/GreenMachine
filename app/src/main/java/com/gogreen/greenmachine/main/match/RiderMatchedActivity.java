@@ -1,17 +1,20 @@
 package com.gogreen.greenmachine.main.match;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -20,7 +23,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -36,8 +38,14 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
 
     private Toolbar toolbar;
     private GoogleMap mMap;
+
     private ParseGeoPoint driverLocation;
     private ParseGeoPoint hotspotLocation;
+    private String driverPhone;
+    private String driverName;
+
+    private TextView mDriverPhoneTextView;
+    private TextView mDriverName;
 
 
     @Override
@@ -57,6 +65,22 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
         getInfo();
         mapFragment.getMapAsync(this);
 
+        mDriverPhoneTextView = (TextView) findViewById(R.id.driver_phone_text);
+        mDriverPhoneTextView.setText(this.driverPhone);
+
+        mDriverName = (TextView) findViewById(R.id.driver_name_text);
+        mDriverName.setText(this.driverName);
+
+        ImageView callButton = (ImageView) findViewById(R.id.call);
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Allow a phone call
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + driverPhone));
+                startActivity(callIntent);
+            }
+        });
     }
 
 
@@ -118,6 +142,8 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
 
             this.hotspotLocation = hotspot.getParseGeoPoint();
             this.driverLocation = driverProfile.getLastKnownLocation();
+            this.driverPhone = driverProfile.getPhoneNumber();
+            this.driverName = driverProfile.getFirstName();
             foundRoute = true;
         }
     }

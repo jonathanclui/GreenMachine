@@ -1,15 +1,19 @@
 package com.gogreen.greenmachine.main.match;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gogreen.greenmachine.R;
-import com.gogreen.greenmachine.navigation.RetrieveDistanceMatrix;
+import com.gogreen.greenmachine.navigation.distmatrix.RetrieveDistanceMatrix;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
@@ -48,7 +52,9 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
     private ArrayList<ParseGeoPoint> riderLocations;
     private ParseGeoPoint hotspotLocation;
 
-    private TextView riderText;
+    private TextView mRiderText;
+    private TextView mRiderPhoneTextView;
+    private String riderNumber;
 
     static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
     static final JsonFactory JSON_FACTORY = new JacksonFactory();
@@ -70,6 +76,7 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
         String language="US-EN";
         String key="AIzaSyCzhOo4mqXFIMa73xk5N-2A5mifzcpINfo";
         String urlString="https://maps.googleapis.com/maps/api/distancematrix/json";
+
         // Set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -85,7 +92,7 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
         new RetrieveDistanceMatrix().execute(url);
 
         // Initialize rider textview
-        this.riderText = (TextView) findViewById(R.id.rider_name_text);
+        this.mRiderText = (TextView) findViewById(R.id.rider_name_text);
 
         // Initialize riders to be empty
         this.riderLocations = new ArrayList<ParseGeoPoint>();
@@ -94,8 +101,21 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
                 .findFragmentById(R.id.map);
         getInfo();
         mapFragment.getMapAsync(this);
-    }
 
+        mRiderPhoneTextView = (TextView) findViewById(R.id.rider_phone_text);
+        mRiderPhoneTextView.setText(riderNumber);
+
+        ImageView callButton = (ImageView) findViewById(R.id.call);
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Allow a phone call
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + riderNumber));
+                startActivity(callIntent);
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -142,10 +162,11 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
                     // handle later if there is time
                 }
 
-                this.riderText.setText(riderProfile.getFirstName());
+                this.mRiderText.setText(riderProfile.getFirstName());
 
                 ParseGeoPoint riderLocation = riderProfile.getLastKnownLocation();
                 this.riderLocations.add(riderLocation);
+                this.riderNumber = riderProfile.getPhoneNumber();
             }
 
             Hotspot hotspot = route.getHotspot();

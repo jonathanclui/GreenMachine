@@ -1,6 +1,7 @@
 package com.gogreen.greenmachine.navigation;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,20 +20,20 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
     private static final int TYPE_ROW = 1;
 
     private String mNavTitles[];
-    private int mIcons[];
+    private TypedArray mIcons;
 
     private String name;
     private int profile;
     private String email;
     private Context context;
 
-    public NavDrawerAdapter(String Titles[], int Icons[], String Name, String Email,
-                            int Profile, Context passedContext) {
-        this.mNavTitles = Titles;
-        this.mIcons = Icons;
-        this.name = Name;
-        this.email = Email;
-        this.profile = Profile;
+    public NavDrawerAdapter(String titles[], TypedArray icons, String name, String email,
+                            int profile, Context passedContext) {
+        this.mNavTitles = titles;
+        this.mIcons = icons;
+        this.name = name;
+        this.email = email;
+        this.profile = profile;
         this.context = passedContext;
     }
 
@@ -93,7 +94,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.View
     public void onBindViewHolder(NavDrawerAdapter.ViewHolder holder, int position) {
         if(holder.holderId == 1) {
             holder.textView.setText(mNavTitles[position - 1]);
-            holder.imageView.setImageResource(mIcons[position - 1]);
+            holder.imageView.setImageResource(mIcons.getResourceId(position - 1, -1));
         } else {
             holder.profile.setImageResource(profile);
             holder.name.setText(name);

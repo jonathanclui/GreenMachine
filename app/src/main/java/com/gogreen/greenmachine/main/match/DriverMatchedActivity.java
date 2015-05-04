@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gogreen.greenmachine.R;
-import com.gogreen.greenmachine.navigation.RetrieveDistanceMatrix;
+import com.gogreen.greenmachine.navigation.distmatrix.RetrieveDistanceMatrix;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;

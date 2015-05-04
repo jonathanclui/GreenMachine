@@ -139,7 +139,7 @@
             android:parentActivityName=".main.match.RidingActivity">
         </activity>
         <activity
-            android:name=".main.AboutUsActivity"
+            android:name=".navigation.AboutUsActivity"
             android:label="@string/title_activity_about_us" >
 
         </activity>

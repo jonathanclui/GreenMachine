@@ -27,6 +27,7 @@ import com.gogreen.greenmachine.main.badges.BadgeActivity;
 import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
+import com.gogreen.greenmachine.navigation.AboutUsActivity;
 import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.navigation.RetrieveDistanceMatrix;
 import com.gogreen.greenmachine.navigation.SettingsActivity;
@@ -59,7 +60,6 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -116,9 +116,7 @@ public class MainActivity extends ActionBarActivity implements
     private ActionBarDrawerToggle mDrawerToggle;
 
     private Set<Hotspot> serverHotspots;
-
-
-
+    
     public List<LatLng> simulatePoints=Arrays.asList(
             makeLatLng(37.6476749,-122.4066639),
             makeLatLng(37.641694,-122.405891),

@@ -1,156 +1,121 @@
-    <merge xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context="com.gogreen.greenmachine.profile.ProfileBasicInfoActivity" >
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.gogreen.greenmachine.profile.ProfileBasicInfoActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/material_purple_500"
+    android:orientation="vertical"
+    android:weightSum="100">
 
-
-        <ScrollView
-            android:id="@+id/signup_form"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            >
-
-            <LinearLayout
-                style="@style/LoginFormContainer"
-                android:orientation="vertical"
-                android:weightSum="1">
-
-    <!--<include
-        android:id="@+id/tool_bar"
-        layout="@layout/tool_bar">
-    </include>-->
-
-                <LinearLayout
-                    style="@style/LoginFormContainer"
-                    android:orientation="vertical"
-                    android:background="#e35cfb"
-                    android:layout_weight="0.17">
-                    <ImageView android:id="@+id/icon"
-                        android:src="@drawable/ic_drive"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="50px" />
-
-                    <TextView
-                        android:layout_width="301dp"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/title_driver_info"
-                        android:id="@+id/textView"
-                        android:layout_gravity="center_horizontal"
-                        android:textAlignment="center"
-                        android:padding="10px"
-                        android:gravity="center_horizontal" />
-                </LinearLayout>
-
-            <LinearLayout
-                style="@style/LoginFormContainer"
-                android:orientation="vertical"
-                android:padding="30px"
-                >
-
-                <Switch
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/prompt_driving"
-                    android:id="@+id/driving_switch"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:padding="5px"
-                    android:textOn="YES"
-                    android:textOff="NO"
-                    android:checked="true"
-                    />
-
-    <!--<EditText
-        android:id="@+id/driving_edit_text"
+    <ImageView
+        android:id="@+id/icon"
+        android:contentDescription="@string/description_profile_driving_icon"
+        android:src="@drawable/ic_drive"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/prompt_driving"
-        android:maxLines="1"
-        android:singleLine="true" />-->
-                <LinearLayout
-                    android:id="@+id/isdriving"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/describe_car"
-                    android:padding="5px"
-                    android:id="@+id/textView2"
-                    android:layout_marginTop="15px"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#000000" />
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:paddingTop="@dimen/tool_bar_top_padding" />
 
-    <EditText
-        android:id="@+id/car_edit_text"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/prompt_car"
-        android:maxLines="1"
-        android:singleLine="true" />
+        android:layout_height="0dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/title_driver_info"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:paddingTop="15dp"
+        android:layout_weight="20"/>
 
-                <TextView
-                    android:layout_marginTop="15px"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/num_passengers"
-                    android:id="@+id/textView3"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#000000"
-                    android:padding="5px"/>
-                    <Spinner
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/car_spinner" />
-                    </LinearLayout>
-                </LinearLayout>
-                </LinearLayout>
-            </ScrollView>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="30px"
-        android:id="@+id/rl"
-        >
+        android:layout_height="0dp"
+        android:layout_weight="60"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="@color/material_grey_200">
 
-        <LinearLayout
+        <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/linearLayout"
-            >
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="100dp"
-                android:id="@+id/imageButton2"
-                android:src="@drawable/ic_left_arrow"
-                android:background="@color/primary_background"
-                />
+            android:text="@string/prompt_driving"
+            android:id="@+id/driving_switch"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textOn="@string/switch_on"
+            android:textOff="@string/switch_off"
+            android:checked="true" />
 
-            <ImageView android:id="@+id/train"
-                android:src="@drawable/train2of4"
-                android:layout_gravity="center"
-                android:layout_width="150dp"
-                android:layout_height="75dp"
-                android:padding="50px"
-                android:layout_centerHorizontal="true"
-                android:layout_alignTop="@+id/next_button"
-                />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/isdriving">
 
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="100dp"
-                android:id="@+id/next_button"
-                android:src="@drawable/ic_right_arrow"
-                android:background="@color/primary_background"
-                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/describe_car"
+                android:id="@+id/textView2"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/car_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_car"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/num_passengers"
+                android:id="@+id/num_passengers"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#000000" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/car_spinner" />
         </LinearLayout>
-    </RelativeLayout>
-</merge>
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:id="@+id/bottom_buttons">
+
+        <ImageButton
+            android:contentDescription="@string/description_back_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/back_button"
+            android:src="@drawable/ic_left_arrow"
+            android:layout_gravity="center_vertical"/>
+
+        <ImageView
+            android:contentDescription="@string/description_train_icon"
+            android:id="@+id/train"
+            android:src="@drawable/train2of4"
+            android:layout_gravity="center"
+            android:layout_width="150dp"
+            android:layout_height="75dp"
+            android:padding="10dp" />
+
+        <ImageButton
+            android:contentDescription="@string/description_next_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/next_button"
+            android:src="@drawable/ic_right_arrow"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+</LinearLayout>

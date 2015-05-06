@@ -35,12 +35,6 @@ public class ProfileDriverInfoActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_driver_info);
 
-        // Set up the toolbar
-        /*toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);*/
-
         // Set up Edit Texts and Switch
         carReveal = (LinearLayout) findViewById(R.id.isdriving);
         drivingSwitch = (Switch) findViewById(R.id.driving_switch);
@@ -58,6 +52,7 @@ public class ProfileDriverInfoActivity extends ActionBarActivity {
 
 
         });
+
         carEditText = (EditText) findViewById(R.id.car_edit_text);
         mCarSpinner = (Spinner) findViewById(R.id.car_spinner);
         ArrayAdapter<CharSequence> carAdapter = ArrayAdapter.createFromResource(this,

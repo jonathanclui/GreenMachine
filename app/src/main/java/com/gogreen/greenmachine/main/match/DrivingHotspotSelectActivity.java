@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
@@ -129,7 +128,6 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Connected to GoogleApiClient");
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
@@ -186,8 +184,6 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
     }
 
     private void updateLocation() {
-        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Lat:"+mLatitude+" Lon:" + mLongitude);
-
         mLatitude = mCurrentLocation.getLatitude();
         mLongitude = mCurrentLocation.getLongitude();
 

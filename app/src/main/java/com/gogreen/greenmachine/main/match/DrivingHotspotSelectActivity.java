@@ -439,7 +439,6 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         }
         @Override
         protected Void doInBackground(Void... params) {
-            // Loop through every 30 seconds and try to find a rider
             for (int i = 0; i < 100; i++) {
                 if (!routeCreated) {
                     routeCreated = createMatchRoute();

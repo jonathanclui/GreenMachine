@@ -401,7 +401,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
 
     private boolean findDriver() {
         List<MatchRoute> matchRoute;
-        boolean matched = false;
 
         // Grab all routes from the server
         ParseQuery<MatchRoute> notStartedQuery = ParseQuery.getQuery("MatchRoute");
@@ -414,7 +413,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         ParseQuery<MatchRoute> finalQuery = ParseQuery.or(Arrays.asList(notStartedQuery, enRouteQuery));
 
         try {
-            matchRoute = new ArrayList<MatchRoute>(finalQuery.find());
+            matchRoute = new ArrayList<>(finalQuery.find());
         } catch (ParseException e) {
             // Handle server retrieval failure
             return false;
@@ -422,13 +421,14 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
 
         // Loop through routes to find a route for the same hotspots
         Iterator iter = matchRoute.iterator();
-        while (iter.hasNext() && !matched) {
+        while (iter.hasNext()) {
             MatchRoute route = (MatchRoute) iter.next();
-            ArrayList<Hotspot> potentialHotspots = (ArrayList<Hotspot>) route.getPotentialHotspots();
+            ArrayList<Hotspot> potentialHotspots = route.getPotentialHotspots();
             // First check if the potential hotspots is empty. It is cleared if there was a prev. match
-            if (potentialHotspots.isEmpty()) {
+            int remainingCapacity = route.getCapacity();
+            if (potentialHotspots.isEmpty() && remainingCapacity > 0) {
                 // Use the hotspot
-                Hotspot routeHotspot = (Hotspot) route.getHotspot();
+                Hotspot routeHotspot = route.getHotspot();
                 try {
                     routeHotspot.fetchIfNeeded();
                 } catch (ParseException e) {
@@ -455,8 +455,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                             break;
                         }
                     }
-                    int remainingCapacity = route.getCapacity();
-                    if (!alreadyRider && remainingCapacity > 0) {
+                    if (!alreadyRider) {
                         this.matchRoute = route;
                         this.matchRoute.setCapacity(remainingCapacity - 1);
                         this.matchRoute.addRider(myProfile);
@@ -469,7 +468,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                         }
                     }
                 }
-            } else {
+            } else if (remainingCapacity > 0){
                 // Search for an intersection to initialize the hotspot and clear the online potentialHotspots list
                 Set<Hotspot> routesOnline = new HashSet<Hotspot>(potentialHotspots);
                 Set<Hotspot> intersection = new HashSet<Hotspot>(selectedHotspots);
@@ -484,7 +483,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                     } catch (ParseException e) {
                         return false;
                     }
-                    int remainingCapacity = route.getCapacity();
                     if (remainingCapacity > 0) {
                         PublicProfile myProfile = (PublicProfile) ParseUser.getCurrentUser().get("publicProfile");
                         try {
@@ -500,10 +498,8 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                         this.matchRoute.setHotspot(hotspot);
                         try {
                             this.matchRoute.save();
-                            matched = true;
                             return true;
                         } catch (ParseException e) {
-                            matched = false;
                             return false;
                         }
                     }

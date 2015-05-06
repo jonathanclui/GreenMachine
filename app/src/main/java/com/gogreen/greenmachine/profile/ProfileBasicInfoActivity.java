@@ -33,10 +33,6 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_basic_info);
 
-        // Set up the toolbar
-        /*toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);*/
-
         // Set up Edit Texts
         firstNameEditText = (EditText) findViewById(R.id.first_name_edit_text);
         lastNameEditText = (EditText) findViewById(R.id.last_name_edit_text);

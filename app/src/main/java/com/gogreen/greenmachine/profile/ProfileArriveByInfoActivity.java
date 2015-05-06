@@ -1,13 +1,6 @@
 package com.gogreen.greenmachine.profile;
 
-import android.app.DialogFragment;
-import android.app.FragmentManager;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.text.format.DateFormat;
-import android.widget.ImageButton;
-import android.widget.TimePicker;
-import android.widget.TextView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,11 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TimePicker;
 
 import com.gogreen.greenmachine.R;
-import com.gogreen.greenmachine.fragments.TimePickerFragment;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.parse.ParseUser;
 
@@ -37,13 +30,6 @@ public class ProfileArriveByInfoActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_arrive_by_info);
-
-        /*
-        // Set up the toolbar
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);*/
 
         arriveHQByEditText = (EditText) findViewById(R.id.arrive_hq_by_edit_text);
         arriveHomeByEditText = (EditText) findViewById(R.id.arrive_home_by_edit_text);

@@ -31,6 +31,7 @@
     <string name="description_next_arrow">Next arrow on profile workflow</string>
     <string name="description_back_arrow">Back arrow on profile worflow</string>
     <string name="description_profile_driving_icon">Driving icon on profile page</string>
+    <string name="description_profile_clock_icon">Clock icon on profile page</string>
     <string name="description_train_icon">Train images for navigation</string>
 
     <string name="notification_location_on">Please turn on GPS</string>

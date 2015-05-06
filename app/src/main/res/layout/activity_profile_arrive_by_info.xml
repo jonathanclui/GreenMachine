@@ -1,116 +1,87 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.gogreen.greenmachine.profile.ProfileBasicInfoActivity">
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/material_blue_500"
+    android:orientation="vertical"
+    android:weightSum="100"
+    tools:context="com.gogreen.greenmachine.profile.ProfileArriveByInfoActivity">
 
-    <ScrollView
-        android:id="@+id/signup_form"
+    <ImageView
+        android:contentDescription="@string/description_profile_clock_icon"
+        android:id="@+id/icon"
+        android:src="@drawable/ic_clock"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:paddingTop="@dimen/tool_bar_top_padding"/>
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        >
-        <LinearLayout
-            style="@style/LoginFormContainer"
-            android:orientation="vertical"
-            android:weightSum="1">
-            <LinearLayout
-                style="@style/LoginFormContainer"
-                android:orientation="vertical"
-                android:background="#1976D2"
-                android:layout_weight="0.17">
-    <!--include
-        android:id="@+id/tool_bar"
-        layout="@layout/tool_bar">
-    </include-->
-        <ImageView android:id="@+id/icon"
-            android:src="@drawable/ic_clock"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/title_profile_arrive_by_info"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:paddingTop="15dp"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="60"
+        android:padding="@dimen/profile_padding"
+        android:background="@color/material_grey_200">
+
+        <EditText
+            android:id="@+id/arrive_hq_by_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_arrive_hq_by"
+            android:maxLines="1"
+            android:windowSoftInputMode="stateHidden"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/arrive_home_by_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_arrive_home_by"
+            android:maxLines="1"
+            android:windowSoftInputMode="stateHidden"
+            android:singleLine="true" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_weight="10"
+        android:id="@+id/linearLayout">
+
+        <ImageButton
+            android:contentDescription="@string/description_back_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/back_button"
+            android:src="@drawable/ic_left_arrow"
+            android:layout_gravity="center_vertical"/>
+
+        <ImageView
+            android:id="@+id/train"
+            android:src="@drawable/train3of4"
             android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="50px" />
-        <TextView
-            android:layout_width="301dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/title_profile_arrive_by_info"
-            android:id="@+id/textView"
-            android:layout_gravity="center_horizontal"
-            android:textAlignment="center"
-            android:padding="10px"
-            android:gravity="center_horizontal" />
-        </LinearLayout>
-                <LinearLayout style="@style/LoginFormContainer"
-                    android:orientation="vertical"
-                    android:padding="30px">
-                    <EditText
-                        android:id="@+id/arrive_hq_by_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_arrive_hq_by"
-                        android:maxLines="1"
-                        android:windowSoftInputMode="stateHidden"
-                        android:singleLine="true" />
+            android:layout_width="150dp"
+            android:layout_height="75dp"
+            android:padding="10dp"/>
 
-                    <EditText
-                        android:id="@+id/arrive_home_by_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_arrive_home_by"
-                        android:maxLines="1"
-                        android:windowSoftInputMode="stateHidden"
-                        android:singleLine="true" />
-                </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="30px"
-        android:id="@+id/rl"
-        android:transitionGroup="false"
-
-        >
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/linearLayout"
-            >
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="100dp"
-                android:id="@+id/imageButton2"
-                android:src="@drawable/ic_left_arrow"
-                android:background="@color/primary_background"
-                />
-
-            <ImageView android:id="@+id/train"
-                android:src="@drawable/train3of4"
-                android:layout_gravity="center"
-                android:layout_width="150dp"
-                android:layout_height="75dp"
-                android:padding="50px"
-                android:layout_centerHorizontal="true"
-                android:layout_alignTop="@+id/next_button"
-
-                />
-            <!--<com.gc.materialdesign.views.ButtonRectangle
-                android:id="@+id/next_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/primary_button"
-                android:text="@string/setprofile"
-                android:padding="50px"
-                android:layout_alignParentRight="true" />-->
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="100dp"
-                android:id="@+id/next_button"
-                android:src="@drawable/ic_right_arrow"
-                android:background="@color/primary_background"
-                />
-        </LinearLayout>
-    </RelativeLayout>
-
- </merge>
+        <ImageButton
+            android:contentDescription="@string/description_next_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/next_button"
+            android:src="@drawable/ic_right_arrow"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+</LinearLayout>

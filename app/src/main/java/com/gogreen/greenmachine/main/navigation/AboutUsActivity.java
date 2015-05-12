@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine.navigation;
+package com.gogreen.greenmachine.main.navigation;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;

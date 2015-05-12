@@ -70,7 +70,7 @@
             android:label="@string/title_activity_welcome" >
         </activity>
         <activity
-            android:name=".navigation.SettingsActivity"
+            android:name=".main.navigation.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
@@ -100,30 +100,30 @@
             android:parentActivityName=".main.match.RidingHotspotSelectActivity" >
         </activity>
         <activity
-            android:name=".profile.ProfileBasicInfoActivity"
+            android:name=".main.profile.ProfileBasicInfoActivity"
             android:label="@string/title_activity_profile_basic_info"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
-            android:name=".profile.ProfileDriverInfoActivity"
+            android:name=".main.profile.ProfileDriverInfoActivity"
             android:label="@string/title_activity_profile_driver_info"
-            android:parentActivityName=".profile.ProfileBasicInfoActivity"
+            android:parentActivityName=".main.profile.ProfileBasicInfoActivity"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
-            android:name=".profile.ProfileArriveByInfoActivity"
+            android:name=".main.profile.ProfileArriveByInfoActivity"
             android:label="@string/title_activity_profile_arrive_by_info"
-            android:parentActivityName=".profile.ProfileDriverInfoActivity"
+            android:parentActivityName=".main.profile.ProfileDriverInfoActivity"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
-            android:name=".profile.ProfileHotspotInfoActivity"
+            android:name=".main.profile.ProfileHotspotInfoActivity"
             android:label="@string/title_activity_profile_hotspot_info"
-            android:parentActivityName=".profile.ProfileArriveByInfoActivity"
+            android:parentActivityName=".main.profile.ProfileArriveByInfoActivity"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
-            android:name=".profile.ProfileInitDispatchActivity"
+            android:name=".main.profile.ProfileInitDispatchActivity"
             android:label="ProfileInitDispatchActivity" >
         </activity>
         <activity
@@ -139,7 +139,7 @@
             android:parentActivityName=".main.match.RidingActivity">
         </activity>
         <activity
-            android:name=".navigation.AboutUsActivity"
+            android:name=".main.navigation.AboutUsActivity"
             android:label="@string/title_activity_about_us"
             android:parentActivityName=".main.MainActivity">
         </activity>

@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine.profile;
+package com.gogreen.greenmachine.main.profile;
 
 import android.content.Intent;
 import android.os.Bundle;

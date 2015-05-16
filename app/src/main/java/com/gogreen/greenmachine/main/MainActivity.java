@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,19 +26,18 @@ import com.gogreen.greenmachine.main.badges.BadgeActivity;
 import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
-import com.gogreen.greenmachine.navigation.AboutUsActivity;
-import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
-import com.gogreen.greenmachine.navigation.distmatrix.RetrieveDistanceMatrix;
-import com.gogreen.greenmachine.navigation.SettingsActivity;
-import com.gogreen.greenmachine.navigation.distmatrix.Element;
-import com.gogreen.greenmachine.navigation.distmatrix.Result;
-import com.gogreen.greenmachine.navigation.distmatrix.Row;
+import com.gogreen.greenmachine.main.navigation.AboutUsActivity;
+import com.gogreen.greenmachine.main.navigation.NavDrawerAdapter;
+import com.gogreen.greenmachine.main.navigation.SettingsActivity;
+import com.gogreen.greenmachine.distmatrix.Element;
+import com.gogreen.greenmachine.distmatrix.Result;
+import com.gogreen.greenmachine.distmatrix.RetrieveDistanceMatrix;
+import com.gogreen.greenmachine.distmatrix.Row;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -62,29 +60,38 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends ActionBarActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener,
+        OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener {
 
     private GoogleApiClient mGoogleApiClient;
+    private GoogleMap mMap;
     private Location mLastLocation;
     private Location mCurrentLocation;
     private double mLatitude;
     private double mLongitude;
-    private boolean mRequestingLocationUpdates = true;
+
+    private boolean mRequestingLocationUpdates;
     private LocationRequest mLocationRequest;
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1004;
-    protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
-    protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
-    protected final static String LOCATION_KEY = "location-key";
-    protected String mLastUpdateTime;
-    protected GoogleMap mMap;
+
+    private final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
+    private final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
+    private final static String LOCATION_KEY = "location-key";
+
+    private ParseUser currUser;
+    private PrivateProfile privProfile;
+    private String firstName;
+    private String lastName;
+
+    private String mLastUpdateTime;
 
     // Menu positions
     private final int HOME = 1;
@@ -93,108 +100,51 @@ public class MainActivity extends ActionBarActivity implements
     private final int ABOUT_US = 4;
     private final int LOGOUT = 5;
 
-    // Nav drawer resources
-    private String navDrawerName;
-    private String navDrawerEmail;
-    private int navDrawerProfileImage = R.drawable.jonathan_lui;
-    private String[] navRowTitles;
-    private TypedArray navRowIcons;
-
-    private Toolbar toolbar;
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    // Navigation Drawer resources
     private RecyclerView.LayoutManager mLayoutManager;
+    private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawer;
 
-    private ActionBarDrawerToggle mDrawerToggle;
+    // Nav Drawer Display Resources
+    private String navDrawerName;
+    private String navDrawerEmail;
+    private int navDrawerProfileImage;
 
     private Set<Hotspot> serverHotspots;
-
-    public List<LatLng> simulatePoints=Arrays.asList(
-        makeLatLng(37.6476749,-122.4066639),
-        makeLatLng(37.641694,-122.405891),
-        makeLatLng(37.6347100,-122.4067497),
-        makeLatLng(37.634042,-122.4136162),
-        makeLatLng(37.6338779,-122.4170494),
-        makeLatLng(37.6330622,-122.4191952),
-        makeLatLng(37.6307511,-122.4178219),
-        makeLatLng(37.6292556,-122.4167061),
-        makeLatLng(37.6270124,-122.415247),
-        makeLatLng(37.6246331,-122.4138737),
-        makeLatLng(37.6226617,-122.4121571),
-        makeLatLng(37.6202823,-122.4104404),
-        makeLatLng(37.6155912,-122.4064922),
-        makeLatLng(37.615035, -122.405966),
-        makeLatLng(37.614185, -122.405140),
-        makeLatLng(37.614686, -122.405623),
-        makeLatLng(37.613819, -122.404786),
-        makeLatLng(37.609642, -122.400763)
-    );
-
-    public List<LatLng> simulatePoints_2=Arrays.asList(
-        makeLatLng(37.475430,-122.221943),
-        makeLatLng(37.477158,-122.221364),
-        makeLatLng(37.476213,-122.220817),
-        makeLatLng(37.476221,-122.221471),
-        makeLatLng(37.477073,-122.222684),
-        makeLatLng(37.478614,-122.224722),
-        makeLatLng(37.480768,-122.227876),
-        makeLatLng(37.482258,-122.229786),
-        makeLatLng(37.483999,-122.231900),
-        makeLatLng(37.485689, -122.234341),
-        makeLatLng(37.484701, -122.233096),
-        makeLatLng(37.485374, -122.234019),
-        makeLatLng(37.486787, -122.235553),
-        makeLatLng(37.487179, -122.236015),
-        makeLatLng(37.487179, -122.236015),
-        makeLatLng(37.487179, -122.236015),
-        makeLatLng(37.487179, -122.236015)
-    );
-
-    public int simulateStep=0;
-    Marker simulatedDriver;
-    public int simulateStep_2=0;
-    Marker simulatedDriver_2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Grab server hotspots
-        this.serverHotspots = getAllHotspots();
+        // Initialize location updates
+        this.mRequestingLocationUpdates = true;
+
+        // Fetch the parse objects needed
+        fetchParseObjects();
 
         // Grab appropriate data for adapter
-        navRowTitles = getResources().getStringArray(R.array.navigation_drawer_titles);
-        navRowIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icons);
+        String[] navRowTitles = getResources().getStringArray(R.array.navigation_drawer_titles);
+        TypedArray navRowIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icons);
 
         // Set up the toolbar
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
         // Set up recycler and provide it with the proper adapter
-        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
 
-        ParseUser currUser = ParseUser.getCurrentUser();
+        navDrawerName = this.firstName + " " + this.lastName;
+        navDrawerProfileImage = R.drawable.jonathan_lui;
 
-        navDrawerEmail = currUser.getEmail();
-        PrivateProfile privProfile = (PrivateProfile) currUser.get("privateProfile");
-        try {
-            privProfile.fetchIfNeeded();
-        } catch (ParseException e) {
-            navDrawerName = "Connor Horton";
-        }
-
-        navRowIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icons);
-        navDrawerName = privProfile.getFirstName() + " " + privProfile.getLastName();
-
-        mAdapter = new NavDrawerAdapter(navRowTitles, navRowIcons, navDrawerName, navDrawerEmail, navDrawerProfileImage, this);
+        RecyclerView.Adapter mAdapter = new NavDrawerAdapter(navRowTitles, navRowIcons,
+                navDrawerName, navDrawerEmail, navDrawerProfileImage, this);
         mRecyclerView.setAdapter(mAdapter);
 
+        // Navigation Drawer listeners
         final GestureDetector mGestureDetector = new GestureDetector(MainActivity.this,
                 new GestureDetector.SimpleOnGestureListener() {
                     @Override public boolean onSingleTapUp(MotionEvent e) {
@@ -241,10 +191,10 @@ public class MainActivity extends ActionBarActivity implements
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Set the drawer
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this,
-                mDrawer,
-                toolbar,
+        this.mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        this.mDrawerToggle = new ActionBarDrawerToggle(this,
+                this.mDrawer,
+                mToolbar,
                 R.string.open_drawer,
                 R.string.close_drawer) {
 
@@ -262,8 +212,8 @@ public class MainActivity extends ActionBarActivity implements
                 syncState();
             }
         };
-        mDrawer.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
+        this.mDrawer.setDrawerListener(mDrawerToggle);
+        this.mDrawerToggle.syncState();
 
         // Set up the handler for the driving button click
         ButtonRectangle drivingButton = (ButtonRectangle) findViewById(R.id.driving_button);
@@ -320,96 +270,34 @@ public class MainActivity extends ActionBarActivity implements
         }
     }
 
-    private void logout() {
-        final ProgressDialog dialog = new ProgressDialog(MainActivity.this);
-        dialog.setMessage(getString(R.string.progress_logout));
-        dialog.show();
-
-        ParseUser.logOutInBackground(new LogOutCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    dialog.dismiss();
-                    startNextActivity();
-                }
-            }
-        });
-    }
-
-    private void startNextActivity() {
-        // Start and intent for the dispatch activity
-        Intent intent = new Intent(MainActivity.this, DispatchActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.i(MainActivity.class.getSimpleName(), "Connected to GoogleApiClient");
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
         if (mLastLocation != null) {
             mLatitude = (mLastLocation.getLatitude());
             mLongitude = (mLastLocation.getLongitude());
         }
         else {
-            Toast.makeText(getApplicationContext(),"Please turn on location.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.notification_location_on, Toast.LENGTH_SHORT).show();
         }
+
         if (mRequestingLocationUpdates) {
             startLocationUpdates();
         }
-        //map can be loaded after the current location is known
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
+
+        // Load the Google Map Fragment
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onConnectionSuspended(int code) {
-        Toast.makeText(getApplicationContext(), "Connection Aborted.. Retrying", Toast.LENGTH_SHORT).show();
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        Log.i(MainActivity.class.getSimpleName(), "Connection failed: ConnectionResult.getErrorCode() = "
-                + result.getErrorCode());
-        Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
-    }
-    public void onLocationChanged(Location location) {
-        mCurrentLocation = location;
-        //mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-        updateLocation();
-        simulateDriverStep();
-    }
-
-    public void simulateDriverStep(){
-        if (simulateStep==0){
-            simulatedDriver = mMap.addMarker(new MarkerOptions().position(simulatePoints.get(0))
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_black))
-                            .title("Jaden Smith")
-                            .alpha(0.75f));
-
-            simulatedDriver_2 = mMap.addMarker(new MarkerOptions().position(simulatePoints_2.get(0))
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_black))
-                            .title("Will Smith")
-                            .alpha(0.75f));
-
-            simulateStep+=1;
-
-        }
-        else{
-           if (simulateStep<simulatePoints.size()){
-               simulatedDriver.setPosition(simulatePoints.get(simulateStep));
-
-           }
-           if (simulateStep<simulatePoints_2.size()){
-                simulatedDriver_2.setPosition(simulatePoints_2.get(simulateStep));
-            }
-
-            simulateStep+=1;
-            if (simulateStep>Math.min(simulatePoints.size()-1,simulatePoints_2.size()-1))
-                simulateStep=Math.min(simulatePoints.size()-1,simulatePoints_2.size()-1);
-        }
     }
 
     @Override
@@ -436,9 +324,59 @@ public class MainActivity extends ActionBarActivity implements
         mGoogleApiClient.disconnect();
     }
 
-    private void updateLocation() {
-        Log.i(MainActivity.class.getSimpleName(), "Lat:" + mLatitude + " Lon:" + mLongitude);
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
 
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(mLatitude, mLongitude))
+                .zoom(10)
+                .build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        if (this.serverHotspots != null) {
+            Iterator iter = this.serverHotspots.iterator();
+            while (iter.hasNext()) {
+                Hotspot h = (Hotspot) iter.next();
+                try{
+                    h.fetchIfNeeded();
+                }
+                catch (ParseException e){
+                    e.printStackTrace();
+                };
+                ParseGeoPoint parsePoint = h.getParseGeoPoint();
+                LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
+                Marker m = mMap.addMarker(new MarkerOptions().position(hotspotLoc)
+                                .icon(BitmapDescriptorFactory.defaultMarker(30))
+                                .title("Next Pickup: N/A")
+                                .alpha(0.75f)
+                );
+
+                mMap.setOnMarkerClickListener((GoogleMap.OnMarkerClickListener)this);
+            }
+        } else {
+            // Handle the server not getting hotspots
+        }
+
+        // Enable My Location layer on the map
+        mMap.setMyLocationEnabled(true);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mCurrentLocation = location;
+        //mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        updateLocation();
+        simulateDriverStep();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker m) {
+        updateMarkerTags(m);
+        return false;
+    }
+
+    private void updateLocation() {
         if (mCurrentLocation!=null){
             mLatitude = mCurrentLocation.getLatitude();
             mLongitude = mCurrentLocation.getLongitude();
@@ -460,53 +398,37 @@ public class MainActivity extends ActionBarActivity implements
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(500);
-        mLocationRequest.setFastestInterval(100);
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     protected void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY,
                 mRequestingLocationUpdates);
         savedInstanceState.putParcelable(LOCATION_KEY, mCurrentLocation);
-        //savedInstanceState.putString(LAST_UPDATED_TIME_STRING_KEY, mLastUpdateTime);
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Updates fields based on data stored in the bundle.
-     *
-     * @param savedInstanceState The activity state saved in the Bundle.
-     */
     private void updateValuesFromBundle(Bundle savedInstanceState) {
-        Log.i(MainActivity.class.getSimpleName(), "Updating values from bundle");
         if (savedInstanceState != null) {
-            // Update the value of mRequestingLocationUpdates from the Bundle, and make sure that
-            // the Start Updates and Stop Updates buttons are correctly enabled or disabled.
             if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
                 mRequestingLocationUpdates = savedInstanceState.getBoolean(
                         REQUESTING_LOCATION_UPDATES_KEY);
             }
 
-            // Update the value of mCurrentLocation from the Bundle and update the UI to show the
-            // correct latitude and longitude.
             if (savedInstanceState.keySet().contains(LOCATION_KEY)) {
-                // Since LOCATION_KEY was found in the Bundle, we can be sure that mCurrentLocation
-                // is not null.
                 mCurrentLocation = savedInstanceState.getParcelable(LOCATION_KEY);
             }
 
-            // Update the value of mLastUpdateTime from the Bundle and update the UI.
             if (savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
                 mLastUpdateTime = savedInstanceState.getString(LAST_UPDATED_TIME_STRING_KEY);
             }
@@ -522,113 +444,10 @@ public class MainActivity extends ActionBarActivity implements
                 .build();
         createLocationRequest();
     }
-    /**
-     * Method to verify google play services on the device
-     * */
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "This device is not supported.", Toast.LENGTH_LONG)
-                        .show();
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public void onMapReady(GoogleMap map) {
-        mMap = map;
-
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(mLatitude, mLongitude))      // Sets the center of the map
-                .zoom(10)
-                .build();                   // Creates a CameraPosition from the builder
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        if (this.serverHotspots != null) {
-            Iterator iter = this.serverHotspots.iterator();
-            while (iter.hasNext()) {
-                Hotspot h = (Hotspot) iter.next();
-                try{
-                    h.fetchIfNeeded();
-                }
-                catch (ParseException e){
-                    e.printStackTrace();
-                };
-                ParseGeoPoint parsePoint = h.getParseGeoPoint();
-                LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
-                Marker m=mMap.addMarker(new MarkerOptions().position(hotspotLoc)
-                                .icon(BitmapDescriptorFactory.defaultMarker(30))
-                                .title("Next Pickup: N/A")
-                                .alpha(0.75f)
-                );
-
-                mMap.setOnMarkerClickListener((GoogleMap.OnMarkerClickListener)this);
-            }
-        } else {
-            // Handle the server not getting hotspots
-        }
-    }
-
-
-    @Override
-    public boolean onMarkerClick(Marker m){
-     /*if (m.getAlpha()==0.75f) {
-        setMarker(m);
-     }
-     else{
-        resetMarker(m);
-     }
-    */
-     updateMarkerTags(m);
-     return false;
-    }
-
-
-    private class updateMarkers extends AsyncTask<Hotspot, String, String> {
-        ProgressDialog pdLoading = new ProgressDialog(MainActivity.this);
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pdLoading.setMessage("");
-            pdLoading.show();
-        }
-        @Override
-        protected String doInBackground(Hotspot... params) {
-            // Loop through every 30 seconds and try to find a rider
-            Hotspot h=params[0];
-            String origins="";
-            ArrayList<PublicProfile> drivers_pub_prof = getActiveDrivers(h);
-            int size_i=drivers_pub_prof.size()-1;
-
-            //get locations of all the drivers headed towards this hotspot
-            for(PublicProfile p:drivers_pub_prof){
-                ParseGeoPoint lkl=p.getLastKnownLocation();
-                origins+=(Double.toString(lkl.getLatitude())+","+Double.toString(lkl.getLongitude()));
-                if (size_i!=0) origins+="|";
-            }
-            return origins;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            pdLoading.dismiss();
-        }
-    }
 
     public int getHotspotId(Marker m){
         Iterator iter = this.serverHotspots.iterator();
-        int i=1;
+        int i = 1;
         while (iter.hasNext()) {
             Hotspot h = (Hotspot) iter.next();
             try {
@@ -662,29 +481,24 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     public void updateMarkerTags(Marker m){
-        //Log.i(MainActivity.class.getSimpleName(),Integer.toString(getHotspotId(m)));
         //TODO:oncoming driver's hotspot should be at this marker
         Hotspot h = getMyHotspot(m);
-        //Log.i(MainActivity.class.getSimpleName(),"myHotspot-"+h.getName());
         if (h==null){
             m.setTitle("Next Pickup: N/A");
             return;
         }
         else {
-            //Log.i(MainActivity.class.getSimpleName(),"myHotspot-"+h.getName());
             String origins="";
             try {
                 origins = new updateMarkers().execute(h).get();
             }
             catch (Exception e){
-                Log.i(MainActivity.class.getSimpleName(),"updateMarks:"+e.getMessage());
                 e.printStackTrace();
             }
             if (origins=="") {
                 m.setTitle("Next Pickup: N/A");
                 m.setSnippet("no drivers yet");
             }
-            Log.i(MainActivity.class.getSimpleName(),"drivers@-"+origins);
             int minTime=24*60*60;  //pickupTime in seconds
 
             //pack the query for distance matrix
@@ -701,21 +515,18 @@ public class MainActivity extends ActionBarActivity implements
             url.put("language", language);
             url.put("key", key);
 
-            Log.i(MainActivity.class.getSimpleName(),url+" "+url);
             try {
                 Result r = new RetrieveDistanceMatrix().execute(url).get();
                 List<Row> rows = r.rows;
                 for (Row row : rows) {
                     List<Element> elements = row.elements;
                     for (Element e : elements) {
-                        Log.i(RetrieveDistanceMatrix.class.getSimpleName(), e.distance.text + " " + e.distance.value);
                         minTime=Math.min(minTime,e.duration.value);
                     }
                 }
 
             }
             catch (Exception e){
-                Log.i(MainActivity.class.getSimpleName(),e.getMessage());
                 e.printStackTrace();
             }
 
@@ -730,7 +541,6 @@ public class MainActivity extends ActionBarActivity implements
             }
         }
         boolean condition =(getHotspotId(m)==6);
-        Log.i(MainActivity.class.getSimpleName(),"myHotspot"+getMyHotspot(m).getName());
         condition=getMyHotspot(m).getName().startsWith("Hills");
         boolean myHotspot=condition;
         if (myHotspot && simulateStep<simulatePoints.size()) {
@@ -748,21 +558,18 @@ public class MainActivity extends ActionBarActivity implements
             url.put("language", language);
             url.put("key", key);
             int timeValue=-1;
-            Log.i(MainActivity.class.getSimpleName(),url+" "+url);
             try {
                 Result r = new RetrieveDistanceMatrix().execute(url).get();
                 List<Row> rows = r.rows;
                 for (Row row : rows) {
                     List<Element> elements = row.elements;
                     for (Element e : elements) {
-                        Log.i(RetrieveDistanceMatrix.class.getSimpleName(), e.distance.text + " " + e.distance.value);
                         timeValue=e.duration.value;
                     }
                 }
 
             }
             catch (Exception e){
-                Log.i(MainActivity.class.getSimpleName(),e.getMessage());
                 e.printStackTrace();
             }
 
@@ -776,14 +583,11 @@ public class MainActivity extends ActionBarActivity implements
             }
         }
     }
-
-    //get drivers headed towards this headspot
+    
     public ArrayList<PublicProfile> getActiveDrivers(Hotspot h){
         ArrayList<MatchRoute> matchRoute;
-        ArrayList<PublicProfile> drivers_pub_prof = new ArrayList<PublicProfile>();
+        ArrayList<PublicProfile> driversPubProf = new ArrayList<PublicProfile>();
         ParseQuery<MatchRoute> query = ParseQuery.getQuery("MatchRoute");
-        //query = query.whereEqualTo("tripStatus", MatchRoute.TripStatus.NOT_STARTED.toString());
-        HashMap<Hotspot, PublicProfile> hash = new HashMap<>();
 
         try {
             matchRoute = new ArrayList<MatchRoute>(query.find());
@@ -794,77 +598,210 @@ public class MainActivity extends ActionBarActivity implements
                 } catch (ParseException e) {
 
                 }
-                PublicProfile pub_prof= (PublicProfile) driver.get("publicProfile");
+                PublicProfile pubProfile= (PublicProfile) driver.get("publicProfile");
                 try {
-                    pub_prof.fetchIfNeeded();
+                    pubProfile.fetchIfNeeded();
                 } catch (ParseException e) {
                     continue;
                 }
-                ParseGeoPoint lkl=pub_prof.getLastKnownLocation();
-                Log.i(MainActivity.class.getSimpleName(),"getActiveDrivers:"+lkl);
-                Hotspot g=r.getHotspot();
-                if (g!=null) {
+
+                ParseGeoPoint lkl = pubProfile.getLastKnownLocation();
+
+                Hotspot g = r.getHotspot();
+                if (g != null) {
                     if (g.getObjectId() == h.getObjectId()) {
-                        drivers_pub_prof.add(pub_prof);
+                        driversPubProf.add(pubProfile);
                     }
                 }
             }
-            return drivers_pub_prof;
+            return driversPubProf;
 
         } catch (ParseException e) {
             // Handle server retrieval failure
-            Log.i(MainActivity.class.getSimpleName(),"activeDrivers:"+e.getMessage());
             e.printStackTrace();
-            return (null);
+            return null;
         }
     }
-    public void setMarker(Marker m){
-        m.setIcon(BitmapDescriptorFactory.defaultMarker(150));
-        m.setAlpha(1.0f);
 
-    }
+    private void fetchParseObjects() {
+        this.currUser = ParseUser.getCurrentUser();
 
-    public void resetMarker(Marker m){
-        m.setAlpha(0.75f);
-        m.setIcon(BitmapDescriptorFactory.defaultMarker(30));
+        verifyUser(this.currUser);
+
+        this.navDrawerEmail = currUser.getEmail();
+
+        this.privProfile = (PrivateProfile) currUser.get("privateProfile");
+
+        try {
+            this.privProfile.fetchIfNeeded();
+            this.firstName = this.privProfile.getFirstName();
+            this.lastName = this.privProfile.getLastName();
+        } catch (ParseException e) {
+            logout();
+        }
+
+        this.serverHotspots = getAllHotspots();
+
     }
 
     private Set<Hotspot> getAllHotspots() {
-        Set<Hotspot> serverHotspots = new HashSet<Hotspot>();
-
         // Grab the hotspot set from the server
+        Set<Hotspot> hSpots;
         ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
         hotspotQuery.orderByDescending("hotspotId");
         try {
-            serverHotspots = new HashSet<Hotspot>(hotspotQuery.find());
+            hSpots = new HashSet<Hotspot>(hotspotQuery.find());
         } catch (ParseException e) {
             // Handle a server query fail
             return null;
         }
 
-        return serverHotspots;
+        return hSpots;
     }
+
     public LatLng makeLatLng(double a, double b){
         return new LatLng(a,b);
     }
 
-    public static int computePoints(Marker m){
-        String id=m.getTitle();
+    public void simulateDriverStep(){
+        if (simulateStep==0){
+            simulatedDriver = mMap.addMarker(new MarkerOptions().position(simulatePoints.get(0))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_black))
+                    .title("Jaden Smith")
+                    .alpha(0.75f));
 
-        LatLng l=m.getPosition();
+            simulatedDriver_2 = mMap.addMarker(new MarkerOptions().position(simulatePoints_2.get(0))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_black))
+                    .title("Will Smith")
+                    .alpha(0.75f));
 
-        //grab the driver(s) headed to hotspot with above id in this time window
-        //need a table of hotspotId|timeWindow|driverObj|numriders --> To fill this table, find time from driver's location to hotspotID(s)
-        //---------------------------------------------------------> when a rider is matched, add numriders to the hotspot against the matched time window
-        //(DateObj.getHours()*60 + minutes)/15
+            simulateStep += 1;
 
-        // if no drivers in this window, print no drivers around
+        }
+        else{
+            if (simulateStep<simulatePoints.size()){
+                simulatedDriver.setPosition(simulatePoints.get(simulateStep));
 
-        //pickup time =  (driver's leave by time + time from driver's location to this hotspot) - (current_time)
-        //double dist=find distance to destination from hotspot
+            }
+            if (simulateStep<simulatePoints_2.size()){
+                simulatedDriver_2.setPosition(simulatePoints_2.get(simulateStep));
+            }
 
-        //return dist/number_riders
+            simulateStep+=1;
+            if (simulateStep>Math.min(simulatePoints.size()-1,simulatePoints_2.size()-1))
+                simulateStep=Math.min(simulatePoints.size()-1,simulatePoints_2.size()-1);
+        }
+    }
 
-        return 1;
+    public List<LatLng> simulatePoints=Arrays.asList(
+            makeLatLng(37.6476749,-122.4066639),
+            makeLatLng(37.641694,-122.405891),
+            makeLatLng(37.6347100,-122.4067497),
+            makeLatLng(37.634042,-122.4136162),
+            makeLatLng(37.6338779,-122.4170494),
+            makeLatLng(37.6330622,-122.4191952),
+            makeLatLng(37.6307511,-122.4178219),
+            makeLatLng(37.6292556,-122.4167061),
+            makeLatLng(37.6270124,-122.415247),
+            makeLatLng(37.6246331,-122.4138737),
+            makeLatLng(37.6226617,-122.4121571),
+            makeLatLng(37.6202823,-122.4104404),
+            makeLatLng(37.6155912,-122.4064922),
+            makeLatLng(37.615035, -122.405966),
+            makeLatLng(37.614185, -122.405140),
+            makeLatLng(37.614686, -122.405623),
+            makeLatLng(37.613819, -122.404786),
+            makeLatLng(37.609642, -122.400763)
+    );
+
+    public List<LatLng> simulatePoints_2=Arrays.asList(
+            makeLatLng(37.475430,-122.221943),
+            makeLatLng(37.477158,-122.221364),
+            makeLatLng(37.476213,-122.220817),
+            makeLatLng(37.476221,-122.221471),
+            makeLatLng(37.477073,-122.222684),
+            makeLatLng(37.478614,-122.224722),
+            makeLatLng(37.480768,-122.227876),
+            makeLatLng(37.482258,-122.229786),
+            makeLatLng(37.483999,-122.231900),
+            makeLatLng(37.485689, -122.234341),
+            makeLatLng(37.484701, -122.233096),
+            makeLatLng(37.485374, -122.234019),
+            makeLatLng(37.486787, -122.235553),
+            makeLatLng(37.487179, -122.236015),
+            makeLatLng(37.487179, -122.236015),
+            makeLatLng(37.487179, -122.236015),
+            makeLatLng(37.487179, -122.236015)
+    );
+
+    public int simulateStep = 0;
+    Marker simulatedDriver;
+    Marker simulatedDriver_2;
+
+    private void logout() {
+        final ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+        dialog.setMessage(getString(R.string.progress_logout));
+        dialog.show();
+
+        ParseUser.logOutInBackground(new LogOutCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    dialog.dismiss();
+                    startWelcomeActivity();
+                }
+            }
+        });
+    }
+
+    private void startWelcomeActivity() {
+        // Start and intent for the dispatch activity
+        Intent intent = new Intent(MainActivity.this, DispatchActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void verifyUser(ParseUser user) {
+        PrivateProfile privProfile = (PrivateProfile) user.get("privateProfile");
+        if (privProfile.getCreatedAt() == null) {
+            ParseUser.logOut();
+            startWelcomeActivity();
+            return;
+        }
+    }
+
+    private class updateMarkers extends AsyncTask<Hotspot, String, String> {
+        ProgressDialog pdLoading = new ProgressDialog(MainActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdLoading.setMessage("");
+            pdLoading.show();
+        }
+        @Override
+        protected String doInBackground(Hotspot... params) {
+            // Loop through every 30 seconds and try to find a rider
+            Hotspot h = params[0];
+            String origins = "";
+            ArrayList<PublicProfile> drivers_pub_prof = getActiveDrivers(h);
+            int size_i=drivers_pub_prof.size()-1;
+
+            //get locations of all the drivers headed towards this hotspot
+            for(PublicProfile p:drivers_pub_prof){
+                ParseGeoPoint lkl = p.getLastKnownLocation();
+                origins+=(Double.toString(lkl.getLatitude()) + "," + Double.toString(lkl.getLongitude()));
+                if (size_i != 0) {
+                    origins += "|";
+                }
+            }
+            return origins;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            pdLoading.dismiss();
+        }
     }
 }

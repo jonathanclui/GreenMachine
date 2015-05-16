@@ -1,18 +1,15 @@
-package com.gogreen.greenmachine.profile;
+package com.gogreen.greenmachine.main.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,32 +25,12 @@ import java.util.ArrayList;
 
 public class ProfileHotspotInfoActivity extends ActionBarActivity {
 
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-
-    // UI references.
-    private EditText hotspotLatEditText;
-    private EditText hotspotLongEditText;
-
-    private Toolbar toolbar;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_hotspot_info);
-
-        /*
-        // Set up the toolbar
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);*/
-
-        hotspotLatEditText = (EditText) findViewById(R.id.hotspot_lat_edit_text);
-        hotspotLongEditText = (EditText) findViewById(R.id.hotspot_long_edit_text);
-
-        // Hide the lat and long fields for now since they are hard coded
-        hotspotLatEditText.setVisibility(View.GONE);
-        hotspotLongEditText.setVisibility(View.GONE);
 
         // Set up the handler for the next button click
         ImageButton nextButton = (ImageButton) findViewById(R.id.next_button);
@@ -117,21 +94,6 @@ public class ProfileHotspotInfoActivity extends ActionBarActivity {
         user.saveInBackground();
     }
 
-    /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p/>
-     * If it isn't installed {@link com.google.android.gms.maps.SupportMapFragment} (and
-     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     * <p/>
-     * A user can return to this FragmentActivity after following the prompt and correctly
-     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
-     * have been completely destroyed during this process (it is likely that it would only be
-     * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
-     * method in {@link #onResume()} to guarantee that it will be called.
-     */
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -149,12 +111,6 @@ public class ProfileHotspotInfoActivity extends ActionBarActivity {
         }
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
     private void setUpMap() {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(37.775, -122.4183333))      // Sets the center of the map

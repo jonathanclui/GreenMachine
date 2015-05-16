@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.gogreen.greenmachine.main.MainActivity;
 import com.gogreen.greenmachine.main.WelcomeActivity;
-import com.gogreen.greenmachine.profile.ProfileInitDispatchActivity;
+import com.gogreen.greenmachine.main.profile.ProfileInitDispatchActivity;
 import com.parse.ParseUser;
 
 /**

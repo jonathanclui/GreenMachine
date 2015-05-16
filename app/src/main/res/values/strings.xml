@@ -28,11 +28,20 @@
 
     <string name="description_logo">Button logo</string>
     <string name="description_oracle_logo">Oracle logo</string>
+    <string name="description_next_arrow">Next arrow on profile workflow</string>
+    <string name="description_back_arrow">Back arrow on profile worflow</string>
+    <string name="description_profile_driving_icon">Driving icon on profile page</string>
+    <string name="description_profile_clock_icon">Clock icon on profile page</string>
+    <string name="description_train_icon">Train images for navigation</string>
+
+    <string name="notification_location_on">Please turn on GPS</string>
+    <string name="notification_device_unsupported">This device is not supported</string>
 
     <string name="submit">Submit</string>
     <string name="powered_by">Powered by</string>
     <string name="oracle">Oracle</string>
 
-    <!-- Remove when done with project - this is recreated with each activity -->
+    <string name="switch_on">YES</string>
+    <string name="switch_off">NO</string>
 
 </resources>

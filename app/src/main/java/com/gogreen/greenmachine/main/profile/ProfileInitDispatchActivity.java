@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine.profile;
+package com.gogreen.greenmachine.main.profile;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -25,6 +25,7 @@ public class ProfileInitDispatchActivity extends Activity {
             // Check if the profile was previously initiated
             if (currentUser.get("privateProfile") != null) {
                 startActivity((new Intent(this, ProfileBasicInfoActivity.class)));
+                finish();
             }
         } catch (Exception e) {
             Toast.makeText(ProfileInitDispatchActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();

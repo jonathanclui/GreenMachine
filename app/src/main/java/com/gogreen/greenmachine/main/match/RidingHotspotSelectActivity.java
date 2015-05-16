@@ -19,7 +19,6 @@ import com.gogreen.greenmachine.parseobjects.MatchRequest;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -58,16 +57,15 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Location mCurrentLocation;
-    double mLatitude;
-    double mLongitude;
-    private boolean mRequestingLocationUpdates = true;
+    private double mLatitude;
+    private double mLongitude;
+    private boolean mRequestingLocationUpdates;
     private LocationRequest mLocationRequest;
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1004;
-    protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
-    protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
-    protected final static String LOCATION_KEY = "location-key";
-    protected String mLastUpdateTime;
-    protected GoogleMap mMap;
+    private final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
+    private final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
+    private final static String LOCATION_KEY = "location-key";
+    private String mLastUpdateTime;
+    private GoogleMap mMap;
 
     private Toolbar toolbar;
 
@@ -90,6 +88,8 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         this.arriveByDate = convertToDateObject(getIntent().getExtras().get("arriveDate").toString());
         this.destination = processDestination(getIntent().getExtras().get("destination").toString());
 
+        // Turn on location updates
+        this.mRequestingLocationUpdates = true;
 
         this.riderMatched = false;
 
@@ -149,26 +149,21 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
             startLocationUpdates();
         }
         //map can be loaded after the current location is known
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onConnectionSuspended(int code) {
-        Toast.makeText(getApplicationContext(), "Connection Aborted.. Retrying", Toast.LENGTH_SHORT).show();
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Connection failed: ConnectionResult.getErrorCode() = "
-                + result.getErrorCode());
-        Toast.makeText(getApplicationContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
     }
+
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
-        //mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateLocation();
     }
 
@@ -197,8 +192,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     }
 
     private void updateLocation() {
-        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Lat:"+mLatitude+" Lon:" + mLongitude);
-
         mLatitude = mCurrentLocation.getLatitude();
         mLongitude = mCurrentLocation.getLongitude();
 
@@ -224,46 +217,30 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     }
 
     protected void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                mGoogleApiClient, this);
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY,
-                mRequestingLocationUpdates);
+        savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, mRequestingLocationUpdates);
         savedInstanceState.putParcelable(LOCATION_KEY, mCurrentLocation);
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Updates fields based on data stored in the bundle.
-     *
-     * @param savedInstanceState The activity state saved in the Bundle.
-     */
     private void updateValuesFromBundle(Bundle savedInstanceState) {
-        Log.i(DrivingHotspotSelectActivity.class.getSimpleName(), "Updating values from bundle");
         if (savedInstanceState != null) {
-            // Update the value of mRequestingLocationUpdates from the Bundle, and make sure that
-            // the Start Updates and Stop Updates buttons are correctly enabled or disabled.
             if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
                 mRequestingLocationUpdates = savedInstanceState.getBoolean(
                         REQUESTING_LOCATION_UPDATES_KEY);
             }
 
-            // Update the value of mCurrentLocation from the Bundle and update the UI to show the
-            // correct latitude and longitude.
             if (savedInstanceState.keySet().contains(LOCATION_KEY)) {
-                // Since LOCATION_KEY was found in the Bundle, we can be sure that mCurrentLocation
-                // is not null.
                 mCurrentLocation = savedInstanceState.getParcelable(LOCATION_KEY);
             }
 
-            // Update the value of mLastUpdateTime from the Bundle and update the UI.
             if (savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
                 mLastUpdateTime = savedInstanceState.getString(LAST_UPDATED_TIME_STRING_KEY);
             }
@@ -283,7 +260,8 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     private Date convertToDateObject(String s) {
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd h:m a");
         Calendar cal = Calendar.getInstance();
-        String input = cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +s;
+        String input = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE)
+                + " " + s;
 
         Date t = new Date();
 
@@ -292,7 +270,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
-        Log.i(RidingHotspotSelectActivity.class.getSimpleName(),"input:"+input+" "+"orig:"+s+"parsed:"+t);
         return t;
     }
 
@@ -302,27 +279,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         } else {
             return MatchRoute.Destination.HOME;
         }
-    }
-
-    /**
-     * Method to verify google play services on the device
-     * */
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "This device is not supported.", Toast.LENGTH_LONG)
-                        .show();
-                finish();
-            }
-            return false;
-        }
-        return true;
     }
 
     @Override
@@ -351,6 +307,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         } else {
             // Handle the server not getting hotspots
         }
+        mMap.setMyLocationEnabled(true);
     }
 
     @Override
@@ -416,8 +373,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     }
 
     private Set<Hotspot> getAllHotspots() {
-        Set<Hotspot> serverHotspots = new HashSet<Hotspot>();
-
         // Grab the hotspot set from the server
         ParseQuery<Hotspot> hotspotQuery = ParseQuery.getQuery("Hotspot");
         hotspotQuery.orderByDescending("hotspotId");
@@ -446,7 +401,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
 
     private boolean findDriver() {
         List<MatchRoute> matchRoute;
-        boolean matched = false;
 
         // Grab all routes from the server
         ParseQuery<MatchRoute> notStartedQuery = ParseQuery.getQuery("MatchRoute");
@@ -459,7 +413,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         ParseQuery<MatchRoute> finalQuery = ParseQuery.or(Arrays.asList(notStartedQuery, enRouteQuery));
 
         try {
-            matchRoute = new ArrayList<MatchRoute>(finalQuery.find());
+            matchRoute = new ArrayList<>(finalQuery.find());
         } catch (ParseException e) {
             // Handle server retrieval failure
             return false;
@@ -467,13 +421,14 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
 
         // Loop through routes to find a route for the same hotspots
         Iterator iter = matchRoute.iterator();
-        while (iter.hasNext() && !matched) {
+        while (iter.hasNext()) {
             MatchRoute route = (MatchRoute) iter.next();
-            ArrayList<Hotspot> potentialHotspots = (ArrayList<Hotspot>) route.getPotentialHotspots();
+            ArrayList<Hotspot> potentialHotspots = route.getPotentialHotspots();
             // First check if the potential hotspots is empty. It is cleared if there was a prev. match
-            if (potentialHotspots.isEmpty()) {
+            int remainingCapacity = route.getCapacity();
+            if (potentialHotspots.isEmpty() && remainingCapacity > 0) {
                 // Use the hotspot
-                Hotspot routeHotspot = (Hotspot) route.getHotspot();
+                Hotspot routeHotspot = route.getHotspot();
                 try {
                     routeHotspot.fetchIfNeeded();
                 } catch (ParseException e) {
@@ -500,8 +455,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                             break;
                         }
                     }
-                    int remainingCapacity = route.getCapacity();
-                    if (!alreadyRider && remainingCapacity > 0) {
+                    if (!alreadyRider) {
                         this.matchRoute = route;
                         this.matchRoute.setCapacity(remainingCapacity - 1);
                         this.matchRoute.addRider(myProfile);
@@ -514,7 +468,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                         }
                     }
                 }
-            } else {
+            } else if (remainingCapacity > 0){
                 // Search for an intersection to initialize the hotspot and clear the online potentialHotspots list
                 Set<Hotspot> routesOnline = new HashSet<Hotspot>(potentialHotspots);
                 Set<Hotspot> intersection = new HashSet<Hotspot>(selectedHotspots);
@@ -529,7 +483,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                     } catch (ParseException e) {
                         return false;
                     }
-                    int remainingCapacity = route.getCapacity();
                     if (remainingCapacity > 0) {
                         PublicProfile myProfile = (PublicProfile) ParseUser.getCurrentUser().get("publicProfile");
                         try {
@@ -545,7 +498,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                         this.matchRoute.setHotspot(hotspot);
                         try {
                             this.matchRoute.save();
-                            matched = true;
                             return true;
                         } catch (ParseException e) {
                             return false;

@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine.navigation.distmatrix;
+package com.gogreen.greenmachine.distmatrix;
 
 import com.google.api.client.util.Key;
 

@@ -1,55 +1,49 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".LoginActivity" >
 
-    <!-- Login form -->
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <LinearLayout
+        style="@style/LoginFormContainer"
+        android:orientation="vertical" >
 
-        <LinearLayout
-            style="@style/LoginFormContainer"
-            android:orientation="vertical" >
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/tool_bar">
+        </include>
 
-            <include
-                android:id="@+id/tool_bar"
-                layout="@layout/tool_bar">
-            </include>
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:padding="@dimen/profile_padding"
+            android:layout_marginTop="20dp"/>
 
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="16dp"
-                android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:padding="30px"
-                android:layout_marginTop="20px"/>
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:imeActionId="@+id/edittext_action_login"
-                android:imeActionLabel="@string/login"
-                android:imeOptions="actionUnspecified"
-                android:fontFamily="sans-serif"
-                android:padding="30px"/>
-
-
-        </LinearLayout>
-    </ScrollView>
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:imeActionId="@+id/edittext_action_login"
+            android:imeActionLabel="@string/login"
+            android:imeOptions="actionUnspecified"
+            android:fontFamily="sans-serif"
+            android:padding="@dimen/profile_padding"/>
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="30px"
         android:id="@+id/rl">
         <com.gc.materialdesign.views.ButtonRectangle
             android:id="@+id/action_button"
@@ -59,8 +53,8 @@
             android:text="@string/login"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:padding="50px" />
+            android:layout_margin="10dp"/>
 
     </RelativeLayout>
 
-</merge>
+</LinearLayout>

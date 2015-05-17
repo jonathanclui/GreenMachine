@@ -37,6 +37,7 @@ import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
+import com.gogreen.greenmachine.util.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -337,12 +338,7 @@ public class MainActivity extends ActionBarActivity implements
             Iterator iter = this.serverHotspots.iterator();
             while (iter.hasNext()) {
                 Hotspot h = (Hotspot) iter.next();
-                try{
-                    h.fetchIfNeeded();
-                }
-                catch (ParseException e){
-                    e.printStackTrace();
-                };
+                Utils.getInstance().fetchParseObject(h);
                 ParseGeoPoint parsePoint = h.getParseGeoPoint();
                 LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
                 Marker m = mMap.addMarker(new MarkerOptions().position(hotspotLoc)
@@ -383,11 +379,7 @@ public class MainActivity extends ActionBarActivity implements
             // Fetch user's public profile
             ParseUser currentUser = ParseUser.getCurrentUser();
             PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
-            try {
-                pubProfile.fetchIfNeeded();
-            } catch (ParseException e) {
-                return;
-            }
+            Utils.getInstance().fetchParseObject(pubProfile);
 
             // Insert coordinates into the user's public profile lastKnownLocation
             ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
@@ -449,11 +441,7 @@ public class MainActivity extends ActionBarActivity implements
         int i = 1;
         while (iter.hasNext()) {
             Hotspot h = (Hotspot) iter.next();
-            try {
-                h.fetchIfNeeded();
-            } catch (ParseException e) {
-
-            }
+            Utils.getInstance().fetchParseObject(h);
             ParseGeoPoint parsePoint = h.getParseGeoPoint();
             LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
             if (m.getPosition().longitude==parsePoint.getLongitude() && m.getPosition().latitude==parsePoint.getLatitude()){
@@ -598,11 +586,7 @@ public class MainActivity extends ActionBarActivity implements
 
                 }
                 PublicProfile pubProfile= (PublicProfile) driver.get("publicProfile");
-                try {
-                    pubProfile.fetchIfNeeded();
-                } catch (ParseException e) {
-                    continue;
-                }
+                Utils.getInstance().fetchParseObject(pubProfile);
 
                 ParseGeoPoint lkl = pubProfile.getLastKnownLocation();
 

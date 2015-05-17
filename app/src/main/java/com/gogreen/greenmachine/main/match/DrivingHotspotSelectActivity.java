@@ -16,6 +16,7 @@ import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
+import com.gogreen.greenmachine.util.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -190,11 +191,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         // Fetch user's public profile
         ParseUser currentUser = ParseUser.getCurrentUser();
         PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
-        try {
-            pubProfile.fetchIfNeeded();
-        } catch (ParseException e) {
-            return;
-        }
+        Utils.getInstance().fetchParseObject(pubProfile);
 
         // Insert coordinates into the user's public profile lastKnownLocation
         ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
@@ -303,11 +300,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         Iterator iter = this.serverHotspots.iterator();
         while (iter.hasNext()) {
             Hotspot hSpot = (Hotspot) iter.next();
-            try {
-                hSpot.fetchIfNeeded();
-            } catch (ParseException e) {
-                return;
-            }
+            Utils.getInstance().fetchParseObject(hSpot);
             if (isEqualParseGeoPoint(hPoint, hSpot.getParseGeoPoint())) {
                 this.selectedHotspots.add(hSpot);
                 break;
@@ -332,11 +325,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         Iterator iter = this.serverHotspots.iterator();
         while (iter.hasNext()) {
             Hotspot hSpot = (Hotspot) iter.next();
-            try {
-                hSpot.fetchIfNeeded();
-            } catch (ParseException e) {
-                return;
-            }
+            Utils.getInstance().fetchParseObject(hSpot);
             if (isEqualParseGeoPoint(hPoint, hSpot.getParseGeoPoint())) {
                 this.selectedHotspots.remove(hSpot);
                 break;

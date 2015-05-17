@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
+import com.gogreen.greenmachine.util.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -63,11 +64,7 @@ public class SettingsActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         userProfile = (PrivateProfile) ParseUser.getCurrentUser().get("privateProfile");
-        try {
-            userProfile = userProfile.fetchIfNeeded();
-        } catch (ParseException e) {
-            return;
-        }
+        Utils.getInstance().fetchParseObject(userProfile);
 
         // Set up proper links to UI Components
         mFirstName = (EditText) findViewById(R.id.first_name_edit_text);

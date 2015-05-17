@@ -6,7 +6,7 @@
     android:background="@color/material_blue_500"
     android:orientation="vertical"
     android:weightSum="100"
-    tools:context="com.gogreen.greenmachine.profile.ProfileArriveByInfoActivity">
+    tools:context="com.gogreen.greenmachine.main.profile.ProfileArriveByInfoActivity">
 
     <ImageView
         android:contentDescription="@string/description_profile_clock_icon"

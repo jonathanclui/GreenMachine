@@ -1,12 +1,10 @@
-package com.gogreen.greenmachine.fragments;
+package com.gogreen.greenmachine.main.fragments;
 
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;

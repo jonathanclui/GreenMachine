@@ -26,9 +26,9 @@ import com.gogreen.greenmachine.main.badges.BadgeActivity;
 import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.main.match.DrivingActivity;
 import com.gogreen.greenmachine.main.match.RidingActivity;
-import com.gogreen.greenmachine.navigation.AboutUsActivity;
-import com.gogreen.greenmachine.navigation.NavDrawerAdapter;
-import com.gogreen.greenmachine.navigation.SettingsActivity;
+import com.gogreen.greenmachine.main.navigation.AboutUsActivity;
+import com.gogreen.greenmachine.main.navigation.NavDrawerAdapter;
+import com.gogreen.greenmachine.main.navigation.SettingsActivity;
 import com.gogreen.greenmachine.distmatrix.Element;
 import com.gogreen.greenmachine.distmatrix.Result;
 import com.gogreen.greenmachine.distmatrix.RetrieveDistanceMatrix;
@@ -89,6 +89,8 @@ public class MainActivity extends ActionBarActivity implements
 
     private ParseUser currUser;
     private PrivateProfile privProfile;
+    private String firstName;
+    private String lastName;
 
     private String mLastUpdateTime;
 
@@ -136,8 +138,7 @@ public class MainActivity extends ActionBarActivity implements
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
 
-        navRowIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icons);
-        navDrawerName = privProfile.getFirstName() + " " + privProfile.getLastName();
+        navDrawerName = this.firstName + " " + this.lastName;
         navDrawerProfileImage = R.drawable.jonathan_lui;
 
         RecyclerView.Adapter mAdapter = new NavDrawerAdapter(navRowTitles, navRowIcons,
@@ -609,14 +610,18 @@ public class MainActivity extends ActionBarActivity implements
     private void fetchParseObjects() {
         this.currUser = ParseUser.getCurrentUser();
 
+        verifyUser(this.currUser);
+
         this.navDrawerEmail = currUser.getEmail();
 
         this.privProfile = (PrivateProfile) currUser.get("privateProfile");
 
         try {
-            privProfile.fetchIfNeeded();
+            this.privProfile.fetchIfNeeded();
+            this.firstName = this.privProfile.getFirstName();
+            this.lastName = this.privProfile.getLastName();
         } catch (ParseException e) {
-            navDrawerName = "Connor Horton";
+            logout();
         }
 
         this.serverHotspots = getAllHotspots();
@@ -726,17 +731,27 @@ public class MainActivity extends ActionBarActivity implements
             public void done(ParseException e) {
                 if (e == null) {
                     dialog.dismiss();
-                    startNextActivity();
+                    startWelcomeActivity();
                 }
             }
         });
     }
 
-    private void startNextActivity() {
+    private void startWelcomeActivity() {
         // Start and intent for the dispatch activity
         Intent intent = new Intent(MainActivity.this, DispatchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        finish();
+    }
+
+    private void verifyUser(ParseUser user) {
+        PrivateProfile privProfile = (PrivateProfile) user.get("privateProfile");
+        if (privProfile.getCreatedAt() == null) {
+            ParseUser.logOut();
+            startWelcomeActivity();
+            return;
+        }
     }
 
     private class updateMarkers extends AsyncTask<Hotspot, String, String> {

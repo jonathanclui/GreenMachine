@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.gogreen.greenmachine.R;
-import com.gogreen.greenmachine.helpers.ConfigHelper;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.HotspotsData;
 import com.gogreen.greenmachine.parseobjects.MatchRequest;
@@ -32,8 +31,6 @@ public class Application extends android.app.Application {
 
     private static SharedPreferences preferences;
 
-    private static ConfigHelper configHelper;
-
     public Application() {
     }
 
@@ -55,12 +52,5 @@ public class Application extends android.app.Application {
         Parse.initialize(this, APP_ID, CLIENT_KEY);
 
         preferences = getSharedPreferences("com.gogreen.greenmachine", Context.MODE_PRIVATE);
-
-        configHelper = new ConfigHelper();
-        configHelper.fetchConfigIfNeeded();
-    }
-
-    public static ConfigHelper getConfigHelper() {
-        return configHelper;
     }
 }

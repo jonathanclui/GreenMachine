@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine.navigation;
+package com.gogreen.greenmachine.main.navigation;
 
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TimePicker;

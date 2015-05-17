@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine.navigation;
+package com.gogreen.greenmachine.main.navigation;
 
 import android.content.Context;
 import android.content.res.TypedArray;

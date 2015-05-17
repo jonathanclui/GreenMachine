@@ -6,7 +6,7 @@
     android:background="@color/material_amber_500"
     android:orientation="vertical"
     android:weightSum="100"
-    tools:context="com.gogreen.greenmachine.profile.ProfileBasicInfoActivity" >
+    tools:context="com.gogreen.greenmachine.main.profile.ProfileBasicInfoActivity" >
 
     <ImageView
         android:id="@+id/icon"

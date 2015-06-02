@@ -626,8 +626,6 @@ public class MainActivity extends ActionBarActivity implements
     private void fetchParseObjects() {
         this.currUser = ParseUser.getCurrentUser();
 
-        verifyUser(this.currUser);
-
         this.navDrawerEmail = currUser.getEmail();
 
         this.privProfile = (PrivateProfile) currUser.get("privateProfile");
@@ -759,15 +757,6 @@ public class MainActivity extends ActionBarActivity implements
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
-    }
-
-    private void verifyUser(ParseUser user) {
-        PrivateProfile privProfile = (PrivateProfile) user.get("privateProfile");
-        if (privProfile.getCreatedAt() == null) {
-            ParseUser.logOut();
-            startWelcomeActivity();
-            return;
-        }
     }
 
     private class updateMarkers extends AsyncTask<Hotspot, String, String> {

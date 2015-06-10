@@ -449,27 +449,27 @@ public class MainActivity extends ActionBarActivity implements
             Utils.getInstance().fetchParseObject(h);
             ParseGeoPoint parsePoint = h.getParseGeoPoint();
             LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
-            if (m.getPosition().longitude==parsePoint.getLongitude() && m.getPosition().latitude==parsePoint.getLatitude()){
+            if (m.getPosition().longitude == parsePoint.getLongitude() && m.getPosition().latitude == parsePoint.getLatitude()){
                 return i;
             }
-            i+=1;
+            i += 1;
         }
         return -1;
     }
 
     public Hotspot getMyHotspot(Marker m){
         Iterator iter = this.serverHotspots.iterator();
-        int i=1;
+        int i = 1;
         while (iter.hasNext()) {
             Hotspot h = (Hotspot) iter.next();
             Utils.getInstance().fetchParseObject(h);
             ParseGeoPoint parsePoint = h.getParseGeoPoint();
             LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
-            if (m.getPosition().longitude==parsePoint.getLongitude() && m.getPosition().latitude==parsePoint.getLatitude()){
+            if (m.getPosition().longitude == parsePoint.getLongitude() && m.getPosition().latitude == parsePoint.getLatitude()){
                 Log.i(MainActivity.class.getSimpleName(),"Hotspot found");
                 return h;
             }
-            i+=1;
+            i += 1;
         }
         return (Hotspot)null;
     }
@@ -477,8 +477,8 @@ public class MainActivity extends ActionBarActivity implements
     public void updateMarkerTags(Marker m){
         //TODO:oncoming driver's hotspot should be at this marker
         Hotspot h = getMyHotspot(m);
-        if (h==null){
-            Log.i(MainActivity.class.getSimpleName(),"h is null");
+        if (h == null){
+            //Log.i(MainActivity.class.getSimpleName(),"h is null");
             m.setTitle("Next Pickup: N/A");
             m.setSnippet("no drivers yet");
             return;
@@ -486,7 +486,7 @@ public class MainActivity extends ActionBarActivity implements
         else {
             String origins="";
             try {
-                Marker marray[]= new Marker[]{m};
+                Marker marray[] = new Marker[]{m};
                 new updateMarkers().execute(new Tuple<Hotspot,Marker[]>(h,marray));
             }
             catch (Exception e){
@@ -548,7 +548,7 @@ public class MainActivity extends ActionBarActivity implements
         try {
             matchRoute = new ArrayList<MatchRoute>(query.find());
             for(MatchRoute r:matchRoute){
-                ParseUser driver=r.getDriver();
+                ParseUser driver = r.getDriver();
                 try {
                     driver.fetchIfNeeded();
                 } catch (ParseException e) {
@@ -616,7 +616,7 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     public void simulateDriverStep(){
-        if (simulateStep==0){
+        if (simulateStep == 0){
             simulatedDriver = mMap.addMarker(new MarkerOptions().position(simulatePoints.get(0))
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_black))
                     .title("Jaden Smith")
@@ -639,13 +639,13 @@ public class MainActivity extends ActionBarActivity implements
                 simulatedDriver_2.setPosition(simulatePoints_2.get(simulateStep));
             }
 
-            simulateStep+=1;
+            simulateStep += 1;
             if (simulateStep>Math.min(simulatePoints.size()-1,simulatePoints_2.size()-1))
-                simulateStep=Math.min(simulatePoints.size()-1,simulatePoints_2.size()-1);
+                simulateStep = Math.min(simulatePoints.size()-1,simulatePoints_2.size()-1);
         }
     }
 
-    public List<LatLng> simulatePoints=Arrays.asList(
+    public List<LatLng> simulatePoints = Arrays.asList(
             makeLatLng(37.6476749,-122.4066639),
             makeLatLng(37.641694,-122.405891),
             makeLatLng(37.6347100,-122.4067497),
@@ -666,7 +666,7 @@ public class MainActivity extends ActionBarActivity implements
             makeLatLng(37.609642, -122.400763)
     );
 
-    public List<LatLng> simulatePoints_2=Arrays.asList(
+    public List<LatLng> simulatePoints_2 = Arrays.asList(
             makeLatLng(37.475430,-122.221943),
             makeLatLng(37.477158,-122.221364),
             makeLatLng(37.476213,-122.220817),
@@ -739,12 +739,12 @@ public class MainActivity extends ActionBarActivity implements
             String origins = "";
             Hotspot h = params[0].x;
             HashMap<String, Object> cloudParams = new HashMap<String, Object>();
-            Log.i(MainActivity.class.getSimpleName(), h.getHotspotId() + ":" + h.getObjectId());
+            //Log.i(MainActivity.class.getSimpleName(), h.getHotspotId() + ":" + h.getObjectId());
             cloudParams.put("hotspotObj", h.getObjectId());
             try {
                 List<ParseGeoPoint> result = ParseCloud.callFunction("getActiveDrivers", cloudParams);
 
-                Log.i(MainActivity.class.getSimpleName(), result.toString());
+                //Log.i(MainActivity.class.getSimpleName(), result.toString());
                 for (ParseGeoPoint p : result) {
                     origins += p.getLatitude() + "," + p.getLongitude() + "|";
                 }
@@ -762,24 +762,24 @@ public class MainActivity extends ActionBarActivity implements
         protected void onPostExecute(Tuple<String,Marker[]> result){
             super.onPostExecute(result);
             pdLoading.dismiss();
-            if (result==null)
+            if (result == null)
                 return;
 
-            Marker m=(result.y)[0];
-            String origins=result.x;
-            if (origins=="") {
+            Marker m = (result.y)[0];
+            String origins = result.x;
+            if (origins == "") {
                 (result.y)[0].setTitle("Next Pickup: N/A");
                 (result.y)[0].setSnippet("no drivers yet");
                 return;
             }
-            int minTime=24*60*60;  //pickupTime in seconds
+            int minTime = 24*60*60;  //pickupTime in seconds
 
             //pack the query for distance matrix
-            String destinations=Double.toString((result.y)[0].getPosition().latitude)+","+Double.toString((result.y)[0].getPosition().longitude);
-            String mode="driving";
-            String language="US-EN";
-            String key=getString(R.string.google_maps_key);
-            String urlString="https://maps.googleapis.com/maps/api/distancematrix/json";
+            String destinations = Double.toString((result.y)[0].getPosition().latitude)+","+Double.toString((result.y)[0].getPosition().longitude);
+            String mode = "driving";
+            String language = "US-EN";
+            String key = getString(R.string.google_maps_key);
+            String urlString = "https://maps.googleapis.com/maps/api/distancematrix/json";
 
             GenericUrl url = new GenericUrl(urlString);
             url.put("origins", origins);
@@ -787,14 +787,14 @@ public class MainActivity extends ActionBarActivity implements
             url.put("mode", mode);
             url.put("language", language);
             url.put("key", key);
-            Log.i(MainActivity.class.getSimpleName(), url.toString());
+            //Log.i(MainActivity.class.getSimpleName(), url.toString());
             try {
                 Result r = new RetrieveDistanceMatrix().execute(url).get();
                 List<Row> rows = r.rows;
                 for (Row row : rows) {
                     List<Element> elements = row.elements;
                     for (Element e : elements) {
-                        minTime=Math.min(minTime,e.duration.value);
+                        minTime = Math.min(minTime,e.duration.value);
                     }
                 }
 
@@ -803,7 +803,7 @@ public class MainActivity extends ActionBarActivity implements
                 e.printStackTrace();
                 return;
             }
-            Log.i(MainActivity.class.getSimpleName(), Integer.toString(minTime));
+            //Log.i(MainActivity.class.getSimpleName(), Integer.toString(minTime));
             //if minTime has not been reduced, possibly no drivers on the hotspot
             if (minTime<1440){
                 (result.y)[0].setTitle("Next Pickup: "+(minTime/60)+" min");

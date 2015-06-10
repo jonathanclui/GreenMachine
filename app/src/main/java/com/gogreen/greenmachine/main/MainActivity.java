@@ -578,8 +578,6 @@ public class MainActivity extends ActionBarActivity implements
     private void fetchParseObjects() {
         this.currUser = ParseUser.getCurrentUser();
 
-        verifyUser(this.currUser);
-
         this.navDrawerEmail = currUser.getEmail();
 
         this.privProfile = (PrivateProfile) currUser.get("privateProfile");
@@ -713,25 +711,12 @@ public class MainActivity extends ActionBarActivity implements
         finish();
     }
 
-    private void verifyUser(ParseUser user) {
-        PrivateProfile privProfile = (PrivateProfile) user.get("privateProfile");
-        if (privProfile.getCreatedAt() == null) {
-            ParseUser.logOut();
-            startWelcomeActivity();
-            return;
-        }
-    }
-
     //Marker argument had to be put in an array to force pass by reference as,
     //operations related to the markers should be performed on the original markers
     private class updateMarkers extends AsyncTask<Tuple<Hotspot,Marker[]>, String, Tuple<String,Marker[]>> {
-        ProgressDialog pdLoading = new ProgressDialog(MainActivity.this);
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pdLoading.setMessage("");
-            pdLoading.show();
         }
         @Override
         protected Tuple<String,Marker[]> doInBackground(Tuple<Hotspot,Marker[]>... params) {
@@ -761,7 +746,6 @@ public class MainActivity extends ActionBarActivity implements
         @Override
         protected void onPostExecute(Tuple<String,Marker[]> result){
             super.onPostExecute(result);
-            pdLoading.dismiss();
             if (result == null)
                 return;
 
@@ -776,10 +760,10 @@ public class MainActivity extends ActionBarActivity implements
 
             //pack the query for distance matrix
             String destinations = Double.toString((result.y)[0].getPosition().latitude)+","+Double.toString((result.y)[0].getPosition().longitude);
-            String mode = "driving";
-            String language = "US-EN";
+            String mode = getString(R.string.driving_mode);
+            String language = getString(R.string.us_english);
             String key = getString(R.string.google_maps_key);
-            String urlString = "https://maps.googleapis.com/maps/api/distancematrix/json";
+            String urlString = getString(R.string.distmatrixURL);
 
             GenericUrl url = new GenericUrl(urlString);
             url.put("origins", origins);

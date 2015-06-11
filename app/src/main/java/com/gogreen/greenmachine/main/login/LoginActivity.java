@@ -45,7 +45,7 @@ public class LoginActivity extends ActionBarActivity {
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == R.id.edittext_action_login ||
+                if (actionId == R.integer.action_login ||
                         actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
                     login();
                     return true;

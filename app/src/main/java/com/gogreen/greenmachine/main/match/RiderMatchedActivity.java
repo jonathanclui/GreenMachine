@@ -15,6 +15,7 @@ import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
+import com.gogreen.greenmachine.util.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -113,11 +114,7 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
         Iterator routeIterator = matchRoutes.iterator();
         while (routeIterator.hasNext() && !foundRoute) {
             MatchRoute route = (MatchRoute) routeIterator.next();
-            try {
-                route.fetchIfNeeded();
-            } catch (ParseException e) {
-                // handle later since low on time
-            }
+            Utils.getInstance().fetchParseObject(route);
 
             ParseUser driver = route.getDriver();
             try {
@@ -127,18 +124,10 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
             }
 
             PublicProfile driverProfile = (PublicProfile) driver.get("publicProfile");
-            try {
-                driverProfile.fetchIfNeeded();
-            } catch (ParseException e) {
-                // handle later if time
-            }
+            Utils.getInstance().fetchParseObject(driverProfile);
 
             Hotspot hotspot = route.getHotspot();
-            try {
-                hotspot.fetchIfNeeded();
-            } catch (ParseException e) {
-                // handle later since low on time
-            }
+            Utils.getInstance().fetchParseObject(hotspot);
 
             this.hotspotLocation = hotspot.getParseGeoPoint();
             this.driverLocation = driverProfile.getLastKnownLocation();

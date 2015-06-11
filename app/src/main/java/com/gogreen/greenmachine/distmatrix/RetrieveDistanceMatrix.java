@@ -1,6 +1,7 @@
 package com.gogreen.greenmachine.distmatrix;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.GenericUrl;
@@ -33,6 +34,7 @@ public class RetrieveDistanceMatrix extends AsyncTask<GenericUrl,Result,Result> 
         try {
             HttpRequest request = requestFactory.buildGetRequest(urls[0]);
             HttpResponse httpResponse = request.execute();
+            //Log.i(RetrieveDistanceMatrix.class.getSimpleName(),"httpResponse:"+httpResponse.toString());
             distResult = httpResponse.parseAs(Result.class);
             /*List<Row> rows = distResult.rows;
             for (Row row : rows) {

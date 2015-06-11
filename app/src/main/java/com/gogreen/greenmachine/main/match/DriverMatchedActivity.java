@@ -17,6 +17,7 @@ import com.gogreen.greenmachine.distmatrix.RetrieveDistanceMatrix;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
+import com.gogreen.greenmachine.util.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -72,10 +73,10 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
         setContentView(R.layout.activity_driver_matched);
         String origins="37.5505658,-122.3094177";
         String destinations="37.5505658,-122.3094177";
-        String mode="driving";
-        String language="US-EN";
-        String key="AIzaSyCzhOo4mqXFIMa73xk5N-2A5mifzcpINfo";
-        String urlString="https://maps.googleapis.com/maps/api/distancematrix/json";
+        String mode=getString(R.string.driving_mode);
+        String language=getString(R.string.us_english);
+        String key=getString(R.string.google_maps_key);
+        String urlString=getString(R.string.distmatrixURL);
 
         // Set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -146,21 +147,13 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
         Iterator routeIterator = matchRoutes.iterator();
         while (routeIterator.hasNext() && !foundRoute) {
             MatchRoute route = (MatchRoute) routeIterator.next();
-            try {
-                route.fetchIfNeeded();
-            } catch (ParseException e) {
-                // handle later since low on time
-            }
+            Utils.getInstance().fetchParseObject(route);
 
             ArrayList<PublicProfile> riders = route.getRiders();
             Iterator ridersIter = riders.iterator();
             while (ridersIter.hasNext()) {
                 PublicProfile riderProfile = (PublicProfile) ridersIter.next();
-                try {
-                    riderProfile.fetchIfNeeded();
-                } catch (ParseException e) {
-                    // handle later if there is time
-                }
+                Utils.getInstance().fetchParseObject(riderProfile);
 
                 this.mRiderText.setText(riderProfile.getFirstName());
 
@@ -170,11 +163,7 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
             }
 
             Hotspot hotspot = route.getHotspot();
-            try {
-                hotspot.fetchIfNeeded();
-            } catch (ParseException e) {
-                // handle later since low on time
-            }
+            Utils.getInstance().fetchParseObject(hotspot);
 
             this.hotspotLocation = hotspot.getParseGeoPoint();
             foundRoute = true;
@@ -186,11 +175,7 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
         mMap = map;
         ParseUser currUser = ParseUser.getCurrentUser();
         PublicProfile myProfile = (PublicProfile) currUser.get("publicProfile");
-        try {
-            myProfile.fetchIfNeeded();
-        } catch (ParseException e) {
-            // handle later if time
-        }
+        Utils.getInstance().fetchParseObject(myProfile);
         ParseGeoPoint myLoc = myProfile.getLastKnownLocation();
 
         double hotspotLat = this.hotspotLocation.getLatitude();

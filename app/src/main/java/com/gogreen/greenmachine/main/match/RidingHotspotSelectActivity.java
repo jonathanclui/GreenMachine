@@ -18,6 +18,7 @@ import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRequest;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
+import com.gogreen.greenmachine.util.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -198,11 +199,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         // Fetch user's public profile
         ParseUser currentUser = ParseUser.getCurrentUser();
         PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
-        try {
-            pubProfile.fetchIfNeeded();
-        } catch (ParseException e) {
-            return;
-        }
+        Utils.getInstance().fetchParseObject(pubProfile);
 
         // Insert coordinates into the user's public profile lastKnownLocation
         ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
@@ -333,11 +330,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         Iterator iter = this.serverHotspots.iterator();
         while (iter.hasNext()) {
             Hotspot hSpot = (Hotspot) iter.next();
-            try {
-                hSpot.fetchIfNeeded();
-            } catch (ParseException e) {
-                return;
-            }
+            Utils.getInstance().fetchParseObject(hSpot);
             if (isEqualParseGeoPoint(hPoint, hSpot.getParseGeoPoint())) {
                 this.selectedHotspots.add(hSpot);
                 break;
@@ -360,11 +353,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         Iterator iter = this.serverHotspots.iterator();
         while (iter.hasNext()) {
             Hotspot hSpot = (Hotspot) iter.next();
-            try {
-                hSpot.fetchIfNeeded();
-            } catch (ParseException e) {
-                return;
-            }
+            Utils.getInstance().fetchParseObject(hSpot);
             if (isEqualParseGeoPoint(hPoint, hSpot.getParseGeoPoint())) {
                 this.selectedHotspots.remove(hSpot);
                 break;
@@ -429,11 +418,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
             if (potentialHotspots.isEmpty() && remainingCapacity > 0) {
                 // Use the hotspot
                 Hotspot routeHotspot = route.getHotspot();
-                try {
-                    routeHotspot.fetchIfNeeded();
-                } catch (ParseException e) {
-                    return false;
-                }
+                Utils.getInstance().fetchParseObject(routeHotspot);
 
                 // Check if the route hotspot is in selected hotspots
                 if (this.selectedHotspots.contains(routeHotspot)) {
@@ -441,11 +426,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                     boolean alreadyRider = false;
                     ArrayList<PublicProfile> riders = (ArrayList<PublicProfile>) route.getRiders();
                     PublicProfile myProfile = (PublicProfile) ParseUser.getCurrentUser().get("publicProfile");
-                    try {
-                        myProfile.fetchIfNeeded();
-                    } catch (ParseException e) {
-                        return false;
-                    }
+                    Utils.getInstance().fetchParseObject(myProfile);
 
                     Iterator profIterator = riders.iterator();
                     while (profIterator.hasNext()) {
@@ -478,18 +459,10 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                 if (!intersection.isEmpty()) {
                     Iterator hspotIterator = intersection.iterator();
                     Hotspot hotspot = (Hotspot) hspotIterator.next();
-                    try {
-                        hotspot.fetchIfNeeded();
-                    } catch (ParseException e) {
-                        return false;
-                    }
+                    Utils.getInstance().fetchParseObject(hotspot);
                     if (remainingCapacity > 0) {
                         PublicProfile myProfile = (PublicProfile) ParseUser.getCurrentUser().get("publicProfile");
-                        try {
-                            myProfile.fetchIfNeeded();
-                        } catch (ParseException e) {
-                            return false;
-                        }
+                        Utils.getInstance().fetchParseObject(myProfile);
                         this.matchRoute = route;
                         this.matchRoute.setCapacity(remainingCapacity - 1);
                         this.matchRoute.addRider(myProfile);

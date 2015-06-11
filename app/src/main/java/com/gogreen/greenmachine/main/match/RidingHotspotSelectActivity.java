@@ -500,6 +500,8 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
             super.onPreExecute();
             pdLoading.setMessage(getString(R.string.progress_matching_rider));
             pdLoading.show();
+            pdLoading.setCancelable(false);
+            pdLoading.setCanceledOnTouchOutside(false);
         }
         @Override
         protected Void doInBackground(Void... params) {
@@ -509,11 +511,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                 } else if (!driverFound) {
                     driverFound = findDriver();
                 } else if (driverFound) {
-                }
-                try {
-                    Thread.sleep(250);
-                } catch (InterruptedException e) {
-
                 }
             }
 

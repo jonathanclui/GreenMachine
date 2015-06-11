@@ -421,6 +421,8 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
             super.onPreExecute();
             pdLoading.setMessage(getString(R.string.progress_matching_driver));
             pdLoading.show();
+            pdLoading.setCancelable(false);
+            pdLoading.setCanceledOnTouchOutside(false);
         }
         @Override
         protected Void doInBackground(Void... params) {
@@ -431,11 +433,6 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
                     riderFound = checkForRiders();
                 } else if (riderFound) {
                     break;
-                }
-                try {
-                    Thread.sleep(250);
-                } catch (InterruptedException e) {
-
                 }
             }
             return null;

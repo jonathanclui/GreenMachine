@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="us_english">US-EN</string>
+    <string name="driving_mode">driving</string>
+    <string name="distmatrixURL">https://maps.googleapis.com/maps/api/distancematrix/json</string>
+</resources>

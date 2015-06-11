@@ -15,6 +15,10 @@ public class Hotspot extends ParseObject {
         return getString("description");
     }
 
+    public String getObject() {
+        return getString("objectId");
+    }
+
     public void setDescription(String value) {
         put("description", value);
     }

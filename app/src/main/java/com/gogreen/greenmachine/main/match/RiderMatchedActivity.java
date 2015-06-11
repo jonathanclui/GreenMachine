@@ -15,6 +15,7 @@ import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
+import com.gogreen.greenmachine.util.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -43,10 +44,11 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
     private ParseGeoPoint hotspotLocation;
     private String driverPhone;
     private String driverName;
+    private String driverCar;
 
     private TextView mDriverPhoneTextView;
     private TextView mDriverName;
-
+    private TextView mDriverCar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +62,8 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        // Grab info to populate to a rider (about a driver)
         getInfo();
         mapFragment.getMapAsync(this);
 
@@ -70,6 +72,9 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
 
         mDriverName = (TextView) findViewById(R.id.driver_name_text);
         mDriverName.setText(this.driverName);
+
+        mDriverCar = (TextView) findViewById(R.id.driver_car_text);
+        mDriverCar.setText(this.driverCar);
 
         ImageView callButton = (ImageView) findViewById(R.id.call);
         callButton.setOnClickListener(new View.OnClickListener() {
@@ -113,11 +118,7 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
         Iterator routeIterator = matchRoutes.iterator();
         while (routeIterator.hasNext() && !foundRoute) {
             MatchRoute route = (MatchRoute) routeIterator.next();
-            try {
-                route.fetchIfNeeded();
-            } catch (ParseException e) {
-                // handle later since low on time
-            }
+            Utils.getInstance().fetchParseObject(route);
 
             ParseUser driver = route.getDriver();
             try {
@@ -127,23 +128,16 @@ public class RiderMatchedActivity extends ActionBarActivity implements OnMapRead
             }
 
             PublicProfile driverProfile = (PublicProfile) driver.get("publicProfile");
-            try {
-                driverProfile.fetchIfNeeded();
-            } catch (ParseException e) {
-                // handle later if time
-            }
+            Utils.getInstance().fetchParseObject(driverProfile);
 
             Hotspot hotspot = route.getHotspot();
-            try {
-                hotspot.fetchIfNeeded();
-            } catch (ParseException e) {
-                // handle later since low on time
-            }
+            Utils.getInstance().fetchParseObject(hotspot);
 
             this.hotspotLocation = hotspot.getParseGeoPoint();
             this.driverLocation = driverProfile.getLastKnownLocation();
             this.driverPhone = driverProfile.getPhoneNumber();
             this.driverName = driverProfile.getFirstName();
+            this.driverCar = route.getCar();
             foundRoute = true;
         }
     }

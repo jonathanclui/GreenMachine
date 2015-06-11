@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
+import com.gogreen.greenmachine.util.Utils;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -67,11 +68,7 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
     private void prePopulateFields() {
         ParseUser currentUser = ParseUser.getCurrentUser();
         PrivateProfile privProfile = (PrivateProfile) currentUser.get("privateProfile");
-        try {
-            privProfile.fetchIfNeeded();
-        } catch (ParseException e) {
-
-        }
+        Utils.getInstance().fetchParseObject(privProfile);
 
         this.firstNameEditText.setText(privProfile.getFirstName());
         this.lastNameEditText.setText(privProfile.getLastName());

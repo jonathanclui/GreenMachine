@@ -70,6 +70,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
     private MatchRoute matchRoute;
     private Set<Hotspot> serverHotspots;
     private int currentCapacity;
+    private String driverCar;
     private Date matchByDate;
     private Date arriveByDate;
     private MatchRoute.Destination destination;
@@ -85,6 +86,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         this.matchByDate = convertToDateObject(getIntent().getExtras().get("matchDate").toString());
         this.arriveByDate = convertToDateObject(getIntent().getExtras().get("arriveDate").toString());
         this.destination = processDestination(getIntent().getExtras().get("destination").toString());
+        this.driverCar = (String) getIntent().getExtras().get("driverCar");
 
         // Turn on location updates
         this.mRequestingLocationUpdates = true;
@@ -370,7 +372,7 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         ArrayList<Hotspot> selectedHotspotsList = new ArrayList<Hotspot>(selectedHotspots);
         matchRoute.initializeMatchRoute(ParseUser.getCurrentUser(), selectedHotspotsList, destination,
                 MatchRoute.TripStatus.NOT_STARTED, currentCapacity, matchByDate,
-                arriveByDate, new ArrayList<PublicProfile>());
+                arriveByDate, driverCar, new ArrayList<PublicProfile>());
         try {
             matchRoute.save();
             return true;

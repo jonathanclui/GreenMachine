@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +22,10 @@ import android.widget.Toast;
 
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.distmatrix.Element;
+import com.gogreen.greenmachine.distmatrix.Result;
+import com.gogreen.greenmachine.distmatrix.RetrieveDistanceMatrix;
+import com.gogreen.greenmachine.distmatrix.Row;
 import com.gogreen.greenmachine.main.badges.BadgeActivity;
 import com.gogreen.greenmachine.main.login.DispatchActivity;
 import com.gogreen.greenmachine.main.match.DrivingActivity;
@@ -30,10 +33,6 @@ import com.gogreen.greenmachine.main.match.RidingActivity;
 import com.gogreen.greenmachine.main.navigation.AboutUsActivity;
 import com.gogreen.greenmachine.main.navigation.NavDrawerAdapter;
 import com.gogreen.greenmachine.main.navigation.SettingsActivity;
-import com.gogreen.greenmachine.distmatrix.Element;
-import com.gogreen.greenmachine.distmatrix.Result;
-import com.gogreen.greenmachine.distmatrix.RetrieveDistanceMatrix;
-import com.gogreen.greenmachine.distmatrix.Row;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
@@ -54,7 +53,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.api.client.http.GenericUrl;
-import com.parse.FunctionCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
@@ -737,8 +735,8 @@ public class MainActivity extends ActionBarActivity implements
                 return;
             }
             //if minTime has not been reduced, possibly no drivers on the hotspot
-            if (minTime<1440){
-                (result.y)[0].setTitle("Next Pickup: "+(minTime/60)+" min");
+            if (minTime < 1440){
+                (result.y)[0].setTitle("Next Pickup: " + (minTime / 60) + " min");
                 (result.y)[0].setSnippet("Text @ 650-290-2120");
             }
             else {

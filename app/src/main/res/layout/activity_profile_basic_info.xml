@@ -42,7 +42,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:inputType=
-                "textCapSentences|textAutoCorrect|textAutoComplete|textPersonName"/>
+                "textCapSentences|textAutoCorrect|textPersonName"/>
 
         <EditText
             android:id="@+id/last_name_edit_text"
@@ -52,7 +52,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:inputType=
-                "textCapSentences|textAutoCorrect|textAutoComplete|textPersonName"/>
+                "textCapSentences|textAutoCorrect|textPersonName"/>
 
         <EditText
             android:id="@+id/home_city_edit_text"
@@ -62,7 +62,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:inputType=
-                "textCapSentences|textAutoCorrect|textAutoComplete"/>
+                "textCapSentences|textAutoCorrect"/>
 
         <EditText
             android:id="@+id/phone_edit_text"

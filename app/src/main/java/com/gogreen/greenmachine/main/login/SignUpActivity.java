@@ -52,8 +52,7 @@ public class SignUpActivity extends ActionBarActivity {
         passwordAgainEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == R.integer.action_signup ||
-                        actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
+                if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
                     signup();
                     return true;
                 }
@@ -75,7 +74,7 @@ public class SignUpActivity extends ActionBarActivity {
         String password = passwordEditText.getText().toString().trim();
         String passwordAgain = passwordAgainEditText.getText().toString().trim();
 
-        if(containsValidationError(username, password, passwordAgain)) {
+        if (containsInvalidInput(username, password, passwordAgain)) {
             return;
         }
 
@@ -95,11 +94,10 @@ public class SignUpActivity extends ActionBarActivity {
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
-
+                dialog.dismiss();
                 if (e != null) {
                     // Show the error message
-                    Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                    dialog.dismiss();
+                    Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
                     // Start an intent for the dispatch activity
                     ParseUser curUser = ParseUser.getCurrentUser();
@@ -125,7 +123,6 @@ public class SignUpActivity extends ActionBarActivity {
 
                     }
 
-                    dialog.dismiss();
                     Intent intent = new Intent(SignUpActivity.this, DispatchActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -134,7 +131,7 @@ public class SignUpActivity extends ActionBarActivity {
         });
     }
 
-    private boolean containsValidationError(String username, String password, String passwordAgain) {
+    private boolean containsInvalidInput(String username, String password, String passwordAgain) {
         // Validate the sign up data
         boolean validationError = false;
         StringBuilder validationErrorMessage = new StringBuilder(getString(R.string.error_intro));
@@ -162,7 +159,6 @@ public class SignUpActivity extends ActionBarActivity {
         if (validationError) {
             Toast.makeText(SignUpActivity.this, validationErrorMessage.toString(), Toast.LENGTH_SHORT)
                     .show();
-            return validationError;
         }
         return validationError;
     }

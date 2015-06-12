@@ -45,8 +45,7 @@ public class LoginActivity extends ActionBarActivity {
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == R.integer.action_login ||
-                        actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
+                if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
                     login();
                     return true;
                 }
@@ -85,7 +84,7 @@ public class LoginActivity extends ActionBarActivity {
 
         // If there is a validation error, display the error
         if (validationError) {
-            Toast.makeText(LoginActivity.this, validationErrorMessage.toString(), Toast.LENGTH_LONG)
+            Toast.makeText(LoginActivity.this, validationErrorMessage.toString(), Toast.LENGTH_SHORT)
                     .show();
             return;
         }
@@ -101,13 +100,12 @@ public class LoginActivity extends ActionBarActivity {
                 dialog.dismiss();
                 if (e != null) {
                     // Show the error message
-                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
                     // Start an intent for the dispatch activity
                     Intent intent = new Intent(LoginActivity.this, DispatchActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                    finish();
                 }
             }
         });

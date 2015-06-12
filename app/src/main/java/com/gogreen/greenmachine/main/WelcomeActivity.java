@@ -31,7 +31,6 @@ import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.SignInButton;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -89,15 +88,6 @@ public class WelcomeActivity extends ActionBarActivity {
             public void onClick(View v) {
                 // Starts an intent for the sign up activity
                 startActivity(new Intent(WelcomeActivity.this, SignUpActivity.class));
-            }
-        });
-
-        // Sign up button click handler
-        SignInButton signGoogleButton = (SignInButton) findViewById(R.id.signgoogle_button);
-        signGoogleButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Starts an intent for the sign up activity
-                login();
             }
         });
     }

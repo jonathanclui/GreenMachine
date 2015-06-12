@@ -75,7 +75,9 @@ public class SignUpActivity extends ActionBarActivity {
         String password = passwordEditText.getText().toString().trim();
         String passwordAgain = passwordAgainEditText.getText().toString().trim();
 
-        validateUserInput(username, password, passwordAgain);
+        if(containsValidationError(username, password, passwordAgain)) {
+            return;
+        }
 
         // Set up a progress dialog
         final ProgressDialog dialog = new ProgressDialog(SignUpActivity.this);
@@ -97,6 +99,7 @@ public class SignUpActivity extends ActionBarActivity {
                 if (e != null) {
                     // Show the error message
                     Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
                 } else {
                     // Start an intent for the dispatch activity
                     ParseUser curUser = ParseUser.getCurrentUser();
@@ -121,6 +124,7 @@ public class SignUpActivity extends ActionBarActivity {
                     } catch (ParseException error) {
 
                     }
+
                     dialog.dismiss();
                     Intent intent = new Intent(SignUpActivity.this, DispatchActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -130,15 +134,11 @@ public class SignUpActivity extends ActionBarActivity {
         });
     }
 
-    private void validateUserInput(String username, String password, String passwordAgain) {
+    private boolean containsValidationError(String username, String password, String passwordAgain) {
         // Validate the sign up data
         boolean validationError = false;
         StringBuilder validationErrorMessage = new StringBuilder(getString(R.string.error_intro));
-        if (username.length() == 0) {
-            validationError = true;
-            validationErrorMessage.append(getString(R.string.error_blank_username));
-        }
-        if (!username.contains("@")) {
+        if (!username.contains("@") || username.length() == 0) {
             validationError = true;
             validationErrorMessage.append(getString(R.string.error_invalid_email));
         }
@@ -160,9 +160,10 @@ public class SignUpActivity extends ActionBarActivity {
 
         // If there is a validation error, display the error
         if (validationError) {
-            Toast.makeText(SignUpActivity.this, validationErrorMessage.toString(), Toast.LENGTH_LONG)
+            Toast.makeText(SignUpActivity.this, validationErrorMessage.toString(), Toast.LENGTH_SHORT)
                     .show();
-            return;
+            return validationError;
         }
+        return validationError;
     }
 }

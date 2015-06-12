@@ -14,18 +14,18 @@
         android:id="@+id/first_name_row"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingLeft="30px"
-        android:paddingRight="30px">
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <TextView
-            android:layout_width="0px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/prompt_first_name"
             android:id="@+id/first_name_text_view"
             android:layout_weight="1"/>
 
         <EditText
-            android:layout_width="0px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:id="@+id/first_name_edit_text"
@@ -38,8 +38,8 @@
         android:id="@+id/last_name_row"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingLeft="30px"
-        android:paddingRight="30px">
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <TextView
             android:layout_width="0px"
@@ -62,11 +62,11 @@
         android:id="@+id/home_city_row"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingLeft="30px"
-        android:paddingRight="30px">
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <TextView
-            android:layout_width="0px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/prompt_home_city"
             android:id="@+id/home_city_text_view"
@@ -74,7 +74,7 @@
 
         <EditText
             android:layout_width="0px"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:ems="10"
             android:id="@+id/home_city_edit_text"
             android:layout_weight="3"
@@ -86,18 +86,18 @@
         android:id="@+id/phone_number_row"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingLeft="30px"
-        android:paddingRight="30px">
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <TextView
-            android:layout_width="0px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/prompt_phone"
             android:id="@+id/phone_text_view"
             android:layout_weight="1"/>
 
         <EditText
-            android:layout_width="0px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="phone"
             android:ems="10"
@@ -106,65 +106,27 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/driver_row"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:paddingLeft="30px"
-        android:paddingRight="30px">
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/switch_label_driving"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:id="@+id/driver_switch"/>
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/driver_car_row"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:paddingLeft="30px"
-        android:paddingRight="30px">
-
-        <TextView
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_car"
-            android:id="@+id/driver_car_text_view"
-            android:layout_weight="1"/>
-
-        <EditText
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:id="@+id/driver_car_edit_text"
-            android:layout_weight="3"
-            android:inputType=
-                "textCapSentences|textAutoCorrect"/>
-    </TableRow>
-
-    <TableRow
         android:id="@+id/arrive_hq_by_row"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingLeft="30px"
-        android:paddingRight="30px">
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <TextView
-            android:layout_width="0px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/prompt_arrive_hq_by"
             android:id="@+id/arrive_hq_by_text_view"
             android:layout_weight="2"/>
 
         <EditText
-            android:layout_width="0px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="time"
             android:ems="10"
             android:id="@+id/arrive_hq_by_edit_text"
             android:windowSoftInputMode="stateHidden"
+            android:focusable="false"
             android:layout_weight="2"/>
 
     </TableRow>
@@ -173,23 +135,24 @@
         android:id="@+id/arrive_home_by_row"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingLeft="30px"
-        android:paddingRight="30px">
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <TextView
-            android:layout_width="0px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/prompt_arrive_home_by"
             android:id="@+id/arrive_home_by_text_view"
             android:layout_weight="2"/>
 
         <EditText
-            android:layout_width="0px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="time"
             android:ems="10"
             android:id="@+id/arrive_home_by_edit_text"
             android:windowSoftInputMode="stateHidden"
+            android:focusable="false"
             android:layout_weight="2"/>
 
     </TableRow>
@@ -206,11 +169,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_dim_top"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
             android:text="@string/submit" />
     </TableRow>
 </TableLayout>

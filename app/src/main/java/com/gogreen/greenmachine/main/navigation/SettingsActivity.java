@@ -11,10 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
-import android.widget.TableRow;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -36,8 +33,6 @@ public class SettingsActivity extends ActionBarActivity {
     private EditText mLastName;
     private EditText mHomeCity;
     private EditText mPhone;
-    private Switch mDriving;
-    private EditText mCar;
     private EditText mArriveHQBy;
     private EditText mArriveHomeBy;
 
@@ -45,7 +40,6 @@ public class SettingsActivity extends ActionBarActivity {
     private boolean isDriver;
 
     private Toolbar toolbar;
-    private TableRow carReveal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +60,6 @@ public class SettingsActivity extends ActionBarActivity {
         mLastName = (EditText) findViewById(R.id.last_name_edit_text);
         mHomeCity = (EditText) findViewById(R.id.home_city_edit_text);
         mPhone = (EditText) findViewById(R.id.phone_edit_text);
-        mDriving = (Switch) findViewById(R.id.driver_switch);
-        mCar = (EditText) findViewById(R.id.driver_car_edit_text);
         mArriveHQBy = (EditText) findViewById(R.id.arrive_hq_by_edit_text);
         mArriveHomeBy = (EditText) findViewById(R.id.arrive_home_by_edit_text);
 
@@ -76,31 +68,8 @@ public class SettingsActivity extends ActionBarActivity {
         mLastName.setText(userProfile.getLastName());
         mHomeCity.setText(userProfile.getHomeCity());
         mPhone.setText(userProfile.getPhoneNumber());
-        mCar.setText(userProfile.getDriverCar());
         mArriveHQBy.setText(userProfile.getArriveHQBy());
         mArriveHomeBy.setText(userProfile.getArriveHomeBy());
-
-        // Set up Edit Texts and Switch
-        carReveal = (TableRow) findViewById(R.id.driver_car_row);
-        isDriver = userProfile.getDriverStatus();
-        mDriving.setChecked(isDriver);
-        if (!isDriver){
-            carReveal.setVisibility(View.INVISIBLE);
-        }
-
-        mDriving.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (mDriving.isChecked()) {
-                    // The toggle is enabled
-                    isDriver = true;
-                    carReveal.setVisibility(View.VISIBLE);
-                } else {
-                    // The toggle is disabled
-                    isDriver = false;
-                    carReveal.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
 
         mArriveHQBy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,8 +172,6 @@ public class SettingsActivity extends ActionBarActivity {
         fields.put("lastName", mLastName.getText().toString().trim());
         fields.put("homeCity", mHomeCity.getText().toString().trim());
         fields.put("phone", mPhone.getText().toString().trim());
-        fields.put("driving", isDriver);
-        fields.put("car", mCar.getText().toString().trim());
         fields.put("arriveHQBy", mArriveHQBy.getText().toString().trim());
         fields.put("arriveHomeBy", mArriveHomeBy.getText().toString().trim());
 

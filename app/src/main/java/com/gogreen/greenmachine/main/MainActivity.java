@@ -37,6 +37,7 @@ import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
 import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
+import com.gogreen.greenmachine.util.Tuple;
 import com.gogreen.greenmachine.util.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -745,14 +746,5 @@ public class MainActivity extends ActionBarActivity implements
             }
             return;
         }
-    }
-}
-
-class Tuple<X, Y> {
-    public final X x;
-    public final Y y;
-    public Tuple(X x, Y y) {
-        this.x = x;
-        this.y = y;
     }
 }

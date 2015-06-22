@@ -1,8 +1,5 @@
 package com.gogreen.greenmachine.util;
 
-import android.util.Log;
-
-import com.gogreen.greenmachine.main.match.RidingHotspotSelectActivity;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 
@@ -32,7 +29,6 @@ public class Utils {
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
-        Log.i(RidingHotspotSelectActivity.class.getSimpleName(), "input:" + input + " " + "orig:" + s + "parsed:" + t);
         return t;
     }
 

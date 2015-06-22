@@ -75,7 +75,7 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     private Set<Hotspot> selectedHotspots;
     private Date matchByDate;
     private Date arriveByDate;
-    private boolean riderMatched = false;
+    private boolean riderMatched;
     private MatchRoute.Destination destination;
 
     @Override
@@ -386,6 +386,29 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         }
     }
 
+    // Check if c1 is within c2's window of seconds
+    private boolean isInTimeWindow(Calendar c1, Calendar c2, int seconds) {
+        Calendar after = c2;
+        after.add(Calendar.SECOND, seconds);
+        Date highTime = after.getTime();
+
+        Calendar before = c2;
+
+        // since 'add' works by reference subtract the time added above first
+        before.add(Calendar.SECOND, -2 * seconds);
+
+        Date lowTime = before.getTime();
+        Date c1Time = c1.getTime();
+
+        // restore the calendar's time to original before returning control
+        before.add(Calendar.SECOND, seconds);
+        if ((c1Time.compareTo(highTime) <= 0) && (c1Time.compareTo(lowTime) >= 0)) {
+            return true;
+        }
+
+        return false;
+    }
+
     private boolean findDriver() {
         List<MatchRoute> matchRoute;
 
@@ -528,31 +551,11 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            if (!riderMatched) {
+                riderRequest.saveInBackground();
+            }
             pdLoading.dismiss();
             processResult();
         }
-    }
-
-    // Check if c1 is within c2's window of seconds
-    private boolean isInTimeWindow(Calendar c1, Calendar c2, int seconds) {
-        Calendar after = c2;
-        after.add(Calendar.SECOND, seconds);
-        Date highTime = after.getTime();
-
-        Calendar before = c2;
-
-        // since 'add' works by reference subtract the time added above first
-        before.add(Calendar.SECOND, -2 * seconds);
-
-        Date lowTime = before.getTime();
-        Date c1Time = c1.getTime();
-
-        // restore the calendar's time to original before returning control
-        before.add(Calendar.SECOND, seconds);
-        if ((c1Time.compareTo(highTime) <= 0) && (c1Time.compareTo(lowTime) >= 0)) {
-            return true;
-        }
-
-        return false;
     }
 }

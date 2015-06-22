@@ -443,6 +443,8 @@ public class DrivingHotspotSelectActivity extends ActionBarActivity implements
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            matchRoute.setStatus(MatchRoute.TripStatus.CANCELED);
+            matchRoute.saveInBackground();
             pdLoading.dismiss();
             processResult();
         }

@@ -54,6 +54,11 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
         OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener {
 
+    private final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
+    private final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
+    private final static String LOCATION_KEY = "location-key";
+    private final static String HOTSPOTS_KEY = "hotspots";
+
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Location mCurrentLocation;
@@ -61,9 +66,6 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     private double mLongitude;
     private boolean mRequestingLocationUpdates;
     private LocationRequest mLocationRequest;
-    private final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
-    private final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
-    private final static String LOCATION_KEY = "location-key";
     private String mLastUpdateTime;
     private GoogleMap mMap;
 
@@ -135,6 +137,10 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
+            startLocationUpdates();
+        }
+
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
@@ -173,35 +179,26 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        stopLocationUpdates();
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
-            startLocationUpdates();
-        }
-    }
-    @Override
     protected void onStop() {
         super.onStop();
+        stopLocationUpdates();
         mGoogleApiClient.disconnect();
     }
 
     private void updateLocation() {
-        mLatitude = mCurrentLocation.getLatitude();
-        mLongitude = mCurrentLocation.getLongitude();
+        if (mCurrentLocation != null) {
+            mLatitude = mCurrentLocation.getLatitude();
+            mLongitude = mCurrentLocation.getLongitude();
 
-        // Fetch user's public profile
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
-        Utils.getInstance().fetchParseObject(pubProfile);
+            // Fetch user's public profile
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            PublicProfile pubProfile = (PublicProfile) currentUser.get("publicProfile");
+            Utils.getInstance().fetchParseObject(pubProfile);
 
-        // Insert coordinates into the user's public profile lastKnownLocation
-        ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
-        pubProfile.setLastKnownLocation(userLoc);
+            // Insert coordinates into the user's public profile lastKnownLocation
+            ParseGeoPoint userLoc = new ParseGeoPoint(mLatitude, mLongitude);
+            pubProfile.setLastKnownLocation(userLoc);
+        }
     }
 
     protected void createLocationRequest() {
@@ -220,8 +217,19 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
     }
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
+
         savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, mRequestingLocationUpdates);
+
         savedInstanceState.putParcelable(LOCATION_KEY, mCurrentLocation);
+
+        // Save selected hotspots
+        Iterator selectedHspotsIter = this.selectedHotspots.iterator();
+        List<String> hSpotIds = new ArrayList<>();
+        while (selectedHspotsIter.hasNext()) {
+            Hotspot h = (Hotspot) selectedHspotsIter.next();
+            hSpotIds.add(h.getObjectId());
+        }
+        savedInstanceState.putStringArrayList(HOTSPOTS_KEY, (ArrayList) hSpotIds);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -238,6 +246,20 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
 
             if (savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
                 mLastUpdateTime = savedInstanceState.getString(LAST_UPDATED_TIME_STRING_KEY);
+            }
+
+            if (savedInstanceState.keySet().contains(HOTSPOTS_KEY)) {
+                List<String> selectedHspotList = savedInstanceState.getStringArrayList(HOTSPOTS_KEY);
+                Set<String> selectedHspotStrings = new HashSet<>(selectedHspotList);
+
+                Iterator serverHotspotIter = this.serverHotspots.iterator();
+                while (serverHotspotIter.hasNext()) {
+                    Hotspot h = (Hotspot) serverHotspotIter.next();
+                    if (selectedHspotStrings.contains(h.getObjectId())) {
+                        // Set the opacity of the marker if it is actually a marker on the map
+                        this.selectedHotspots.add(h);
+                    }
+                }
             }
             updateLocation();
         }
@@ -292,12 +314,16 @@ public class RidingHotspotSelectActivity extends ActionBarActivity implements
                 Hotspot h = (Hotspot) iter.next();
                 ParseGeoPoint parsePoint = h.getParseGeoPoint();
                 LatLng hotspotLoc = new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(hotspotLoc)
-                                .icon(BitmapDescriptorFactory.defaultMarker(30))
-                                .title(h.getName())
-                                .alpha(0.75f)
-                );
+                MarkerOptions markerOptions = new MarkerOptions().position(hotspotLoc)
+                        .icon(BitmapDescriptorFactory.defaultMarker(30))
+                        .title(h.getName())
+                        .alpha(0.75f);
+                Marker marker = mMap.addMarker(markerOptions);
                 mMap.setOnMarkerClickListener((GoogleMap.OnMarkerClickListener)this);
+
+                if (this.selectedHotspots.contains(h)) {
+                    setMarker(marker);
+                }
             }
         } else {
             // Handle the server not getting hotspots

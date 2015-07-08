@@ -129,5 +129,6 @@ public class ProfileBasicInfoActivity extends ActionBarActivity {
         View v = activity.getCurrentFocus();
         if (v != null) {
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-        }    }
+        }
+    }
 }

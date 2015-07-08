@@ -280,7 +280,7 @@ public class DrivingHotspotSelectActivity extends AppCompatActivity implements
     public void onMapReady(GoogleMap map) {
 
         mMap = map;
-        
+
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(mLatitude, mLongitude))      // Sets the center of the map
                 .zoom(10)

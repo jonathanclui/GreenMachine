@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 
 public class DriverMatchedActivity extends ActionBarActivity implements OnMapReadyCallback {
 

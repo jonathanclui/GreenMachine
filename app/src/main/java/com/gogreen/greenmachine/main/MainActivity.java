@@ -188,6 +188,10 @@ public class MainActivity extends ActionBarActivity implements
             @Override
             public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
             }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+            }
         });
 
         // Set the proper layout

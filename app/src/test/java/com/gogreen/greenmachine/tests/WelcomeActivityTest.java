@@ -20,7 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class,
-        sdk = 21)
+        sdk = 19,
+        application = GreenMachineTestApplication.class)
 public class WelcomeActivityTest {
 
     private WelcomeActivity activity;
@@ -36,11 +37,10 @@ public class WelcomeActivityTest {
 
     @Test
     public void slogan_text_is_correct() {
-        activity = Robolectric.buildActivity(WelcomeActivity.class).create().start().resume().visible().get();
+        activity = Robolectric.setupActivity(WelcomeActivity.class);
         TextView sloganTextView = (TextView) activity.findViewById(R.id.slogan);
 
         String expectedText = "Green Machine";
-        assertThat(sloganTextView).isNot(null);
         assertThat(expectedText).isEqualTo(sloganTextView.getText().toString());
     }
 }

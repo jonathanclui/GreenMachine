@@ -1,5 +1,7 @@
 package com.gogreen.greenmachine.main;
 
+import android.app.Application;
+
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.components.ApplicationComponent;
 import com.gogreen.greenmachine.components.DaggerApplicationComponent;
@@ -16,7 +18,7 @@ import com.parse.ParseObject;
 /**
  * Created by jonathanlui on 4/19/15.
  */
-public class GreenMachineApplication extends android.app.Application {
+public class GreenMachineApplication extends Application {
     // Debugging switch
     public static final boolean APPDEBUG = false;
 

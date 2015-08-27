@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gogreen.greenmachine.R;
-import com.gogreen.greenmachine.distmatrix.RetrieveDistanceMatrix;
 import com.gogreen.greenmachine.main.MainActivity;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.MatchRoute;
@@ -27,15 +26,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.JsonObjectParser;
-import com.google.api.client.json.jackson.JacksonFactory;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -44,8 +34,6 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.inject.Inject;
 
 
 public class DriverMatchedActivity extends ActionBarActivity implements OnMapReadyCallback {
@@ -63,16 +51,6 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
 
     private MatchRoute mRoute;
 
-    static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
-    static final JsonFactory JSON_FACTORY = new JacksonFactory();
-    HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(new HttpRequestInitializer() {
-                                                                                @Override
-                                                                                public void initialize(HttpRequest request) {
-                                                                                    request.setParser(new JsonObjectParser(JSON_FACTORY));
-                                                                                }
-                                                                            }
-    );
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,13 +67,6 @@ public class DriverMatchedActivity extends ActionBarActivity implements OnMapRea
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        GenericUrl url = new GenericUrl(urlString);
-        url.put("origins", origins);
-        url.put("destinations", destinations);
-        url.put("mode", mode);
-        url.put("language", language);
-        url.put("key", key);
-        new RetrieveDistanceMatrix().execute(url);
 
         // Initialize rider textview
         this.mRiderText = (TextView) findViewById(R.id.rider_name_text);

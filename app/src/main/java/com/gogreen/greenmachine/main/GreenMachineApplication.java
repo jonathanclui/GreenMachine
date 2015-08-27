@@ -1,7 +1,5 @@
 package com.gogreen.greenmachine.main;
 
-import android.content.SharedPreferences;
-
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.components.ApplicationComponent;
 import com.gogreen.greenmachine.components.DaggerApplicationComponent;
@@ -14,8 +12,6 @@ import com.gogreen.greenmachine.parseobjects.PrivateProfile;
 import com.gogreen.greenmachine.parseobjects.PublicProfile;
 import com.parse.Parse;
 import com.parse.ParseObject;
-
-import javax.inject.Inject;
 
 /**
  * Created by jonathanlui on 4/19/15.
@@ -32,8 +28,6 @@ public class GreenMachineApplication extends android.app.Application {
 
     public static String APP_ID = null;
     public static String CLIENT_KEY = null;
-
-    @Inject SharedPreferences mSharedPrefs;
 
     private ApplicationComponent mComponent;
 
@@ -56,8 +50,6 @@ public class GreenMachineApplication extends android.app.Application {
         ParseObject.registerSubclass(Hotspot.class);
         ParseObject.registerSubclass(HotspotsData.class);
         Parse.initialize(this, APP_ID, CLIENT_KEY);
-
-        this.getComponent().inject(this);
 
         mComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))

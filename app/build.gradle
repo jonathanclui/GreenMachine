@@ -15,7 +15,7 @@ android {
     buildToolsVersion '23.0.0'
     defaultConfig {
         applicationId "com.gogreen.greenmachine"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 3
         versionName "3"
@@ -38,13 +38,20 @@ dependencies {
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.github.navasmdc:MaterialDesign:1.+@aar'
     compile 'com.nineoldandroids:library:2.4.0'
-    compile ('com.google.http-client:google-http-client-android:1.18.0-rc') {
+    compile('com.google.http-client:google-http-client-android:1.18.0-rc') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-    compile ('com.google.http-client:google-http-client-jackson:1.18.0-rc') {
+    compile('com.google.http-client:google-http-client-jackson:1.18.0-rc') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
+
     apt 'com.google.dagger:dagger-compiler:2.0'
     compile 'com.google.dagger:dagger:2.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'
+
+    testCompile 'junit:junit:4.12'
+    testCompile "org.robolectric:robolectric:3.0"
+    testCompile "org.robolectric:shadows-httpclient:3.0"
+    testCompile "org.mockito:mockito-core:1.10.19"
+    testCompile 'org.assertj:assertj-core:1.1.0'
 }

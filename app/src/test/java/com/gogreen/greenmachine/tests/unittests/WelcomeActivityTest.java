@@ -1,16 +1,19 @@
-package com.gogreen.greenmachine.tests;
+package com.gogreen.greenmachine.tests.unittests;
 
+import android.content.Context;
 import android.widget.TextView;
 
 import com.gogreen.greenmachine.BuildConfig;
 import com.gogreen.greenmachine.R;
 import com.gogreen.greenmachine.main.WelcomeActivity;
+import com.gogreen.greenmachine.tests.mocks.GreenMachineTestApplication;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,10 +27,14 @@ import static org.assertj.core.api.Assertions.assertThat;
         application = GreenMachineTestApplication.class)
 public class WelcomeActivityTest {
 
+    private Context context;
     private WelcomeActivity activity;
 
     @Before
     public void setUp() throws Exception {
+        activity = Robolectric.setupActivity(WelcomeActivity.class);
+        context = RuntimeEnvironment.application;
+
     }
 
     @Test
@@ -37,10 +44,10 @@ public class WelcomeActivityTest {
 
     @Test
     public void slogan_text_is_correct() {
-        activity = Robolectric.setupActivity(WelcomeActivity.class);
+
         TextView sloganTextView = (TextView) activity.findViewById(R.id.slogan);
 
-        String expectedText = "Green Machine";
+        String expectedText = context.getString(R.string.slogan);
         assertThat(expectedText).isEqualTo(sloganTextView.getText().toString());
     }
 }

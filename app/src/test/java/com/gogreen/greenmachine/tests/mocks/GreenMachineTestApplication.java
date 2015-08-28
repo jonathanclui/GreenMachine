@@ -1,4 +1,4 @@
-package com.gogreen.greenmachine.tests;
+package com.gogreen.greenmachine.tests.mocks;
 
 import android.app.Application;
 

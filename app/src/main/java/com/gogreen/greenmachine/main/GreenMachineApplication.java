@@ -1,9 +1,11 @@
 package com.gogreen.greenmachine.main;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.app.Application;
 
 import com.gogreen.greenmachine.R;
+import com.gogreen.greenmachine.components.ApplicationComponent;
+import com.gogreen.greenmachine.components.DaggerApplicationComponent;
+import com.gogreen.greenmachine.modules.ApplicationModule;
 import com.gogreen.greenmachine.parseobjects.Hotspot;
 import com.gogreen.greenmachine.parseobjects.HotspotsData;
 import com.gogreen.greenmachine.parseobjects.MatchRequest;
@@ -16,7 +18,7 @@ import com.parse.ParseObject;
 /**
  * Created by jonathanlui on 4/19/15.
  */
-public class Application extends android.app.Application {
+public class GreenMachineApplication extends Application {
     // Debugging switch
     public static final boolean APPDEBUG = false;
 
@@ -29,9 +31,9 @@ public class Application extends android.app.Application {
     public static String APP_ID = null;
     public static String CLIENT_KEY = null;
 
-    private static SharedPreferences preferences;
+    private ApplicationComponent mComponent;
 
-    public Application() {
+    public GreenMachineApplication() {
     }
 
     @Override
@@ -51,6 +53,12 @@ public class Application extends android.app.Application {
         ParseObject.registerSubclass(HotspotsData.class);
         Parse.initialize(this, APP_ID, CLIENT_KEY);
 
-        preferences = getSharedPreferences("com.gogreen.greenmachine", Context.MODE_PRIVATE);
+        mComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
+    }
+
+    public ApplicationComponent getComponent() {
+        return mComponent;
     }
 }
